@@ -1,0 +1,11 @@
+{
+  "LevelId": 0,
+  "SpriteName": "Level_1",
+  "IsNeedPet": false,
+  "PetSpriteName": "",
+  "TotalWave": 10,
+  "MapId": 0,
+  "TowerIdList": [
+    2
+  ]
+}
