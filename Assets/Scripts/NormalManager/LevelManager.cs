@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using LitJson;
 
-public class LevelManager : MonoSingleton<LevelManager>
+public class LevelManager : Singleton<LevelManager>
 {
     // 当前 levelGroup 和 level 的 id
     public uint LevelGroupId { get; set; }
@@ -35,7 +35,7 @@ public class LevelManager : MonoSingleton<LevelManager>
     {
         if (m_startLevelGroupIdList.Count == 0)
         {
-            string jsonText = GameManager._Ins.factoryManager.GetJsonTextString(s_startLevelGroupFileName);
+            string jsonText = FactoryManager.GetInstance().GetJsonTextString(s_startLevelGroupFileName);
             m_startLevelGroupIdList = JsonMapper.ToObject<List<uint>>(jsonText);
         }
         return m_startLevelGroupIdList;
@@ -49,7 +49,7 @@ public class LevelManager : MonoSingleton<LevelManager>
 
         foreach (uint id in startLevelGroupIdList)
         {
-            string jsonText = GameManager._Ins.factoryManager.GetJsonTextString(s_levelGroupFile + GetLevelGroupFileName(id));
+            string jsonText = FactoryManager.GetInstance().GetJsonTextString(s_levelGroupFile + GetLevelGroupFileName(id));
             levelGroupInfoList.Add(JsonMapper.ToObject<UI_LevelGroupData>(jsonText));
         }
         return levelGroupInfoList;
@@ -58,7 +58,7 @@ public class LevelManager : MonoSingleton<LevelManager>
     // 通过关卡组 id 获取其中包含的关卡组信息
     public UI_LevelGroupData GetLevelGroupInfoByLevelGroupId(uint levelGroupId)
     {
-        string jsonText = GameManager._Ins.factoryManager.GetJsonTextString(s_levelGroupFile + GetLevelGroupFileName(levelGroupId));
+        string jsonText = FactoryManager.GetInstance().GetJsonTextString(s_levelGroupFile + GetLevelGroupFileName(levelGroupId));
         return JsonMapper.ToObject<UI_LevelGroupData>(jsonText);
     }
 
@@ -71,7 +71,7 @@ public class LevelManager : MonoSingleton<LevelManager>
         for (uint i = 0; i < count; i++)
         {
             // 文件所在位置为：Levels/关卡组id/关卡id，但是关卡 id 是从 0 开始的
-            string jsonText = GameManager._Ins.factoryManager.GetJsonTextString($"{s_levelFile}{levelGroupId}/{GetLevelFileName(i)}");
+            string jsonText = FactoryManager.GetInstance().GetJsonTextString($"{s_levelFile}{levelGroupId}/{GetLevelFileName(i)}");
             levelInfoList.Add(JsonMapper.ToObject<UI_LevelData>(jsonText));
         }
         return levelInfoList;

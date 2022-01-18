@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioManager 
+public class AudioManager : Singleton<AudioManager>
 {
     AudioSource[] audioSource;//0播放BG   1播放特效
     bool isPlayBG = true;
@@ -10,10 +10,11 @@ public class AudioManager
 
     AudioClip btnClip;//按钮点击音效很常用,所以特意封装一下
 
-    public AudioManager()
+
+    protected override void Init()
     {
-        audioSource = GameManager._Ins.GetComponents<AudioSource>();
-        btnClip = GameManager._Ins.factoryManager.GetAudioClip("Main/Button");
+        audioSource = GameManager.GetInstance().GetComponents<AudioSource>();
+        btnClip = FactoryManager.GetInstance().GetAudioClip("Main/Button");
     }
 
     public void PlayBG(string clipPath)
@@ -51,7 +52,7 @@ public class AudioManager
 
     AudioClip GetAudioClip(string clipPath)
     {
-        return GameManager._Ins.factoryManager.GetAudioClip(clipPath);
+        return FactoryManager.GetInstance().GetAudioClip(clipPath);
     }
 
     public void PlayButtonAudio()

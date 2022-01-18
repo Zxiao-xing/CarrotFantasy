@@ -5,13 +5,11 @@ using UnityEngine.UI;
 public class NormalBigLevelPanel : BasePanel
 {
     SlideBookByPos m_slideBookByPos;
-    PlayerManager m_playerManager;
     Transform m_contentTrans;
 
     protected void Awake()
     {
         base.Start();
-        m_playerManager = uIFacade.playerManager;
         m_slideBookByPos = GetComponentInChildren<SlideBookByPos>();
         m_contentTrans = GetComponentInChildren<ScrollRect>().content;
 
@@ -41,14 +39,14 @@ public class NormalBigLevelPanel : BasePanel
         List<UI_LevelGroupData> levelGroupInfoList = LevelManager.GetInstance().GetStartLevelGroupInfoList();
         for (int i = 0; i < levelGroupInfoList.Count; i++)
         {
-            GameObject levelGroupGo = GameManager._Ins.factoryManager.GetObject(ObjectFactoryType.UIFactory, "Level/Btn_LevelGroup");
+            GameObject levelGroupGo = FactoryManager.GetInstance().GetObject(ObjectFactoryType.UIFactory, "Level/Btn_LevelGroup");
             levelGroupGo.name = $"Btn_LevelGroup_{levelGroupInfoList[i].LevelGroupId}";
             // 设置关卡组
             Image levelGroupImage = levelGroupGo.transform.GetComponent<Image>();
-            levelGroupImage.sprite = GameManager._Ins.factoryManager.GetSprite(StringManager.Sprite_LevelGroupFile + levelGroupInfoList[i].SpriteName);
+            levelGroupImage.sprite = FactoryManager.GetInstance().GetSprite(StringManager.Sprite_LevelGroupFile + levelGroupInfoList[i].SpriteName);
             // 设置关卡组标题图片
             Image levelGroupTitleImage = levelGroupGo.transform.GetChild(0).GetComponent<Image>();
-            levelGroupTitleImage.sprite = GameManager._Ins.factoryManager.GetSprite(StringManager.Sprite_LevelGroupFile + levelGroupInfoList[i].TitleSpriteName);
+            levelGroupTitleImage.sprite = FactoryManager.GetInstance().GetSprite(StringManager.Sprite_LevelGroupFile + levelGroupInfoList[i].TitleSpriteName);
             // 设置按钮点击事件
             Button levelGroupBtn = levelGroupGo.transform.GetComponent<Button>();
             levelGroupBtn.onClick.RemoveAllListeners();
@@ -60,7 +58,7 @@ public class NormalBigLevelPanel : BasePanel
             });
 
             // 刷新关卡状态相关 UI
-            RefreshLevelStateUI(m_playerManager.GetPlayerLevelGroupInfo(levelGroupInfoList[i].LevelGroupId).IsLocked, m_playerManager.GetUnlockedLevelCountInLevelGroup(levelGroupInfoList[i].LevelGroupId), levelGroupInfoList[i].BelongLevelCount, levelGroupGo.transform);
+            RefreshLevelStateUI(PlayerManager.GetInstance().GetPlayerLevelGroupInfo(levelGroupInfoList[i].LevelGroupId).IsLocked, PlayerManager.GetInstance().GetUnlockedLevelCountInLevelGroup(levelGroupInfoList[i].LevelGroupId), levelGroupInfoList[i].BelongLevelCount, levelGroupGo.transform);
 
             levelGroupBtn.transform.parent = m_contentTrans;
         }
@@ -85,7 +83,7 @@ public class NormalBigLevelPanel : BasePanel
     {
         uIFacade.PlayButtonAudio();
         // 被锁住就无法进入
-        if (m_playerManager.GetPlayerLevelGroupInfo(levelGourpId).IsLocked)
+        if (PlayerManager.GetInstance().GetPlayerLevelGroupInfo(levelGourpId).IsLocked)
         {
             return;
         }

@@ -28,7 +28,7 @@ public class MonsterBuilder : IBuilder<Monster>
 
     public GameObject GetProducts()
     {
-        GameObject go= GameController._Ins.GetObject(ObjectFactoryType.GameFactory, "Monster");
+        GameObject go= GameController.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Monster");
         Monster monster = GetProductClass(go);
         GetData(monster);
         GetOtherResources(monster);

@@ -7,9 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class UIFacade 
 {
-   public UIManager uIManager { get; private set; }
-    FactoryManager factoryManager;
-    public PlayerManager playerManager { get; private set; }
   //  public AudioManager audioManager { get; private set; }
     //场景切换
   public BaseSceneState currentScene, lastScene;
@@ -17,20 +14,15 @@ public class UIFacade
     Image maskImg;
     Transform canvasTrans;
 
-    public UIFacade(UIManager uimanager)
+    public UIFacade()
     {
-        GameManager gameManager = GameManager._Ins;
-        //uimanager的赋值必须这样,否则uimanager的初始化未完成,得到的uimanager是null
-        playerManager = gameManager.playerManager;
-        uIManager = uimanager;
-        factoryManager = gameManager.factoryManager;
         canvasTrans = GameObject.FindObjectOfType<Canvas>().transform;
         InitMask();
     }
 
     void InitMask()
     {
-        GameObject res = factoryManager.GetObject(ObjectFactoryType.UIFactory, "Img_Mask");
+        GameObject res = FactoryManager.GetInstance().GetObject(ObjectFactoryType.UIFactory, "Img_Mask");
         maskImg = res.GetComponent<Image>();
         res.transform.SetParent(canvasTrans,false);
     }
@@ -78,23 +70,23 @@ public class UIFacade
     #region factoryManager的函数封装
     public GameObject GetObject(ObjectFactoryType factoryType, string itemName)
     {
-        return factoryManager.GetObject(factoryType, itemName);
+        return FactoryManager.GetInstance().GetObject(factoryType, itemName);
     }
 
     public void PushObject(ObjectFactoryType factoryType, string itemName, GameObject go)
     {
-        factoryManager.PushObject(factoryType, itemName, go);
+        FactoryManager.GetInstance().PushObject(factoryType, itemName, go);
     }
 
     public Sprite GetSprite(string spriteName)
     {
        
-        return factoryManager.GetSprite(spriteName);
+        return FactoryManager.GetInstance().GetSprite(spriteName);
     }
 
     public AudioClip GetAudioClip(string clipName)
     {
-        return factoryManager.GetAudioClip(clipName);
+        return FactoryManager.GetInstance().GetAudioClip(clipName);
     }
     #endregion
 
@@ -102,43 +94,43 @@ public class UIFacade
 
     public bool BGSwitch()
     {
-       return GameManager._Ins.audioManager.BGSwitch();
+       return AudioManager.GetInstance().BGSwitch();
     }
 
     public bool EffAudioSwitch()
     {
-       return GameManager._Ins.audioManager.EffAudioSwitch();
+       return AudioManager.GetInstance().EffAudioSwitch();
     }
 
     public void PlayButtonAudio()
     {
-        GameManager._Ins.audioManager.PlayButtonAudio();
+        AudioManager.GetInstance().PlayButtonAudio();
     }
     #endregion
 
     public void AddScenePanel(string  panelName)
     {
-        uIManager.AddScenePanel(panelName);
+        UIManager.GetInstance().AddScenePanel(panelName);
     }
 
     public void ClearScenePanelDict()
     {
-        uIManager.ClearScenePanelDict();
+        UIManager.GetInstance().ClearScenePanelDict();
     }
 
     public void EnterPanel(string panelName)
     {
-        uIManager.EnterPanel(panelName);
+        UIManager.GetInstance().EnterPanel(panelName);
     }
 
     public void ExitPanel(string panelName)
     {
-        uIManager.ExitPanel(panelName);
+        UIManager.GetInstance().ExitPanel(panelName);
     }
 
     public void IntoSmallLevel()
     {
-        uIManager.IntoSmallLevel();
+        UIManager.GetInstance().IntoSmallLevel();
     }
 
 }

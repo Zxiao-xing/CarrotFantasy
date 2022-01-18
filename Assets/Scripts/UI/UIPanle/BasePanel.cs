@@ -8,7 +8,7 @@ public class BasePanel : MonoBehaviour, IBasePanel
 
     protected virtual void Start()
     {
-        uIFacade = GameManager._Ins.uIManager.mUIFacade;
+        uIFacade = UIManager.GetInstance().mUIFacade;
     }
 
     public virtual void Enter()

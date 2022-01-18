@@ -71,7 +71,7 @@ public class SlideBookByNormalProp : MonoBehaviour,IBeginDragHandler,IEndDragHan
         DOTween.To(() => scrollRect.horizontalNormalizedPosition, lerpValue => 
         scrollRect.horizontalNormalizedPosition = lerpValue,
        currentIndex/(float)(itemCount-1), 0.5f).SetEase(Ease.OutQuint);
-        GameManager._Ins.audioManager.PlayEffAudio("Main/Paging");
+        AudioManager.GetInstance().PlayEffAudio("Main/Paging");
         if (pageTxt != null)
             pageTxt.text = (currentIndex + 1) + "/" + itemCount;
         //scrollRect.DOHorizontalNormalizedPos(currentIndex / (float)(itemCount - 1), 0.5f).SetEase(Ease.OutQuint);

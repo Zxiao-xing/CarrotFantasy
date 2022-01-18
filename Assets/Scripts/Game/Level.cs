@@ -23,7 +23,7 @@ public class Level
     {
         if (currentRound == roundList.Count)//胜利
         {
-            GameController._Ins.GameOver(true);
+            GameController.GetInstance().GameOver(true);
             return;
         }
         if (currentRound == roundList.Count - 1)//最后一关,换背景音乐

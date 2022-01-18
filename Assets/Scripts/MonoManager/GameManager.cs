@@ -2,40 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-/*管理所有管理者的最终端  (是一个单例模式)*/
-public class GameManager : MonoBehaviour
+
+public class GameManager : MonoSingleton<GameManager>
 {
-    /*所有管理者只在这里生成一次,是一种伪单例*/
-    public FactoryManager factoryManager { get; private set; }
-    public PlayerManager playerManager { get; private set; }
-    public UIManager uIManager { get; private set; }
-    public AudioManager audioManager { get; private set; }
-
-    private static GameManager _ins;
-    public static GameManager _Ins { get => _ins; }
-
-    private void Awake()
+    private void Update()
     {
-        DontDestroyOnLoad(gameObject);
-        //保证Canvas不被销毁
-        Canvas canvas = FindObjectOfType<Canvas>();
-        DontDestroyOnLoad(canvas.gameObject);
-        DontDestroyOnLoad(Camera.main.gameObject);
-        _ins = this;
-        playerManager = new PlayerManager();
-        factoryManager = new FactoryManager();
-        audioManager = new AudioManager();
-        uIManager = new UIManager();
-    }
-
-    public void SaveData()
-    {
-        playerManager.SaveData();
-    }
-
-    public void LoadData()
-    {
-        playerManager.LoadData();
+        if (ScreenCache.Cache())
+        {
+            UIManager.GetInstance().MatchScreen();
+        }
     }
 
     // 退出游戏时保存数据
@@ -43,4 +18,28 @@ public class GameManager : MonoBehaviour
     {
         SaveData();
     }
+    protected override void Init()
+    {
+        //保证 Canvas、Camera 不被销毁
+        Canvas canvas = FindObjectOfType<Canvas>();
+        DontDestroyOnLoad(canvas.gameObject);
+        DontDestroyOnLoad(Camera.main.gameObject);
+
+        // 打开开始面板
+        UIManager.GetInstance().OpenStartPanel();
+    }
+
+    public void SaveData()
+    {
+        PlayerManager.GetInstance().SaveData();
+    }
+
+    public void LoadData()
+    {
+        PlayerManager.GetInstance().LoadData();
+    }
+
+
+
+
 }

@@ -18,7 +18,7 @@ public class MonsterNestPanel : BasePanel
         milkTxt = topTrans.Find("Txt_Milk").GetComponent<Text>();
         nestTxt = topTrans.Find("Txt_Nest").GetComponent<Text>();
         cookiesTxt = topTrans.Find("Txt_Cookies").GetComponent<Text>();
-        shopDiamandsTxt.text = GameManager._Ins.playerManager.GetPlayerInfo().diamands.ToString();
+        shopDiamandsTxt.text = PlayerManager.GetInstance().GetPlayerInfo().diamands.ToString();
         shopGo = transform.Find("ShopPage").gameObject;
 
     }
@@ -26,7 +26,7 @@ public class MonsterNestPanel : BasePanel
     public override void Enter()
     {
         base.Enter();
-        GameManager._Ins.audioManager.PlayBG("MonsterNest/BGMusic02");
+        AudioManager.GetInstance().PlayBG("MonsterNest/BGMusic02");
         UpdateText();
         CreateBabies();
     }
@@ -40,20 +40,19 @@ public class MonsterNestPanel : BasePanel
     public void BuyItems(int itemType)
     {
         uIFacade.PlayButtonAudio();
-        PlayerManager gm = GameManager._Ins.playerManager;
         switch (itemType)
         {
             case 1:
-                gm.GetPlayerInfo().diamands -= milkPrice;
-                gm.GetPlayerInfo().milk += 10;
+                PlayerManager.GetInstance().GetPlayerInfo().diamands -= milkPrice;
+                PlayerManager.GetInstance().GetPlayerInfo().milk += 10;
                 break;
             case 2:
-                gm.GetPlayerInfo().diamands -= cookiesPrice;
-                gm.GetPlayerInfo().cookies += 1;
+                PlayerManager.GetInstance().GetPlayerInfo().diamands -= cookiesPrice;
+                PlayerManager.GetInstance().GetPlayerInfo().cookies += 1;
                 break;
             case 3:
-                gm.GetPlayerInfo().diamands -= nestPrice;
-                gm.GetPlayerInfo().nest += 1;
+                PlayerManager.GetInstance().GetPlayerInfo().diamands -= nestPrice;
+                PlayerManager.GetInstance().GetPlayerInfo().nest += 1;
                 break;
             default:
                 break;
@@ -65,7 +64,7 @@ public class MonsterNestPanel : BasePanel
     {
         uIFacade.PlayButtonAudio();
         shopGo.SetActive(true);
-        int diamands = GameManager._Ins.playerManager.GetPlayerInfo().diamands;
+        int diamands = PlayerManager.GetInstance().GetPlayerInfo().diamands;
         btnMilk.interactable = false;
         btnNest.interactable = false;
         btnCookies.interactable = false;
@@ -86,22 +85,21 @@ public class MonsterNestPanel : BasePanel
 
     public void UpdateText()
     {
-        PlayerManager gm = GameManager._Ins.playerManager;
-        milkTxt.text = gm.GetPlayerInfo().milk.ToString();
-        nestTxt.text = gm.GetPlayerInfo().nest.ToString();
-        cookiesTxt.text = gm.GetPlayerInfo().cookies.ToString();
-        shopDiamandsTxt.text = gm.GetPlayerInfo().diamands.ToString();
+        milkTxt.text = PlayerManager.GetInstance().GetPlayerInfo().milk.ToString();
+        nestTxt.text = PlayerManager.GetInstance().GetPlayerInfo().nest.ToString();
+        cookiesTxt.text = PlayerManager.GetInstance().GetPlayerInfo().cookies.ToString();
+        shopDiamandsTxt.text = PlayerManager.GetInstance().GetPlayerInfo().diamands.ToString();
     }
 
     void CreateBabies()
     {
         babyGroupTrans = transform.Find("Emp_Monsters");
-        List<MonsterPetData> datas = GameManager._Ins.playerManager.GetPlayerInfo().monsterPetDatasList;
+        List<MonsterPetData> datas = PlayerManager.GetInstance().GetPlayerInfo().monsterPetDatasList;
         GameObject babyGo = null;
         int i = babyGroupTrans.childCount;
         for (; i < datas.Count; i++)
         {
-            babyGo = GameManager._Ins.factoryManager.GetObject(ObjectFactoryType.UIFactory, "Emp_Monster");
+            babyGo = FactoryManager.GetInstance().GetObject(ObjectFactoryType.UIFactory, "Emp_Monster");
             babyGo.transform.SetParent(babyGroupTrans);
             babyGo.GetComponent<MonsterBaby>().Init(datas[i]);
         }

@@ -24,7 +24,6 @@ public class Grids : MonoBehaviour
     public GridState state = new GridState();
     public GridPosIndex pos = new GridPosIndex();
     GameObject curretnItem;
-    GameController gameController;
     [HideInInspector]
     public GameObject towerGo = null;//格子上建的塔
     [HideInInspector]
@@ -33,8 +32,7 @@ public class Grids : MonoBehaviour
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        gameController = GameController._Ins;
-        mapMaker = gameController.mapMaker;
+        mapMaker = GameController.GetInstance().mapMaker;
         levelUPsign = transform.Find("LevelUP").gameObject;
         levelUPsign.SetActive(false);
 #if Tool
@@ -57,7 +55,7 @@ public class Grids : MonoBehaviour
         if (towerGo != null)
         {
             if (towerGo.GetComponent<TowerPersonalProperty>().towerLevel < 3 &&
-               gameController.coins >= towerGo.GetComponent<TowerPersonalProperty>().upPrice)
+               GameController.GetInstance().coins >= towerGo.GetComponent<TowerPersonalProperty>().upPrice)
             {
                 if (levelUPsign.activeSelf == false)
                     levelUPsign.SetActive(true);
@@ -145,7 +143,7 @@ public class Grids : MonoBehaviour
         //选择的UI就不执行
         if (EventSystem.current.IsPointerOverGameObject())
             return;
-        gameController.ClickGrid(this);
+        GameController.GetInstance().ClickGrid(this);
     }
 #endif
 
@@ -177,12 +175,12 @@ public class Grids : MonoBehaviour
             spriteRenderer.sprite = mapMaker.gridSp;
             if (towerGo == null)
             {
-                gameController.towerList.SetActive(true);
+                GameController.GetInstance().towerList.SetActive(true);
                 SetTowerListToRightPos();
             }
             else
             {
-                gameController.towerShow.SetActive(true);
+                GameController.GetInstance().towerShow.SetActive(true);
                 towerGo.GetComponent<Tower>().attackRender.enabled = true;
                 SetTowerShowToRightPos();
             }
@@ -196,26 +194,26 @@ public class Grids : MonoBehaviour
     /// </summary>
     void SetTowerListToRightPos()
     {
-        int towerNums = gameController.towerList.transform.childCount;
+        int towerNums = GameController.GetInstance().towerList.transform.childCount;
         Vector3 pos = transform.position;
-        pos.y += mapMaker.gridHeight;
-        if (this.pos.yIndex >= MapMaker.yRow - 2)
-            pos.y = transform.position.y - mapMaker.gridHeight;
+        pos.y += mapMaker.m_gridHeight;
+        if (this.pos.yIndex >= MapMaker.m_row - 2)
+            pos.y = transform.position.y - mapMaker.m_gridHeight;
         if (towerNums < 5)
         {
             if (this.pos.xIndex == 0)
-                pos.x = transform.position.x + mapMaker.gridWidth * (towerNums - 1) * .5f;
-            else if (this.pos.xIndex == MapMaker.xColumn - 1)
-                pos.x = transform.position.x - mapMaker.gridWidth * (towerNums - 1) * .5f;
+                pos.x = transform.position.x + mapMaker.m_gridWidth * (towerNums - 1) * .5f;
+            else if (this.pos.xIndex == MapMaker.m_column - 1)
+                pos.x = transform.position.x - mapMaker.m_gridWidth * (towerNums - 1) * .5f;
         }
         else
         {
             if (this.pos.xIndex <= 1)
-                pos.x = transform.position.x + mapMaker.gridWidth * (towerNums - 1) * .5f;
-            else if (this.pos.xIndex >= MapMaker.xColumn - 2)
-                pos.x = transform.position.x - mapMaker.gridWidth * (towerNums - 1) * .5f;
+                pos.x = transform.position.x + mapMaker.m_gridWidth * (towerNums - 1) * .5f;
+            else if (this.pos.xIndex >= MapMaker.m_column - 2)
+                pos.x = transform.position.x - mapMaker.m_gridWidth * (towerNums - 1) * .5f;
         }
-        gameController.towerList.transform.position = pos;
+        GameController.GetInstance().towerList.transform.position = pos;
 
     }
 
@@ -225,22 +223,22 @@ public class Grids : MonoBehaviour
     /// </summary>
     void SetTowerShowToRightPos()
     {
-        gameController.towerShow.transform.position = transform.position;
-        gameController.towerDesTrans.localPosition = gameController.btnDown.localPosition;
-        gameController.towerUpTrans.localPosition = gameController.btnUp.localPosition;
+        GameController.GetInstance().towerShow.transform.position = transform.position;
+        GameController.GetInstance().towerDesTrans.localPosition = GameController.GetInstance().btnDown.localPosition;
+        GameController.GetInstance().towerUpTrans.localPosition = GameController.GetInstance().btnUp.localPosition;
         if (pos.yIndex == 7)
         {
             if (pos.xIndex <= 1)
-                gameController.towerUpTrans.localPosition = gameController.btnRight.localPosition;
+                GameController.GetInstance().towerUpTrans.localPosition = GameController.GetInstance().btnRight.localPosition;
             else
-                gameController.towerUpTrans.localPosition = gameController.btnLeft.localPosition;
+                GameController.GetInstance().towerUpTrans.localPosition = GameController.GetInstance().btnLeft.localPosition;
         }
         else if (pos.yIndex == 0)
         {
             if (pos.xIndex <= 1)
-                gameController.towerDesTrans.localPosition = gameController.btnRight.localPosition;
+                GameController.GetInstance().towerDesTrans.localPosition = GameController.GetInstance().btnRight.localPosition;
             else
-                gameController.towerDesTrans.localPosition = gameController.btnLeft.localPosition;
+                GameController.GetInstance().towerDesTrans.localPosition = GameController.GetInstance().btnLeft.localPosition;
         }
     }
 
@@ -264,10 +262,10 @@ public class Grids : MonoBehaviour
     {
         spriteRenderer.enabled = false;
         if (towerGo == false)
-            gameController.towerList.SetActive(false);
+            GameController.GetInstance().towerList.SetActive(false);
         else
         {
-            gameController.towerShow.SetActive(false);
+            GameController.GetInstance().towerShow.SetActive(false);
             towerGo.GetComponent<Tower>().attackRender.enabled = false;
         }
 
@@ -287,24 +285,22 @@ public class Grids : MonoBehaviour
         curretnItem = Instantiate(mapMaker.itemPrefabs[state.itemID]);
 #endif
 #if Game
-        if (gameController == null)
-            gameController = GameController._Ins;
-        curretnItem = gameController.GetObject(ObjectFactoryType.GameFactory, gameController.CurLevelGroup + "/Items/" + state.itemID);
+        curretnItem = GameController.GetInstance().GetObject(ObjectFactoryType.GameFactory, GameController.GetInstance().CurLevelGroup + "/Items/" + state.itemID);
 #endif
-        curretnItem.transform.SetParent(gameController.transform);
+        curretnItem.transform.SetParent(GameController.GetInstance().transform);
         // curretnItem.transform.localScale = Vector3.one;
         curretnItem.GetComponent<Item>().ID = state.itemID;
         if (state.itemID <= 2)
         {
             Vector3 pos = transform.position;
-            pos.x += mapMaker.gridWidth / 2;
-            pos.y += mapMaker.gridHeight / 2;
+            pos.x += mapMaker.m_gridWidth / 2;
+            pos.y += mapMaker.m_gridHeight / 2;
             curretnItem.transform.position = pos;
         }
         else if (state.itemID <= 4)
         {
             Vector3 pos = transform.position;
-            pos.x -= mapMaker.gridWidth / 2;
+            pos.x -= mapMaker.m_gridWidth / 2;
             curretnItem.transform.position = pos;
         }
         else
@@ -318,7 +314,7 @@ public class Grids : MonoBehaviour
     public void UpdateState(GridState state)
     {
         if (mapMaker == null)
-            mapMaker = gameController.mapMaker;
+            mapMaker = GameController.GetInstance().mapMaker;
         this.state = state;
         if (curretnItem != null)
             Destroy(curretnItem);

@@ -94,13 +94,13 @@ public class SetPanel : BasePanel
 
     private void UpdateStatic()
     {
-        staticTexts[0].text = uIFacade.playerManager.GetPlayerInfo().adventureMaps.ToString();
-        staticTexts[1].text = uIFacade.playerManager.GetPlayerInfo().hideLevels.ToString();
-        staticTexts[2].text = uIFacade.playerManager.GetPlayerInfo().bossMaps.ToString();
-        staticTexts[3].text = uIFacade.playerManager.GetPlayerInfo().coins.ToString();
-        staticTexts[4].text = uIFacade.playerManager.GetPlayerInfo().monsterDefeated.ToString();
-        staticTexts[5].text = uIFacade.playerManager.GetPlayerInfo().bossDefeated.ToString();
-        staticTexts[6].text = uIFacade.playerManager.GetPlayerInfo().destroyItems.ToString();
+        staticTexts[0].text = PlayerManager.GetInstance().GetPlayerInfo().adventureMaps.ToString();
+        staticTexts[1].text = PlayerManager.GetInstance().GetPlayerInfo().hideLevels.ToString();
+        staticTexts[2].text = PlayerManager.GetInstance().GetPlayerInfo().bossMaps.ToString();
+        staticTexts[3].text = PlayerManager.GetInstance().GetPlayerInfo().coins.ToString();
+        staticTexts[4].text = PlayerManager.GetInstance().GetPlayerInfo().monsterDefeated.ToString();
+        staticTexts[5].text = PlayerManager.GetInstance().GetPlayerInfo().bossDefeated.ToString();
+        staticTexts[6].text = PlayerManager.GetInstance().GetPlayerInfo().destroyItems.ToString();
     }
 
     public override void Enter()

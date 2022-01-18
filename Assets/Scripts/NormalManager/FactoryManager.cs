@@ -8,7 +8,7 @@ public enum ObjectFactoryType
     UIPanelFactory,
     GameFactory
 }
-public class FactoryManager
+public class FactoryManager : Singleton<FactoryManager>
 {
     Dictionary<ObjectFactoryType, BaseObjectFactory> objectFactoryDict = new Dictionary<ObjectFactoryType, BaseObjectFactory>();
     AudioClipFactory audioClipFactory;
@@ -16,7 +16,7 @@ public class FactoryManager
     RunTimeAnimatorFactory runTimeAnimatorFactory;
     JsonFactory m_jsonFactory;
 
-    public FactoryManager()
+    protected override void Init()
     {
         objectFactoryDict[ObjectFactoryType.UIFactory] = new UIFactory();
         objectFactoryDict[ObjectFactoryType.GameFactory] = new GameFactory();

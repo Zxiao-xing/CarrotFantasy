@@ -16,7 +16,7 @@ public class BulletCrystal : MonoBehaviour
         if (targetTrans != null && targetTrans.gameObject.activeSelf)
         {
             targetTrans.SendMessage("TakeDamage", damage);
-            GameObject effectGO = GameController._Ins.GetObject(ObjectFactoryType.GameFactory, "Tower/ID" + towerID + "/Effect/" + towerLevel);
+            GameObject effectGO = GameController.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Tower/ID" + towerID + "/Effect/" + towerLevel);
             effectGO.transform.position = targetTrans.position;
         }
     }

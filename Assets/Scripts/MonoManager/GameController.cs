@@ -2,19 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+public class GameController : MonoSingleton<GameController>
 {
-    private static GameController _ins;
-    public static GameController _Ins
-    {
-        get
-        {
-            if (_ins == null)
-                _ins = GameObject.FindObjectOfType<GameController>();
-            return _ins;
-        }
-    }
-
     public int CurLevelGroup { get; private set; }
     public int CurLevel { get; private set; }
     public MapMaker mapMaker { get; private set; }
@@ -51,10 +40,9 @@ public class GameController : MonoBehaviour
     NormalModelPanel normalModelPanel;
     int nowRoundIndex;
     #region 生命周期函数
-    private void Awake()
+    protected override void Init()
     {
         mapMaker = GetComponent<MapMaker>();
-        PlayerManager playerManager = GameManager._Ins.playerManager;
         //下标从0开始但是json文件存储的关卡名字从1开始编号
         CurLevelGroup = (int)LevelManager.GetInstance().LevelGroupId + 1;
         CurLevel = (int)LevelManager.GetInstance().LevelId + 1;
@@ -65,13 +53,12 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        coins = GameManager._Ins.playerManager.GetPlayerInfo().coins;
+        coins = PlayerManager.GetInstance().GetPlayerInfo().coins;
         mapMaker.LoadLevel(CurLevelGroup, CurLevel);
         Invoke("DelayToStart", 3);
         LoadTowerButtons();
 
-        normalModelPanel = GameManager._Ins.uIManager.
-        GetScenePanel(StringManager.NormalModelPanel).GetComponent<NormalModelPanel>();
+        normalModelPanel = UIManager.GetInstance().GetScenePanel(StringManager.NormalModelPanel).GetComponent<NormalModelPanel>();
 
         normalModelPanel.coinTxt.text = coins.ToString();
         normalModelPanel.waveTxt.text = "0   " + 1.ToString();
@@ -84,7 +71,7 @@ public class GameController : MonoBehaviour
     void DelayToStart()
     {
         level = new Level(mapMaker.roundInfo);
-        GameManager._Ins.audioManager.PlayBG("NormalMordel/");
+        AudioManager.GetInstance().PlayBG("NormalMordel/");
     }
 
     private void Update()
@@ -150,7 +137,7 @@ public class GameController : MonoBehaviour
         {//玩家已有怪物数量是否已经满了
             temp = Random.Range(1, 4);
         }
-        while (temp == 4 && GameManager._Ins.playerManager.GetPlayerInfo().
+        while (temp == 4 && PlayerManager.GetInstance().GetPlayerInfo().
         monsterPetDatasList.Count >= 3);
         normalModelPanel.ShowPrize(temp);
     }
@@ -201,7 +188,7 @@ public class GameController : MonoBehaviour
         firePoint.transform.SetParent(fireTransform);
         firePoint.transform.position = fireTransform.position;
         Vector3 pos = firePoint.transform.position;
-        pos.y += mapMaker.gridHeight / 2;
+        pos.y += mapMaker.m_gridHeight / 2;
         firePoint.transform.position = pos;
     }
 
@@ -260,7 +247,7 @@ public class GameController : MonoBehaviour
         int waves = nowRoundIndex + 1;
         int allwaves = (int)m_curLevelData.TotalWave;
         Sprite carrotSp = null, gameModeSp;
-        if (GameManager._Ins.uIManager.mUIFacade.currentScene.GetType() == typeof(GameNormalState))
+        if (UIManager.GetInstance().mUIFacade.currentScene.GetType() == typeof(GameNormalState))
             gameModeSp = GetSprite("NormalMordel/GameOverAndWin/gameover0-hd_10");
         else//没有图片资源了 所以就这样吧
             gameModeSp = GetSprite("NormalMordel/GameOverAndWin/gameover0-hd_10");
@@ -282,27 +269,27 @@ public class GameController : MonoBehaviour
     #region factoryManager的函数封装
     public GameObject GetObject(ObjectFactoryType factoryType, string itemPath)
     {
-        return GameManager._Ins.factoryManager.GetObject(factoryType, itemPath);
+        return FactoryManager.GetInstance().GetObject(factoryType, itemPath);
     }
 
     public void PushObject(ObjectFactoryType factoryType, string itemPath, GameObject go)
     {
-        GameManager._Ins.factoryManager.PushObject(factoryType, itemPath, go);
+        FactoryManager.GetInstance().PushObject(factoryType, itemPath, go);
     }
 
     public Sprite GetSprite(string spritePath)
     {
-        return GameManager._Ins.factoryManager.GetSprite(spritePath);
+        return FactoryManager.GetInstance().GetSprite(spritePath);
     }
 
     public AudioClip GetAudioClip(string clipPath)
     {
-        return GameManager._Ins.factoryManager.GetAudioClip(clipPath);
+        return FactoryManager.GetInstance().GetAudioClip(clipPath);
     }
 
     public RuntimeAnimatorController GetRunTimeController(string controllerPath)
     {
-        return GameManager._Ins.factoryManager.GetRuntimeAnimatorController(controllerPath);
+        return FactoryManager.GetInstance().GetRuntimeAnimatorController(controllerPath);
     }
     #endregion
 

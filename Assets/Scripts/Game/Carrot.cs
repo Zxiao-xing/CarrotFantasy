@@ -30,7 +30,7 @@ public class Carrot : MonoBehaviour
         sprite = new Sprite[7];
         for (int i = 0; i < 7; i++)
         {
-            sprite[i] = GameManager._Ins.factoryManager.GetSprite("NormalMordel/Game/Carrot/" + i);
+            sprite[i] = FactoryManager.GetInstance().GetSprite("NormalMordel/Game/Carrot/" + i);
         }
     }
 
@@ -67,7 +67,7 @@ public class Carrot : MonoBehaviour
         nowHP--;
         hpTxt.text = nowHP.ToString();
         if (nowHP <= 0)
-            GameController._Ins.GameOver(false);
+            GameController.GetInstance().GameOver(false);
         else
         {
             if (nowHP <= 7)

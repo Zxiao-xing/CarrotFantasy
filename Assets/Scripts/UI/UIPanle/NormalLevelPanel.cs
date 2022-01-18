@@ -9,7 +9,6 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class NormalLevelPanel : BasePanel
 {
-    PlayerManager playerManager;
     string fileName = "GameOption/Normal/Level/";
     const string levelPrefabName = "Level";
     List<GameObject> levels = new List<GameObject>(5);
@@ -28,7 +27,6 @@ public class NormalLevelPanel : BasePanel
     protected override void Start()
     {
         base.Start();
-        playerManager = uIFacade.playerManager;
         m_curLevelGroupId = (int)LevelManager.GetInstance().LevelGroupId;
         m_levelDataList = LevelManager.GetInstance().GetLevelInfoByLevelGroupId((uint)m_curLevelGroupId);
         contentTrans = GetComponentInChildren<ScrollRect>().content;
@@ -51,7 +49,7 @@ public class NormalLevelPanel : BasePanel
             level.GetComponent<Image>().sprite = uIFacade.GetSprite(fileName + m_curLevelGroupId + "/" + LevelManager.GetInstance().GetLevelFileName(m_levelDataList[i].LevelId));
             level.transform.SetParent(contentTrans, false);
 
-            LevelInfo levelInfo = GameManager._Ins.playerManager.GetPlayerLevelInfo((uint)m_curLevelGroupId, m_levelDataList[i].LevelId);
+            LevelInfo levelInfo = PlayerManager.GetInstance().GetPlayerLevelInfo((uint)m_curLevelGroupId, m_levelDataList[i].LevelId);
             level.transform.Find("Img_Lock").gameObject.SetActive(levelInfo.IsLocked);
             level.transform.Find("Img_AllClear").gameObject.SetActive(levelInfo.IsAllClear);
 
@@ -109,7 +107,7 @@ public class NormalLevelPanel : BasePanel
             towers[i].GetComponent<Image>().sprite = sprite;
         }
         // 更新 “已锁定” mask
-        LevelInfo levelInfo = GameManager._Ins.playerManager.GetPlayerLevelInfo((uint)m_curLevelGroupId, (uint)m_curLevelIndex);
+        LevelInfo levelInfo = PlayerManager.GetInstance().GetPlayerLevelInfo((uint)m_curLevelGroupId, (uint)m_curLevelIndex);
         m_LockMaskUI.SetActive(levelInfo.IsLocked);
         // 更新怪物波数
         wavesTxt.text = m_levelDataList[m_curLevelIndex].TotalWave.ToString();
@@ -130,7 +128,8 @@ public class NormalLevelPanel : BasePanel
     {
         base.Enter();
 
-        if (playerManager != null)
+        // todo：这里看看
+        if(slideBookByPos != null)
         {
             m_curLevelGroupId = (int)LevelManager.GetInstance().LevelGroupId;
             slideBookByPos.ResetPos();

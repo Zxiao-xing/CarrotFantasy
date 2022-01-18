@@ -8,7 +8,6 @@ public class Item : MonoBehaviour
     private int HP;
     private int nowHP;
     public int ID;
-    GameController gameController;
     private Slider hpSlider;
     float timeVal = 3;
     float timer = 0;
@@ -22,7 +21,6 @@ public class Item : MonoBehaviour
 
     private void Start()
     {
-        gameController = GameController._Ins;
         hpSlider = GetComponentInChildren<Slider>();
         prize = ID * 100;
         Init();
@@ -53,7 +51,7 @@ public class Item : MonoBehaviour
     {
         if (EventSystem.current.IsPointerOverGameObject())
             return;
-        GameController._Ins.SetFirePoint(transform);
+        GameController.GetInstance().SetFirePoint(transform);
     }
 
     public void TakeDamage(int damage)
@@ -69,15 +67,15 @@ public class Item : MonoBehaviour
 
     void Die()
     {
-        if (gameController.fireTrans == transform)
-            gameController.HideFirePoint();
-        GameObject priseGO = GameManager._Ins.factoryManager.GetObject(ObjectFactoryType.GameFactory, "CoinCanvas");
-        priseGO.transform.SetParent(gameController.transform);
+        if (GameController.GetInstance().fireTrans == transform)
+            GameController.GetInstance().HideFirePoint();
+        GameObject priseGO = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "CoinCanvas");
+        priseGO.transform.SetParent(GameController.GetInstance().transform);
         priseGO.transform.position = transform.position;
         priseGO.GetComponentInChildren<GetCoin>().ShowMoney(prize);
 
-        GameObject desGo = GameManager._Ins.factoryManager.GetObject(ObjectFactoryType.GameFactory, "DestoryEff");
+        GameObject desGo = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "DestoryEff");
         desGo.transform.position = transform.position;
-        GameManager._Ins.factoryManager.PushObject(ObjectFactoryType.GameFactory, gameController.CurLevelGroup + "/Items/" + ID, gameObject);
+        FactoryManager.GetInstance().PushObject(ObjectFactoryType.GameFactory, GameController.GetInstance().CurLevelGroup + "/Items/" + ID, gameObject);
     }
 }

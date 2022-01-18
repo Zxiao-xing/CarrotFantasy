@@ -32,7 +32,7 @@ public class PlayerInfo
 /// <summary>
 /// 储存玩家所有的数据信息
 /// </summary>
-public class PlayerManager
+public class PlayerManager : Singleton<PlayerManager>
 {
     private PlayerInfo m_playerInfo;
 

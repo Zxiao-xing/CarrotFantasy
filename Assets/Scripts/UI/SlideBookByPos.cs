@@ -78,7 +78,7 @@ public class SlideBookByPos : MonoBehaviour, IBeginDragHandler, IEndDragHandler
             currentIndex++;
             return;
         }
-        GameManager._Ins.audioManager.PlayEffAudio("Main/Paging");
+        AudioManager.GetInstance().PlayEffAudio("Main/Paging");
         float offsetPos = -currentIndexOffset * oneItemPosX;
         contentPosX += offsetPos;
         content.DOLocalMoveX(contentPosX, 0.5f).SetEase(Ease.OutQuint);

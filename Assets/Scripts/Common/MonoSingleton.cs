@@ -59,6 +59,14 @@ public class MonoSingleton<T> : MonoBehaviour where T : Component
         return s_instance;
     }
 
+    public static void DestoryInstance()
+    {
+        if(s_instance != null)
+        {
+            Destroy(s_instance.gameObject);
+        }
+    }
+
     // 判断是否存在单例
     public bool HasInstance()
     {

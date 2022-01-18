@@ -17,7 +17,7 @@ public class ButtonSellTower : MonoBehaviour
     private void OnEnable()
     {
         button.onClick.AddListener(SellTower);
-        priceTxt.text = GameController._Ins.selectedGrid.towerGo.
+        priceTxt.text = GameController.GetInstance().selectedGrid.towerGo.
             GetComponent<TowerPersonalProperty>().sellPrice.ToString();
     }
 
@@ -28,7 +28,7 @@ public class ButtonSellTower : MonoBehaviour
 
     void SellTower()
     {
-        GameController._Ins.selectedGrid.towerGo.
+        GameController.GetInstance().selectedGrid.towerGo.
             GetComponent<TowerPersonalProperty>().SellTower();
     }
 }

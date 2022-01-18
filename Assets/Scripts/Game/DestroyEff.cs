@@ -9,11 +9,11 @@ public class DestroyEff:MonoBehaviour
 
     private void OnEnable()
     {
-        Invoke("DestroyByTime", liveTime/GameController._Ins.playSpeed);
+        Invoke("DestroyByTime", liveTime/ GameController.GetInstance().playSpeed);
     }
 
     void DestroyByTime()
     {
-        GameManager._Ins.factoryManager.PushObject(ObjectFactoryType.GameFactory, objectname, gameObject);
+        FactoryManager.GetInstance().PushObject(ObjectFactoryType.GameFactory, objectname, gameObject);
     }
 }

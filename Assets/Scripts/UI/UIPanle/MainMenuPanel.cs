@@ -19,7 +19,7 @@ public class MainMenuPanel : BasePanel
         birdTrans.DOLocalMoveY(165,1.5f).SetLoops(-1,LoopType.Yoyo);
         cloudeTrans.DOLocalMoveX(640,6).SetLoops(-1, LoopType.Restart);
 
-        Transform btns = transform.Find("Btns");
+        Transform btns = transform.Find("Btn_Mid");
         btns.Find("Btn_Set").GetComponent<Button>().onClick.AddListener(SetBtnClick);
         btns.Find("Btn_Help").GetComponent<Button>().onClick.AddListener(HelpBtnClick);
     }
@@ -48,7 +48,7 @@ public class MainMenuPanel : BasePanel
         transform.DOLocalMoveX(0, 0.5f);
         birdTrans.gameObject.SetActive(true);
         cloudeTrans.gameObject.SetActive(true);
-        GameManager._Ins.audioManager.PlayBG("Main/BGMusic");
+        AudioManager.GetInstance().PlayBG("Main/BGMusic");
     }
 
     public void HelpBtnClick()

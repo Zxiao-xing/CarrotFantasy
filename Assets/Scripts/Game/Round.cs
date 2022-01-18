@@ -26,7 +26,7 @@ public class Round
 
     public void Handel()
     {
-        GameController._Ins.CreatMonster(roundInfo);
+        GameController.GetInstance().CreatMonster(roundInfo);
     }
 
 }

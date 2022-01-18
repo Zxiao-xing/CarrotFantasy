@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 public class Monster : MonoBehaviour
 {
-    GameController gameController;
     public List<Vector3> monsterPos = new List<Vector3>();
     Animator am;
 
@@ -27,11 +26,10 @@ public class Monster : MonoBehaviour
 
     private void Awake()
     {
-        gameController = GameController._Ins;
         am = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         hpslider = GetComponentInChildren<Slider>();
-        monsterPos = gameController.GetComponent<MapMaker>().GetMonsterPosVect();
+        monsterPos = GameController.GetInstance().GetComponent<MapMaker>().GetMonsterPosVect();
         desSpeedShitSP = transform.Find("Shit").GetComponent<SpriteRenderer>();
     }
 
@@ -42,7 +40,7 @@ public class Monster : MonoBehaviour
 
     private void Update()
     {
-        if (gameController.isStop)
+        if (GameController.GetInstance().isStop)
             return;
         if (nowPosIndex == monsterPos.Count - 1)
         {
@@ -61,7 +59,7 @@ public class Monster : MonoBehaviour
         if (isReach == false)
         {
             transform.position = Vector3.Lerp(transform.position, monsterPos[nowPosIndex + 1],
-                1 / Vector3.Distance(transform.position, monsterPos[nowPosIndex + 1]) * Time.deltaTime * speed * gameController.playSpeed);
+                1 / Vector3.Distance(transform.position, monsterPos[nowPosIndex + 1]) * Time.deltaTime * speed * GameController.GetInstance().playSpeed);
 
             if (Vector3.Distance(transform.position, monsterPos[nowPosIndex + 1]) < 0.1f)
             {
@@ -74,7 +72,7 @@ public class Monster : MonoBehaviour
     public void GetMonsterProperty()
     {
         //通过更换动画控制器来改变怪物的形态
-        am.runtimeAnimatorController = GameManager._Ins.factoryManager.GetRuntimeAnimatorController("Monster/" + gameController.CurLevelGroup + "/" + id);
+        am.runtimeAnimatorController = FactoryManager.GetInstance().GetRuntimeAnimatorController("Monster/" + GameController.GetInstance().CurLevelGroup + "/" + id);
     }
 
     //每一次从对象池拿出来时做的初始化状态操作
@@ -121,27 +119,27 @@ public class Monster : MonoBehaviour
 
     void Killed(bool isreach)
     {
-        if (gameController.fireTrans == transform)
-            gameController.HideFirePoint();
-        GameObject dieEff = GameManager._Ins.factoryManager.GetObject(ObjectFactoryType.GameFactory, "DestoryEff");
-        dieEff.transform.SetParent(gameController.transform);
+        if (GameController.GetInstance().fireTrans == transform)
+            GameController.GetInstance().HideFirePoint();
+        GameObject dieEff = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "DestoryEff");
+        dieEff.transform.SetParent(GameController.GetInstance().transform);
         dieEff.transform.position = transform.position;
-        gameController.KillMonster(isreach,transform.position);
+        GameController.GetInstance().KillMonster(isreach,transform.position);
         if (isreach == false)
         {
-            GameObject coinGo = GameManager._Ins.factoryManager.GetObject(ObjectFactoryType.GameFactory, "CoinCanvas");
-             coinGo.transform.SetParent(gameController.transform);
+            GameObject coinGo = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "CoinCanvas");
+             coinGo.transform.SetParent(GameController.GetInstance().transform);
             coinGo.transform.localPosition = transform.localPosition;
             coinGo.GetComponentInChildren<GetCoin>().ShowMoney(prize);
         }
-        GameManager._Ins.factoryManager.PushObject(ObjectFactoryType.GameFactory, "Monster", gameObject);
+        FactoryManager.GetInstance().PushObject(ObjectFactoryType.GameFactory, "Monster", gameObject);
     }
 
     private void OnMouseDown()
     {
         if (EventSystem.current.IsPointerOverGameObject())
             return;
-        gameController.SetFirePoint(transform);
+        GameController.GetInstance().SetFirePoint(transform);
     }
 
 }

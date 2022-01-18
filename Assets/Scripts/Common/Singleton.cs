@@ -8,7 +8,7 @@ public class Singleton<T> where T : class, new()
     private static T s_instance;
 
     // 获取单例
-    public T GetInstance()
+    public static T GetInstance()
     {
         if(s_instance == null)
         {
@@ -18,14 +18,14 @@ public class Singleton<T> where T : class, new()
     }
 
     // 可以更自由的主动创建单例，如创建代价较大可以提前创建等
-    public void CreateInstance()
+    public static void CreateInstance()
     {
         s_instance = new T();
         (s_instance as Singleton<T>).Init();
     }
 
     // 销毁单例
-    public void DestoryInstance()
+    public static void DestoryInstance()
     {
         if(s_instance != null)
         {
@@ -35,7 +35,7 @@ public class Singleton<T> where T : class, new()
     }
 
     // 是否拥有单例
-    public bool HasInstance()
+    public static bool HasInstance()
     {
         return (s_instance != null);
     }

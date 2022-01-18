@@ -12,16 +12,16 @@ public class BulletBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (!targetTrans.gameObject.activeSelf || GameController._Ins.isStop)
+        if (!targetTrans.gameObject.activeSelf || GameController.GetInstance().isStop)
         {
-            GameController._Ins.PushObject(ObjectFactoryType.GameFactory, "Tower/ID" + towerID + "/Bullect/" + towerLevel, gameObject);
+            GameController.GetInstance().PushObject(ObjectFactoryType.GameFactory, "Tower/ID" + towerID + "/Bullect/" + towerLevel, gameObject);
             return;
         }
         if (targetTrans.gameObject.activeSelf)
         {
             LookAtTarget();
             transform.position = Vector3.MoveTowards(transform.position, targetTrans.position, speed
-                * Time.deltaTime * GameController._Ins.playSpeed);
+                * Time.deltaTime * GameController.GetInstance().playSpeed);
         }
     }
 
@@ -54,9 +54,9 @@ public class BulletBase : MonoBehaviour
             //再次判断目标是否已经被击杀 防止2颗子弹同时打中敌人的message调用Bug
             if (collision.gameObject.activeSelf == true)
                 collision.SendMessage("TakeDamage", damage);
-            GameObject effGO = GameController._Ins.GetObject(ObjectFactoryType.GameFactory, "Tower/ID" + towerID + "/Effect/" + towerLevel);
+            GameObject effGO = GameController.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Tower/ID" + towerID + "/Effect/" + towerLevel);
             effGO.transform.position = transform.position;
-            GameController._Ins.PushObject(ObjectFactoryType.GameFactory, "Tower/ID" + towerID + "/Bullect/" + towerLevel, gameObject);
+            GameController.GetInstance().PushObject(ObjectFactoryType.GameFactory, "Tower/ID" + towerID + "/Bullect/" + towerLevel, gameObject);
         }
     }
 

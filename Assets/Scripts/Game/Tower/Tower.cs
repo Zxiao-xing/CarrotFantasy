@@ -11,7 +11,6 @@ public class Tower : MonoBehaviour
     TowerPersonalProperty towerPersonalProperty;
     //有没有集火目标 有没有目标
     bool isFireTarget, hasTarget;
-    GameController gameController;
       
     private void Awake()
     {
@@ -27,13 +26,12 @@ public class Tower : MonoBehaviour
 
     private void Start()
     {
-        gameController = GameController._Ins;
     }
 
     private void Update()
     {
         //更新集火目标发生的变化
-        if (isFireTarget & towerPersonalProperty.targetTrans != gameController.fireTrans)
+        if (isFireTarget & towerPersonalProperty.targetTrans != GameController.GetInstance().fireTrans)
         {
             isFireTarget = false;
             hasTarget = false;
@@ -66,9 +64,9 @@ public class Tower : MonoBehaviour
     {
         if (!collision.tag.Equals("Monster") && !collision.tag.Equals("Item"))
             return;
-        if (gameController.fireTrans != null && isFireTarget == false)
+        if (GameController.GetInstance().fireTrans != null && isFireTarget == false)
         {
-            if (collision.transform == gameController.fireTrans)
+            if (collision.transform == GameController.GetInstance().fireTrans)
             {
                 isFireTarget = true;
                 hasTarget = true;
@@ -83,7 +81,7 @@ public class Tower : MonoBehaviour
                 }
             }
         }
-        else if (gameController.fireTrans == null)
+        else if (GameController.GetInstance().fireTrans == null)
         {
             if (hasTarget == false)
             {
@@ -91,7 +89,7 @@ public class Tower : MonoBehaviour
                 towerPersonalProperty.targetTrans = collision.transform;
             }
         }
-        if (towerPersonalProperty.targetTrans != gameController.fireTrans && towerPersonalProperty.targetTrans.
+        if (towerPersonalProperty.targetTrans != GameController.GetInstance().fireTrans && towerPersonalProperty.targetTrans.
     tag.Equals("Item") && collision.tag.Equals("Monster"))
         {
             towerPersonalProperty.targetTrans = collision.transform;
@@ -104,9 +102,9 @@ public class Tower : MonoBehaviour
     {
         if (!collision.tag.Equals("Monster") && !collision.tag.Equals("Item"))
             return;
-        if (gameController.fireTrans != null && isFireTarget == false)
+        if (GameController.GetInstance().fireTrans != null && isFireTarget == false)
         {
-            if (collision.transform == gameController.fireTrans)
+            if (collision.transform == GameController.GetInstance().fireTrans)
             {
                 isFireTarget = true;
                 hasTarget = true;
@@ -121,7 +119,7 @@ public class Tower : MonoBehaviour
                 }
             }
         }
-        else if (gameController.fireTrans == null)
+        else if (GameController.GetInstance().fireTrans == null)
         {
             if (hasTarget == false)
             {
@@ -129,7 +127,7 @@ public class Tower : MonoBehaviour
                 towerPersonalProperty.targetTrans = collision.transform;
             }
         }
-        if (towerPersonalProperty.targetTrans != gameController.fireTrans && towerPersonalProperty.targetTrans.
+        if (towerPersonalProperty.targetTrans != GameController.GetInstance().fireTrans && towerPersonalProperty.targetTrans.
          tag.Equals("Item") && collision.tag.Equals("Monster"))
         {
             towerPersonalProperty.targetTrans = collision.transform;

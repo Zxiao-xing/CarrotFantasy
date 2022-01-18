@@ -11,22 +11,20 @@ public class CrystalTowerProperty : TowerPersonalProperty
 
     private void OnEnable()
     {
-        if (gameController == null)
-            return;
-        bulletGO = GameManager._Ins.factoryManager.GetObject(ObjectFactoryType.GameFactory, "Tower/ID" + tower.towerID + "/Bullect/" + towerLevel);
+        bulletGO = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Tower/ID" + tower.towerID + "/Bullect/" + towerLevel);
         bulletGO.SetActive(false);
     }
 
     protected override void Start()
     {
         base.Start();
-        bulletGO = GameManager._Ins.factoryManager.GetObject(ObjectFactoryType.GameFactory, "Tower/ID" + tower.towerID + "/Bullect/" + towerLevel);
+        bulletGO = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Tower/ID" + tower.towerID + "/Bullect/" + towerLevel);
         bulletGO.SetActive(false);
     }
 
     protected override void Update()
     {
-        if (gameController.isStop)
+        if (GameController.GetInstance().isStop)
             return;
         if (targetTrans == null || targetTrans.gameObject.activeSelf == false)
         {
@@ -38,7 +36,7 @@ public class CrystalTowerProperty : TowerPersonalProperty
             if (bulletGO.activeSelf==false)
                 bulletGO.SetActive(true);
             SetFlashData();
-            if (attackTimeVal >= attackCD/gameController.playSpeed)
+            if (attackTimeVal >= attackCD/ GameController.GetInstance().playSpeed)
             {
                 animator.Play("Attack");
                 bulletGO.GetComponent<BulletCrystal>().TakeDamage(targetTrans);
@@ -67,7 +65,7 @@ public class CrystalTowerProperty : TowerPersonalProperty
 
     protected override void DestroyTower()
     {
-        GameManager._Ins.factoryManager.PushObject(ObjectFactoryType.GameFactory, "Tower/ID" + tower.towerID + "/Bullect/" + towerLevel, bulletGO); 
+        FactoryManager.GetInstance().PushObject(ObjectFactoryType.GameFactory, "Tower/ID" + tower.towerID + "/Bullect/" + towerLevel, bulletGO); 
         base.DestroyTower();
     }
 }

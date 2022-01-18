@@ -17,7 +17,6 @@ public class TowerPersonalProperty : MonoBehaviour
     protected Tower tower;
     protected float attackTimeVal;
     [SerializeField] protected float attackCD;
-    protected GameController gameController;
     protected Animator animator;
     protected Vector3 targetPos;
     [SerializeField] bool canRotate;
@@ -32,7 +31,6 @@ public class TowerPersonalProperty : MonoBehaviour
     {
         sellPrice = price / 2;
         upPrice = (int)(price * 1.5f);
-        gameController = GameController._Ins; ;
     }
 
     private void OnEnable()
@@ -42,7 +40,7 @@ public class TowerPersonalProperty : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (gameController.isStop)
+        if (GameController.GetInstance().isStop)
             return;
         if (canRotate)
             RotateTower();
@@ -72,14 +70,14 @@ public class TowerPersonalProperty : MonoBehaviour
 
     protected virtual void Attack()
     {
-        if (attackTimeVal >= attackCD / gameController.playSpeed)
+        if (attackTimeVal >= attackCD / GameController.GetInstance().playSpeed)
         {
             if (targetTrans != null)
             {
                 attackTimeVal = 0;
                 //直接播放动画机上的指定名称动画
                 animator.Play("Attack");
-                GameObject bullect = GameManager._Ins.factoryManager.GetObject(ObjectFactoryType.GameFactory, "Tower/ID" + tower.towerID + "/Bullect/" + towerLevel);
+                GameObject bullect = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Tower/ID" + tower.towerID + "/Bullect/" + towerLevel);
                 bullect.transform.position = transform.position;
                 bullect.GetComponent<BulletBase>().SetTarget(targetTrans);
             }
@@ -96,34 +94,34 @@ public class TowerPersonalProperty : MonoBehaviour
 
     public void SellTower()
     {
-        gameController.ChangeCoin(sellPrice);
+        GameController.GetInstance().ChangeCoin(sellPrice);
 
-        gameController.selectedGrid.HideGrid();
-        gameController.selectedGrid.towerGo = null;
-        gameController.selectedGrid.levelUPsign.SetActive(false);
-        gameController.selectedGrid = null;
+        GameController.GetInstance().selectedGrid.HideGrid();
+        GameController.GetInstance().selectedGrid.towerGo = null;
+        GameController.GetInstance().selectedGrid.levelUPsign.SetActive(false);
+        GameController.GetInstance().selectedGrid = null;
         DestroyTower();
     }
 
     public void UPTower()
     {
-        gameController.ChangeCoin(-upPrice);
+        GameController.GetInstance().ChangeCoin(-upPrice);
 
-        GameObject go = GameManager._Ins.factoryManager.GetObject(ObjectFactoryType.GameFactory, "Tower/ID" + tower.towerID + "/TowerSet/" + (towerLevel + 1));
+        GameObject go = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Tower/ID" + tower.towerID + "/TowerSet/" + (towerLevel + 1));
         go.transform.SetParent(transform.parent);
         go.transform.position = transform.position;
-        gameController.selectedGrid.towerGo = go;
+        GameController.GetInstance().selectedGrid.towerGo = go;
 
-        gameController.selectedGrid.HideGrid();
-        gameController.selectedGrid = null;
+        GameController.GetInstance().selectedGrid.HideGrid();
+        GameController.GetInstance().selectedGrid = null;
         DestroyTower();
     }
 
    protected virtual void DestroyTower()
     {
-        GameObject eff = GameManager._Ins.factoryManager.GetObject(ObjectFactoryType.GameFactory, "BuildEff");
+        GameObject eff = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "BuildEff");
         eff.transform.position = transform.position;
-        GameManager._Ins.factoryManager.PushObject(ObjectFactoryType.GameFactory, "Tower/ID" + tower.towerID + "/TowerSet/" + towerLevel, gameObject);
+        FactoryManager.GetInstance().PushObject(ObjectFactoryType.GameFactory, "Tower/ID" + tower.towerID + "/TowerSet/" + towerLevel, gameObject);
     }
 
 }

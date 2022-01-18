@@ -20,12 +20,12 @@ public class GetCoin : MonoBehaviour
     {
         txt_Coin.text = money.ToString();
         if (money > 500)
-            img_Coin.sprite = GameManager._Ins.factoryManager.GetSprite("NormalMordel/Game/Coin");
+            img_Coin.sprite = FactoryManager.GetInstance().GetSprite("NormalMordel/Game/Coin");
         else
-            img_Coin.sprite = GameManager._Ins.factoryManager.GetSprite("NormalMordel/Game/ManyCoin");
-        transform.parent.DOLocalMoveY(3, 2f / GameController._Ins.playSpeed);
-        img_Coin.DOFade(0, 2f / GameController._Ins.playSpeed);
-        txt_Coin.DOFade(0, 2f / GameController._Ins.playSpeed).OnComplete(Hide);
+            img_Coin.sprite = FactoryManager.GetInstance().GetSprite("NormalMordel/Game/ManyCoin");
+        transform.parent.DOLocalMoveY(3, 2f / GameController.GetInstance().playSpeed);
+        img_Coin.DOFade(0, 2f / GameController.GetInstance().playSpeed);
+        txt_Coin.DOFade(0, 2f / GameController.GetInstance().playSpeed).OnComplete(Hide);
     }
 
     void Hide()
@@ -38,6 +38,6 @@ public class GetCoin : MonoBehaviour
         color.a = 1;
         txt_Coin.color = color;
 
-        GameManager._Ins.factoryManager.PushObject(ObjectFactoryType.GameFactory, objectName, transform.parent.gameObject);
+        FactoryManager.GetInstance().PushObject(ObjectFactoryType.GameFactory, objectName, transform.parent.gameObject);
     }
 }

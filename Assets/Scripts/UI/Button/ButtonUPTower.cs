@@ -7,13 +7,11 @@ public class ButtonUPTower : MonoBehaviour
 {
     Button button;
     Sprite canUpLevel, cannotUpLevel, reachHighestLevel;
-    GameController gameController;
     Image image;
     Text priceTxt;
 
     private void Awake()
     {
-        gameController = GameController._Ins;
         button = GetComponent<Button>();
         image = GetComponent<Image>();
         priceTxt = GetComponentInChildren<Text>();
@@ -30,9 +28,9 @@ public class ButtonUPTower : MonoBehaviour
     private void Start()
     {
         string path = "NormalMordel/Game/Tower/";
-        canUpLevel = gameController.GetSprite(path + "Btn_CanUpLevel");
-        cannotUpLevel = gameController.GetSprite(path + "Btn_CantUpLevel");
-        reachHighestLevel = gameController.GetSprite(path + "Btn_ReachHighestLevel");
+        canUpLevel = GameController.GetInstance().GetSprite(path + "Btn_CanUpLevel");
+        cannotUpLevel = GameController.GetInstance().GetSprite(path + "Btn_CantUpLevel");
+        reachHighestLevel = GameController.GetInstance().GetSprite(path + "Btn_ReachHighestLevel");
         UpdateUI();
     }
 
@@ -43,7 +41,7 @@ public class ButtonUPTower : MonoBehaviour
 
     void UpdateUI()
     {
-        TowerPersonalProperty tp = gameController.selectedGrid.towerGo.GetComponent<TowerPersonalProperty>();
+        TowerPersonalProperty tp = GameController.GetInstance().selectedGrid.towerGo.GetComponent<TowerPersonalProperty>();
         priceTxt.enabled = true;
         if (tp.towerLevel >= 3)
         {
@@ -52,7 +50,7 @@ public class ButtonUPTower : MonoBehaviour
             button.interactable = false;
         }
 
-        else if (gameController.coins >= tp.upPrice)
+        else if (GameController.GetInstance().coins >= tp.upPrice)
         {
             image.sprite = canUpLevel;
             priceTxt.text = tp.upPrice.ToString();
@@ -69,7 +67,7 @@ public class ButtonUPTower : MonoBehaviour
 
     void TowerUP()
     {
-        gameController.selectedGrid.towerGo.GetComponent<TowerPersonalProperty>().UPTower();
+        GameController.GetInstance().selectedGrid.towerGo.GetComponent<TowerPersonalProperty>().UPTower();
     }
 
 }
