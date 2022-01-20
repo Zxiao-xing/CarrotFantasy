@@ -53,8 +53,15 @@ public class FactoryManager : Singleton<FactoryManager>
         return runTimeAnimatorFactory.GetResource(controllerName);
     }
 
+    // 获取 json 文本
     public string GetJsonTextString(string fileName)
     {
         return m_jsonFactory.GetResource(fileName);
+    }
+
+    // 获取 json 中存储的对象
+    public T GetJsonObject<T>(string fileName)
+    {
+        return m_jsonFactory.GetJsonObject<T>(fileName);
     }
 }

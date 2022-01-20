@@ -3,24 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
-public class Grids : MonoBehaviour
-{
-    public struct GridState
-    {
-        public bool isMonsterPoint;
-        public int itemID;
-        public bool canBuild;
-        public bool hasItem;
-    }
 
-    public struct GridPosIndex
-    {
-        public int xIndex, yIndex;
-    }
+public struct GridState
+{
+    public bool isMonsterPoint;
+    public int itemID;
+    public bool canBuild;
+    public bool hasItem;
+}
+
+public struct GridPosIndex
+{
+    public int xIndex, yIndex;
+}
+
+public class Grid : MonoBehaviour
+{
 
     MapMaker mapMaker;
 
     SpriteRenderer spriteRenderer;
+
     public GridState state = new GridState();
     public GridPosIndex pos = new GridPosIndex();
     GameObject curretnItem;
@@ -72,7 +75,9 @@ public class Grids : MonoBehaviour
     public void Init()
     {
         if (curretnItem != null)
+        {
             Destroy(curretnItem);
+        }
         spriteRenderer.enabled = true;
         spriteRenderer.sprite = mapMaker.gridSp;
         state.isMonsterPoint = false;
@@ -168,7 +173,9 @@ public class Grids : MonoBehaviour
     public void ShowGrid()
     {
         if (state.canBuild == false)
+        {
             ShowCannotBuild();
+        }
         else
         {
             spriteRenderer.enabled = true;
@@ -314,16 +321,22 @@ public class Grids : MonoBehaviour
     public void UpdateState(GridState state)
     {
         if (mapMaker == null)
+        {
             mapMaker = GameController.GetInstance().mapMaker;
+        }
         this.state = state;
         if (curretnItem != null)
+        {
             Destroy(curretnItem);
+        }
         spriteRenderer.enabled = true;
         if (state.canBuild == true)
         {
             spriteRenderer.sprite = mapMaker.gridSp;
             if (state.hasItem && state.itemID != -1)
+            {
                 CreatItem();
+            }
             ShowGridShape();
         }
         else

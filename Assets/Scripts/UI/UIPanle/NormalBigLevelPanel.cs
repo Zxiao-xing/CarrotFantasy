@@ -51,7 +51,7 @@ public class NormalBigLevelPanel : BasePanel
             Button levelGroupBtn = levelGroupGo.transform.GetComponent<Button>();
             levelGroupBtn.onClick.RemoveAllListeners();
             // 必须得这样
-            uint levelGtoupId = levelGroupInfoList[i].LevelGroupId;
+            int levelGtoupId = levelGroupInfoList[i].LevelGroupId;
             levelGroupBtn.onClick.AddListener(() =>
             {
                 OnLevelGroupBtn(levelGtoupId);
@@ -64,7 +64,7 @@ public class NormalBigLevelPanel : BasePanel
         }
     }
 
-    private void RefreshLevelStateUI(bool isLocked, int unlockedLevelCount, uint levelAmount, Transform page)
+    private void RefreshLevelStateUI(bool isLocked, int unlockedLevelCount, int levelAmount, Transform page)
     {
         page.Find("Img_Lock").gameObject.SetActive(isLocked);
         page.Find("Img_Page").gameObject.SetActive(!isLocked);
@@ -79,7 +79,7 @@ public class NormalBigLevelPanel : BasePanel
     }
 
     //点击了大关卡面板后进入对应的小关卡选择界面
-    public void OnLevelGroupBtn(uint levelGourpId)
+    public void OnLevelGroupBtn(int levelGourpId)
     {
         uIFacade.PlayButtonAudio();
         // 被锁住就无法进入

@@ -1,6 +1,6 @@
 {
-  "bigLevelID": 1,
-  "levelID": 1,
+  "LevelGroupId": 1,
+  "LevelId": 1,
   "gridPoints": [
     {
       "isMonsterPoint": false,

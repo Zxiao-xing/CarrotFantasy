@@ -21,14 +21,14 @@ public class GameController : MonoSingleton<GameController>
     Level level;
     private int diedMonsterCount;//死亡怪物数目 用于回合数的切换
     [HideInInspector]
-    public Grids selectedGrid;
+    public Grid selectedGrid;
 
     //可以建造的炮塔面板  炮塔升级面板
     public GameObject towerList, towerShow;
     //显示塔升级还是拆除面板上按钮的四个位置
     public Transform btnUp, btnDown, btnLeft, btnRight;
     public Transform towerUpTrans, towerDesTrans;
-    //每一类型防御塔的价钱
+    //每一类型防御塔的价钱,todo：用塔的id来对应塔的信息
     public int[] towerPrice = { 100, 120, 140, 160, 160 };
 
     [SerializeField] GameObject firePoint;//集火点物品图标
@@ -42,18 +42,18 @@ public class GameController : MonoSingleton<GameController>
     #region 生命周期函数
     protected override void Init()
     {
-        mapMaker = GetComponent<MapMaker>();
+        mapMaker = MapMaker.GetInstance();
         //下标从0开始但是json文件存储的关卡名字从1开始编号
         CurLevelGroup = (int)LevelManager.GetInstance().LevelGroupId + 1;
         CurLevel = (int)LevelManager.GetInstance().LevelId + 1;
 
-        m_curLevelData = LevelManager.GetInstance().GetLevelInfoByLevelGroupId((uint)(CurLevelGroup - 1))[CurLevel - 1];
+        m_curLevelData = LevelManager.GetInstance().GetLevelInfoByLevelGroupId(CurLevelGroup - 1)[CurLevel - 1];
         monsterBuilder = new MonsterBuilder();
     }
 
     private void Start()
     {
-        coins = PlayerManager.GetInstance().GetPlayerInfo().coins;
+        coins = PlayerManager.GetInstance().PlayerInfo.coins;
         mapMaker.LoadLevel(CurLevelGroup, CurLevel);
         Invoke("DelayToStart", 3);
         LoadTowerButtons();
@@ -118,7 +118,7 @@ public class GameController : MonoSingleton<GameController>
     {
         diedMonsterCount++;
         if (isReach)
-            mapMaker.carrot.GetComponent<Carrot>().SubtractHP();
+            mapMaker.m_carrot.GetComponent<Carrot>().SubtractHP();
         else//怪物是被炮塔击杀 随机奖励物品
         {
             int temp = Random.Range(1, 100);
@@ -137,8 +137,7 @@ public class GameController : MonoSingleton<GameController>
         {//玩家已有怪物数量是否已经满了
             temp = Random.Range(1, 4);
         }
-        while (temp == 4 && PlayerManager.GetInstance().GetPlayerInfo().
-        monsterPetDatasList.Count >= 3);
+        while (temp == 4 && PlayerManager.GetInstance().PlayerInfo.monsterPetDatasList.Count >= 3);
         normalModelPanel.ShowPrize(temp);
     }
 
@@ -164,7 +163,7 @@ public class GameController : MonoSingleton<GameController>
     }
 
     #region 游戏逻辑相关
-    public void ClickGrid(Grids grid)
+    public void ClickGrid(Grid grid)
     {
         if (grid == selectedGrid)
         {
@@ -253,7 +252,7 @@ public class GameController : MonoSingleton<GameController>
             gameModeSp = GetSprite("NormalMordel/GameOverAndWin/gameover0-hd_10");
         if (isVictory)//只有是胜利结局才去加载萝卜奖励图标资源
         {
-            int hp = mapMaker.carrot.GetComponent<Carrot>().nowHP;
+            int hp = mapMaker.m_carrot.GetComponent<Carrot>().nowHP;
             if (hp >= 8)
                 carrotSp = GetSprite("GameOption/Normal/Level/Carrot_1");
             else if (hp >= 5)

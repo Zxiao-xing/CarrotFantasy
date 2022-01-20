@@ -67,9 +67,9 @@ public class MonsterBaby : MonoBehaviour
 
     void ClickEgg()
     {
-        if (PlayerManager.GetInstance().GetPlayerInfo().nest >= 1)
+        if (PlayerManager.GetInstance().PlayerInfo.nest >= 1)
         {
-            PlayerManager.GetInstance().GetPlayerInfo().nest--;
+            PlayerManager.GetInstance().PlayerInfo.nest--;
             petData.monsterLevel++;
             eggGo.SetActive(false);
             babyGo.SetActive(true);
@@ -86,8 +86,8 @@ public class MonsterBaby : MonoBehaviour
         go.SetActive(!go.activeSelf);
         if (go.activeSelf)
         {
-            go.transform.Find("Btn_Milk").GetComponent<Button>().interactable = PlayerManager.GetInstance().GetPlayerInfo().milk > 0 && petData.remainMilk > 0;
-            go.transform.Find("Btn_Cookies").GetComponent<Button>().interactable = PlayerManager.GetInstance().GetPlayerInfo().cookies > 0 && petData.remainCookies > 0;
+            go.transform.Find("Btn_Milk").GetComponent<Button>().interactable = PlayerManager.GetInstance().PlayerInfo.milk > 0 && petData.remainMilk > 0;
+            go.transform.Find("Btn_Cookies").GetComponent<Button>().interactable = PlayerManager.GetInstance().PlayerInfo.cookies > 0 && petData.remainCookies > 0;
         }
     }
 
@@ -115,9 +115,9 @@ public class MonsterBaby : MonoBehaviour
     {
         feedHeartGo.SetActive(true);
         Invoke("HideHeart", 0.5f);
-        if (PlayerManager.GetInstance().GetPlayerInfo().milk >= petData.remainMilk)
+        if (PlayerManager.GetInstance().PlayerInfo.milk >= petData.remainMilk)
         {
-            PlayerManager.GetInstance().GetPlayerInfo().milk -= petData.remainMilk;
+            PlayerManager.GetInstance().PlayerInfo.milk -= petData.remainMilk;
             petData.remainMilk = 0;
             babyGo.transform.Find("Emp_Btns").Find("Btn_Milk").GetComponent<Button>().interactable = false;
             if (petData.remainCookies == 0)
@@ -127,8 +127,8 @@ public class MonsterBaby : MonoBehaviour
         }
         else
         {
-            petData.remainMilk -= PlayerManager.GetInstance().GetPlayerInfo().milk;
-            PlayerManager.GetInstance().GetPlayerInfo().milk = 0;
+            petData.remainMilk -= PlayerManager.GetInstance().PlayerInfo.milk;
+            PlayerManager.GetInstance().PlayerInfo.milk = 0;
         }
         SendMessageUpwards("UpdateText");
     }
@@ -137,9 +137,9 @@ public class MonsterBaby : MonoBehaviour
     {
         feedHeartGo.SetActive(true);
         Invoke("HideHeart", 0.5f);
-        if (PlayerManager.GetInstance().GetPlayerInfo().cookies >= petData.remainCookies)
+        if (PlayerManager.GetInstance().PlayerInfo.cookies >= petData.remainCookies)
         {
-            PlayerManager.GetInstance().GetPlayerInfo().cookies -= petData.remainCookies;
+            PlayerManager.GetInstance().PlayerInfo.cookies -= petData.remainCookies;
             petData.remainCookies = 0;
             babyGo.transform.Find("Emp_Btns").Find("Btn_Cookies").GetComponent<Button>().interactable = false;
             if (petData.remainMilk == 0)
@@ -147,8 +147,8 @@ public class MonsterBaby : MonoBehaviour
         }
         else
         {
-            petData.remainMilk -= PlayerManager.GetInstance().GetPlayerInfo().milk;
-            PlayerManager.GetInstance().GetPlayerInfo().milk = 0;
+            petData.remainMilk -= PlayerManager.GetInstance().PlayerInfo.milk;
+            PlayerManager.GetInstance().PlayerInfo.milk = 0;
         }
         SendMessageUpwards("UpdateText");
     }
@@ -156,19 +156,19 @@ public class MonsterBaby : MonoBehaviour
     void LevelUp()
     {
         petData.monsterLevel++;
-        for (int i = 0; i < PlayerManager.GetInstance().GetPlayerInfo().monsterPetDatasList.Count; i++)
+        for (int i = 0; i < PlayerManager.GetInstance().PlayerInfo.monsterPetDatasList.Count; i++)
         {
-            if (PlayerManager.GetInstance().GetPlayerInfo().monsterPetDatasList[i].monsterID == petData.monsterID)
+            if (PlayerManager.GetInstance().PlayerInfo.monsterPetDatasList[i].monsterID == petData.monsterID)
             {
-                PlayerManager.GetInstance().GetPlayerInfo().monsterPetDatasList[i] = petData;
+                PlayerManager.GetInstance().PlayerInfo.monsterPetDatasList[i] = petData;
                 break;
             }
         }
         babyGo.SetActive(false);
         normalGo.SetActive(true);
-        //playerManager.GetPlayerInfo().levelUnLocked[petData.monsterID - 1]++;
+        //playerManager.GetPlayerInfo.levelUnLocked[petData.monsterID - 1]++;
         //数组下标从0开始的 所以-1
-        //playerManager.GetPlayerInfo().allSmallLevels[petData.monsterID * 5 - 1].unLocked = true;
+        //playerManager.GetPlayerInfo.allSmallLevels[petData.monsterID * 5 - 1].unLocked = true;
     }
 
     void HideHeart()

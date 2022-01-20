@@ -23,4 +23,10 @@ public class JsonFactory : IResourceFactory<string>
             return "";
         }
     }
+
+    public T GetJsonObject<T>(string fileName)
+    {
+        string jsonText = GetResource(fileName);
+        return JsonMapper.ToObject<T>(jsonText);
+    }
 }

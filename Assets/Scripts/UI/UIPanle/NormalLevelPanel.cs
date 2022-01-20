@@ -28,7 +28,7 @@ public class NormalLevelPanel : BasePanel
     {
         base.Start();
         m_curLevelGroupId = (int)LevelManager.GetInstance().LevelGroupId;
-        m_levelDataList = LevelManager.GetInstance().GetLevelInfoByLevelGroupId((uint)m_curLevelGroupId);
+        m_levelDataList = LevelManager.GetInstance().GetLevelInfoByLevelGroupId(m_curLevelGroupId);
         contentTrans = GetComponentInChildren<ScrollRect>().content;
         slideBookByPos = GetComponentInChildren<SlideBookByPos>();
         wavesTxt = transform.Find("Img_TotalWave/Txt_Waves").GetComponent<Text>();
@@ -49,7 +49,7 @@ public class NormalLevelPanel : BasePanel
             level.GetComponent<Image>().sprite = uIFacade.GetSprite(fileName + m_curLevelGroupId + "/" + LevelManager.GetInstance().GetLevelFileName(m_levelDataList[i].LevelId));
             level.transform.SetParent(contentTrans, false);
 
-            LevelInfo levelInfo = PlayerManager.GetInstance().GetPlayerLevelInfo((uint)m_curLevelGroupId, m_levelDataList[i].LevelId);
+            LevelInfo levelInfo = PlayerManager.GetInstance().GetPlayerLevelInfo(m_curLevelGroupId, m_levelDataList[i].LevelId);
             level.transform.Find("Img_Lock").gameObject.SetActive(levelInfo.IsLocked);
             level.transform.Find("Img_AllClear").gameObject.SetActive(levelInfo.IsAllClear);
 
@@ -93,7 +93,7 @@ public class NormalLevelPanel : BasePanel
             uIFacade.PushObject(ObjectFactoryType.UIFactory, "Tower", towers[i]);
         }
         towers.Clear();
-        List<uint> towerIdList = m_levelDataList[m_curLevelIndex].TowerIdList;
+        List<int> towerIdList = m_levelDataList[m_curLevelIndex].TowerIdList;
         for (int i = 0; i < towerIdList.Count; ++i)
         {
             towers.Add(uIFacade.GetObject(ObjectFactoryType.UIFactory, "Tower"));
@@ -107,7 +107,7 @@ public class NormalLevelPanel : BasePanel
             towers[i].GetComponent<Image>().sprite = sprite;
         }
         // 更新 “已锁定” mask
-        LevelInfo levelInfo = PlayerManager.GetInstance().GetPlayerLevelInfo((uint)m_curLevelGroupId, (uint)m_curLevelIndex);
+        LevelInfo levelInfo = PlayerManager.GetInstance().GetPlayerLevelInfo(m_curLevelGroupId, m_curLevelIndex);
         m_LockMaskUI.SetActive(levelInfo.IsLocked);
         // 更新怪物波数
         wavesTxt.text = m_levelDataList[m_curLevelIndex].TotalWave.ToString();
@@ -140,7 +140,7 @@ public class NormalLevelPanel : BasePanel
 
     public void StartGameBtnClick()
     {
-        LevelManager.GetInstance().LevelId = (uint)m_curLevelIndex;
+        LevelManager.GetInstance().LevelId = m_curLevelIndex;
         uIFacade.ChangeScene(new GameNormalState(uIFacade));
     }
 

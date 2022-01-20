@@ -29,7 +29,7 @@ public class Monster : MonoBehaviour
         am = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         hpslider = GetComponentInChildren<Slider>();
-        monsterPos = GameController.GetInstance().GetComponent<MapMaker>().GetMonsterPosVect();
+        monsterPos = MapMaker.GetInstance().GetMonsterPosVect();
         desSpeedShitSP = transform.Find("Shit").GetComponent<SpriteRenderer>();
     }
 

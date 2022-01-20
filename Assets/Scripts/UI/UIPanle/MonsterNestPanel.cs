@@ -18,7 +18,7 @@ public class MonsterNestPanel : BasePanel
         milkTxt = topTrans.Find("Txt_Milk").GetComponent<Text>();
         nestTxt = topTrans.Find("Txt_Nest").GetComponent<Text>();
         cookiesTxt = topTrans.Find("Txt_Cookies").GetComponent<Text>();
-        shopDiamandsTxt.text = PlayerManager.GetInstance().GetPlayerInfo().diamands.ToString();
+        shopDiamandsTxt.text = PlayerManager.GetInstance().PlayerInfo.diamands.ToString();
         shopGo = transform.Find("ShopPage").gameObject;
 
     }
@@ -43,16 +43,16 @@ public class MonsterNestPanel : BasePanel
         switch (itemType)
         {
             case 1:
-                PlayerManager.GetInstance().GetPlayerInfo().diamands -= milkPrice;
-                PlayerManager.GetInstance().GetPlayerInfo().milk += 10;
+                PlayerManager.GetInstance().PlayerInfo.diamands -= milkPrice;
+                PlayerManager.GetInstance().PlayerInfo.milk += 10;
                 break;
             case 2:
-                PlayerManager.GetInstance().GetPlayerInfo().diamands -= cookiesPrice;
-                PlayerManager.GetInstance().GetPlayerInfo().cookies += 1;
+                PlayerManager.GetInstance().PlayerInfo.diamands -= cookiesPrice;
+                PlayerManager.GetInstance().PlayerInfo.cookies += 1;
                 break;
             case 3:
-                PlayerManager.GetInstance().GetPlayerInfo().diamands -= nestPrice;
-                PlayerManager.GetInstance().GetPlayerInfo().nest += 1;
+                PlayerManager.GetInstance().PlayerInfo.diamands -= nestPrice;
+                PlayerManager.GetInstance().PlayerInfo.nest += 1;
                 break;
             default:
                 break;
@@ -64,7 +64,7 @@ public class MonsterNestPanel : BasePanel
     {
         uIFacade.PlayButtonAudio();
         shopGo.SetActive(true);
-        int diamands = PlayerManager.GetInstance().GetPlayerInfo().diamands;
+        int diamands = PlayerManager.GetInstance().PlayerInfo.diamands;
         btnMilk.interactable = false;
         btnNest.interactable = false;
         btnCookies.interactable = false;
@@ -85,16 +85,16 @@ public class MonsterNestPanel : BasePanel
 
     public void UpdateText()
     {
-        milkTxt.text = PlayerManager.GetInstance().GetPlayerInfo().milk.ToString();
-        nestTxt.text = PlayerManager.GetInstance().GetPlayerInfo().nest.ToString();
-        cookiesTxt.text = PlayerManager.GetInstance().GetPlayerInfo().cookies.ToString();
-        shopDiamandsTxt.text = PlayerManager.GetInstance().GetPlayerInfo().diamands.ToString();
+        milkTxt.text = PlayerManager.GetInstance().PlayerInfo.milk.ToString();
+        nestTxt.text = PlayerManager.GetInstance().PlayerInfo.nest.ToString();
+        cookiesTxt.text = PlayerManager.GetInstance().PlayerInfo.cookies.ToString();
+        shopDiamandsTxt.text = PlayerManager.GetInstance().PlayerInfo.diamands.ToString();
     }
 
     void CreateBabies()
     {
         babyGroupTrans = transform.Find("Emp_Monsters");
-        List<MonsterPetData> datas = PlayerManager.GetInstance().GetPlayerInfo().monsterPetDatasList;
+        List<MonsterPetData> datas = PlayerManager.GetInstance().PlayerInfo.monsterPetDatasList;
         GameObject babyGo = null;
         int i = babyGroupTrans.childCount;
         for (; i < datas.Count; i++)

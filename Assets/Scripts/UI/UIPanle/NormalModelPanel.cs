@@ -75,19 +75,19 @@ public class NormalModelPanel : BasePanel
         {
             case 1:
                 _text = "牛 奶";
-                PlayerManager.GetInstance().GetPlayerInfo().milk++;
+                PlayerManager.GetInstance().PlayerInfo.milk++;
                 break;
             case 2:
                 _text = "饼 干";
-                PlayerManager.GetInstance().GetPlayerInfo().cookies++;
+                PlayerManager.GetInstance().PlayerInfo.cookies++;
                 break;
             case 3:
-                PlayerManager.GetInstance().GetPlayerInfo().nest++;
+                PlayerManager.GetInstance().PlayerInfo.nest++;
                 _text = "怪物窝";
                 break;
             case 4:
                 _text = "神秘蛋";
-                PlayerManager.GetInstance().GetPlayerInfo().monsterPetDatasList.
+                PlayerManager.GetInstance().PlayerInfo.monsterPetDatasList.
                     Add(new MonsterPetData
                     {
                         monsterID = prizeType,
@@ -120,10 +120,11 @@ public class NormalModelPanel : BasePanel
         FinalWaveGo.GetComponent<Image>().DOFade(0, 0.8f).OnComplete(() => GameController.GetInstance().StopGoOnGame(false));
     }
 
-    //重新开始本关卡(按钮响应)
+    //重新开始本关卡(按钮响应)，todo：这个位置的DestoryIntance弄了换一下，改成资源的清空就行了，不然感觉怪怪的？
     public void Restart()
     {
         GameController.DestoryInstance();
+        MapMaker.DestoryInstance();
         uIFacade.ChangeScene(new GameNormalState(uIFacade));
     }
 
@@ -131,6 +132,7 @@ public class NormalModelPanel : BasePanel
     public void ToChooseLevel()
     {
         GameController.DestoryInstance();
+        MapMaker.DestoryInstance();
         uIFacade.ChangeScene(new GameNormalOptionState(uIFacade));
     }
 

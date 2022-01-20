@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// 玩家数据包含得关卡信息
 public class LevelInfo
 {
     public bool IsLocked;               // 是否被锁住
@@ -9,12 +10,14 @@ public class LevelInfo
     public int CarrotState;             // 获取到了啥萝卜
 }
 
+// 玩家数据包含得关卡组信息
 public class LevelGroupInfo
 {
     public bool IsLocked;           // 是否被锁住
     public List<LevelInfo> LevelInfoList = new List<LevelInfo>();           // 包含的关卡信息
 }
 
+// 玩家信息
 public class PlayerInfo
 {
     //帮助界面的数据表数据
@@ -29,12 +32,23 @@ public class PlayerInfo
     public int cookies, milk, nest, diamands;
 }
 
+// 怪物数据
+public class MonsterInfo{
+    public int Id;                  // 怪物 id
+    public string Name;             // 怪物名字
+    public string SpritePath;       // 怪物图片路径
+    public int Damage;              // 怪物能造成得伤害
+    public int Hp;                  // 怪物 hp
+    public int Speed;               // 怪物默认速度
+}
+
 /// <summary>
-/// 储存玩家所有的数据信息
+/// 玩家所需的信息管理，包括玩家数据和其他需要从文件中读取的数据信息
 /// </summary>
 public class PlayerManager : Singleton<PlayerManager>
 {
-    private PlayerInfo m_playerInfo;
+    // 玩家数据
+    public PlayerInfo PlayerInfo { get; set; }
 
     // 判断玩家是否存有数据的标签
     private static string s_hasPlayerInfoFlag = "HasPlayerInfo";
@@ -60,14 +74,14 @@ public class PlayerManager : Singleton<PlayerManager>
     /// </summary>
     public void InitPlayerData()
     {
-        m_playerInfo = new PlayerInfo();
-        m_playerInfo.adventureMaps = 0;
-        m_playerInfo.hideLevels = 0;
-        m_playerInfo.bossMaps = 0;
-        m_playerInfo.coins = 1000;
-        m_playerInfo.bossDefeated = 0;
-        m_playerInfo.monsterDefeated = 0;
-        m_playerInfo.destroyItems = 0;
+        PlayerInfo = new PlayerInfo();
+        PlayerInfo.adventureMaps = 0;
+        PlayerInfo.hideLevels = 0;
+        PlayerInfo.bossMaps = 0;
+        PlayerInfo.coins = 1000;
+        PlayerInfo.bossDefeated = 0;
+        PlayerInfo.monsterDefeated = 0;
+        PlayerInfo.destroyItems = 0;
 
         // 初始化关卡组数据
         for (int i = 0; i < 3; i++)          // todo：关卡组总数从文件获取，这里写死了
@@ -99,52 +113,46 @@ public class PlayerManager : Singleton<PlayerManager>
                 levelInfo.CarrotState = 0;
                 levelGroupInfo.LevelInfoList.Add(levelInfo);
             }
-            m_playerInfo.LevelGroupInfoList.Add(levelGroupInfo);
+            PlayerInfo.LevelGroupInfoList.Add(levelGroupInfo);
         }
 
-        m_playerInfo.monsterPetDatasList = new List<MonsterPetData>();
-        m_playerInfo.cookies = 33;
-        m_playerInfo.milk = 22;
-        m_playerInfo.nest = 0;
-        m_playerInfo.diamands = 25;
-    }
-
-    // 获取玩家数据
-    public PlayerInfo GetPlayerInfo()
-    {
-        return m_playerInfo;
+        PlayerInfo.monsterPetDatasList = new List<MonsterPetData>();
+        PlayerInfo.cookies = 33;
+        PlayerInfo.milk = 22;
+        PlayerInfo.nest = 0;
+        PlayerInfo.diamands = 25;
     }
 
     // 获取玩家关卡组数据链表
     public List<LevelGroupInfo> GetPlayerLevelGroupInfoList()
     {
-        return m_playerInfo.LevelGroupInfoList;
+        return PlayerInfo.LevelGroupInfoList;
     }
 
     // 通过 levelGroupId 获取玩家关卡组数据
-    public LevelGroupInfo GetPlayerLevelGroupInfo(uint levelGroupId)
+    public LevelGroupInfo GetPlayerLevelGroupInfo(int levelGroupId)
     {
         // 潜规则，id 和链表下标是对应的
-        return m_playerInfo.LevelGroupInfoList[(int)levelGroupId];
+        return PlayerInfo.LevelGroupInfoList[levelGroupId];
     }
 
     // 通过 levelGroupId 获取玩家该关卡组中关卡数据链表
-    public List<LevelInfo> GetPlayerLevelInfoList(uint levelGroupId)
+    public List<LevelInfo> GetPlayerLevelInfoList(int levelGroupId)
     {
         LevelGroupInfo levelGroupInfo = GetPlayerLevelGroupInfo(levelGroupId);
         return levelGroupInfo.LevelInfoList;
     }
 
     // 通过 levelGroupId 和 levelId 获取具体关卡数据
-    public LevelInfo GetPlayerLevelInfo(uint levelGroupId, uint levelId)
+    public LevelInfo GetPlayerLevelInfo(int levelGroupId, int levelId)
     {
         // 潜规则，关卡组 id 以及关卡 id 都是和链表下标对应的
         List<LevelInfo> levelInfoList = GetPlayerLevelInfoList(levelGroupId);
-        return levelInfoList[(int)levelId];
+        return levelInfoList[levelId];
     }
 
     // 获取关卡组中已经解锁的关卡数量
-    public int GetUnlockedLevelCountInLevelGroup(uint levelGroupId)
+    public int GetUnlockedLevelCountInLevelGroup(int levelGroupId)
     {
         LevelGroupInfo levelGroupInfo = GetPlayerLevelGroupInfo(levelGroupId);
         int count = 0;
@@ -169,14 +177,14 @@ public class PlayerManager : Singleton<PlayerManager>
     public void SaveData()
     {
         Memento memento = new Memento();
-        memento.SaveData(m_playerInfo);
+        memento.SaveData(PlayerInfo);
     }
 
     // 加载玩家数据
     public void LoadData()
     {
         Memento memento = new Memento();
-        m_playerInfo = memento.LoadData();
+        PlayerInfo = memento.LoadData();
     }
 
 }

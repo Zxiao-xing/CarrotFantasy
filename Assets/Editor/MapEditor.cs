@@ -15,7 +15,7 @@ public class MapEditor : Editor
         base.OnInspectorGUI();
         if(!Application.isPlaying)
             return; 
-        mapMaker = MapMaker._Ins;
+        mapMaker = MapMaker.GetInstance();
         LoadMapFiles();
         EditorGUILayout.BeginHorizontal();
         int currentIndex = EditorGUILayout.Popup(selectedMap, fileName.ToArray());

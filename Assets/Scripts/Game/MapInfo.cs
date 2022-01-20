@@ -2,8 +2,9 @@
 
 public class MapInfo
 {
-    public int bigLevelID, levelID;
-    public List<Grids.GridState> gridPoints = new List<Grids.GridState>();
-    public List<Grids.GridPosIndex> monsterPath = new List<Grids.GridPosIndex>();
+    public int LevelGroupId;
+    public int LevelId;
+    public List<GridState> gridPoints = new List<GridState>();
+    public List<GridPosIndex> monsterPath = new List<GridPosIndex>();
     public List<Round.RoundInfo> roundInfo = new List<Round.RoundInfo>();
 }

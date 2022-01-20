@@ -6,11 +6,11 @@ using LitJson;
 public class LevelManager : Singleton<LevelManager>
 {
     // 当前 levelGroup 和 level 的 id
-    public uint LevelGroupId { get; set; }
-    public uint LevelId { get; set; }
+    public int LevelGroupId { get; set; }
+    public int LevelId { get; set; }
     // 第一层关卡组 id
     private static string s_startLevelGroupFileName = "StartLevelGroup";
-    private List<uint> m_startLevelGroupIdList = new List<uint>();
+    private List<int> m_startLevelGroupIdList = new List<int>();
 
     private static string s_levelGroupFile = "LevelGroups/";
     private static string s_levelFile = "Levels/";
@@ -19,24 +19,23 @@ public class LevelManager : Singleton<LevelManager>
     // Level 同理
 
     // 通过 id 获取 LevelGroup 的 json 文件名
-    public string GetLevelGroupFileName(uint id)
+    public string GetLevelGroupFileName(int id)
     {
         return $"LevelGroup_{id}";
     }
 
     // 通过 id 获取 Level 的 json 文件名
-    public string GetLevelFileName(uint id)
+    public string GetLevelFileName(int id)
     {
         return $"Level_{id}";
     }
 
     // 获取第一层关卡组 id
-    public List<uint> GetStartLevelGroupList()
+    public List<int> GetStartLevelGroupList()
     {
         if (m_startLevelGroupIdList.Count == 0)
         {
-            string jsonText = FactoryManager.GetInstance().GetJsonTextString(s_startLevelGroupFileName);
-            m_startLevelGroupIdList = JsonMapper.ToObject<List<uint>>(jsonText);
+            m_startLevelGroupIdList = FactoryManager.GetInstance().GetJsonObject<List<int>>(s_startLevelGroupFileName);
         }
         return m_startLevelGroupIdList;
     }
@@ -44,35 +43,32 @@ public class LevelManager : Singleton<LevelManager>
     // 获取第一层关卡组信息
     public List<UI_LevelGroupData> GetStartLevelGroupInfoList()
     {
-        List<uint> startLevelGroupIdList = GetStartLevelGroupList();
+        List<int> startLevelGroupIdList = GetStartLevelGroupList();
         List<UI_LevelGroupData> levelGroupInfoList = new List<UI_LevelGroupData>();
 
-        foreach (uint id in startLevelGroupIdList)
+        foreach (int id in startLevelGroupIdList)
         {
-            string jsonText = FactoryManager.GetInstance().GetJsonTextString(s_levelGroupFile + GetLevelGroupFileName(id));
-            levelGroupInfoList.Add(JsonMapper.ToObject<UI_LevelGroupData>(jsonText));
+            levelGroupInfoList.Add(FactoryManager.GetInstance().GetJsonObject<UI_LevelGroupData>(s_levelGroupFile + GetLevelGroupFileName(id)));
         }
         return levelGroupInfoList;
     }
 
     // 通过关卡组 id 获取其中包含的关卡组信息
-    public UI_LevelGroupData GetLevelGroupInfoByLevelGroupId(uint levelGroupId)
+    public UI_LevelGroupData GetLevelGroupInfoByLevelGroupId(int levelGroupId)
     {
-        string jsonText = FactoryManager.GetInstance().GetJsonTextString(s_levelGroupFile + GetLevelGroupFileName(levelGroupId));
-        return JsonMapper.ToObject<UI_LevelGroupData>(jsonText);
+        return FactoryManager.GetInstance().GetJsonObject<UI_LevelGroupData>(s_levelGroupFile + GetLevelGroupFileName(levelGroupId));
     }
 
     // 根据关卡组 id 获取关卡组中的关卡信息
-    public List<UI_LevelData> GetLevelInfoByLevelGroupId(uint levelGroupId)
+    public List<UI_LevelData> GetLevelInfoByLevelGroupId(int levelGroupId)
     {
         UI_LevelGroupData levelGroupInfo = GetLevelGroupInfoByLevelGroupId(levelGroupId);
         List<UI_LevelData> levelInfoList = new List<UI_LevelData>();
-        uint count = levelGroupInfo.BelongLevelCount;
-        for (uint i = 0; i < count; i++)
+        int count = levelGroupInfo.BelongLevelCount;
+        for (int i = 0; i < count; i++)
         {
             // 文件所在位置为：Levels/关卡组id/关卡id，但是关卡 id 是从 0 开始的
-            string jsonText = FactoryManager.GetInstance().GetJsonTextString($"{s_levelFile}{levelGroupId}/{GetLevelFileName(i)}");
-            levelInfoList.Add(JsonMapper.ToObject<UI_LevelData>(jsonText));
+            levelInfoList.Add(FactoryManager.GetInstance().GetJsonObject<UI_LevelData>($"{s_levelFile}{levelGroupId}/{GetLevelFileName(i)}"));
         }
         return levelInfoList;
     }
