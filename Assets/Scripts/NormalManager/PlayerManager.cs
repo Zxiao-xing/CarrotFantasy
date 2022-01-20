@@ -33,13 +33,15 @@ public class PlayerInfo
 }
 
 // 怪物数据
-public class MonsterInfo{
+public class MonsterInfo
+{
     public int Id;                  // 怪物 id
     public string Name;             // 怪物名字
-    public string SpritePath;       // 怪物图片路径
-    public int Damage;              // 怪物能造成得伤害
+    public string AnimatorName;     // 怪物动画控制器名字
+    public int Damage;              // 怪物对萝卜造成的伤害
     public int Hp;                  // 怪物 hp
-    public int Speed;               // 怪物默认速度
+    public float Speed;               // 怪物默认速度
+    public int Coin;                // 击杀可获得的游戏机金币
 }
 
 /// <summary>
@@ -49,30 +51,37 @@ public class PlayerManager : Singleton<PlayerManager>
 {
     // 玩家数据
     public PlayerInfo PlayerInfo { get; set; }
+    // 怪物数据，id 和数据的字典
+    public Dictionary<int, MonsterInfo> MonsterInfoDict { get; private set; }
 
     // 判断玩家是否存有数据的标签
     private static string s_hasPlayerInfoFlag = "HasPlayerInfo";
+
+    private static string s_playerInfoPath = "";                            // 玩家数据存储的路径
+    private static string s_monsterInfoPath = "MonsterData";                // 怪物数据存储的路径
 
     public PlayerManager()
     {
         // 玩家不存在数据就造数据，存在数据则从文件中读取
         if (PlayerPrefs.GetInt(s_hasPlayerInfoFlag) == 0)
         {
-
             InitPlayerData();
-            SaveData();
+            SavePlayerData();
             PlayerPrefs.SetInt(s_hasPlayerInfoFlag, 1);
         }
         else
         {
-            LoadData();
+            LoadPlayerData();
         }
+
+        // 从配置表中加载怪物数据
+        LoadMonsterData();
     }
 
     /// <summary>
-    /// 初始化所有数据
+    /// 初始化玩家数据
     /// </summary>
-    public void InitPlayerData()
+    private void InitPlayerData()
     {
         PlayerInfo = new PlayerInfo();
         PlayerInfo.adventureMaps = 0;
@@ -123,6 +132,31 @@ public class PlayerManager : Singleton<PlayerManager>
         PlayerInfo.diamands = 25;
     }
 
+    // 加载玩家数据
+    private void LoadPlayerData()
+    {
+        Memento memento = new Memento();
+        PlayerInfo = memento.LoadData();
+    }
+
+    // 保存玩家数据
+    public void SavePlayerData()
+    {
+        Memento memento = new Memento();
+        memento.SaveData(PlayerInfo);
+    }
+
+    // 加载怪物数据
+    private void LoadMonsterData()
+    {
+        List<MonsterInfo> monsterInfoList = FactoryManager.GetInstance().GetJsonObject<List<MonsterInfo>>(s_monsterInfoPath);
+        MonsterInfoDict = new Dictionary<int, MonsterInfo>();
+        foreach (MonsterInfo info in monsterInfoList)
+        {
+            MonsterInfoDict.Add(info.Id, info);
+        }
+    }
+
     // 获取玩家关卡组数据链表
     public List<LevelGroupInfo> GetPlayerLevelGroupInfoList()
     {
@@ -167,24 +201,11 @@ public class PlayerManager : Singleton<PlayerManager>
             {
                 count++;
             }
-            // 因为解锁的都是挨着的
+            // 因为解锁的都是挨着的，所以遇到没解锁的后面就都是没解锁的，可以直接跳过了
             break;
         }
         return count;
     }
 
-    // 保存玩家数据
-    public void SaveData()
-    {
-        Memento memento = new Memento();
-        memento.SaveData(PlayerInfo);
-    }
-
-    // 加载玩家数据
-    public void LoadData()
-    {
-        Memento memento = new Memento();
-        PlayerInfo = memento.LoadData();
-    }
 
 }

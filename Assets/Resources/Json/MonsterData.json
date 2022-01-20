@@ -1,0 +1,119 @@
+[
+  {
+    "Id": 0,
+    "Name": "",
+    "AnimatorName": "0",
+    "Damage": 1,
+    "Hp": 100,
+    "Speed": 1,
+    "Coin": 40
+  },
+  {
+    "Id": 1,
+    "Name": "",
+    "AnimatorName": "1",
+    "Damage": 1,
+    "Hp": 100,
+    "Speed": 1,
+    "Coin": 40
+  },
+  {
+    "Id": 2,
+    "Name": "",
+    "AnimatorName": "2",
+    "Damage": 1,
+    "Hp": 100,
+    "Speed": 1,
+    "Coin": 40
+  },
+  {
+    "Id": 3,
+    "Name": "",
+    "AnimatorName": "3",
+    "Damage": 1,
+    "Hp": 100,
+    "Speed": 1,
+    "Coin": 40
+  },
+  {
+    "Id": 4,
+    "Name": "",
+    "AnimatorName": "4",
+    "Damage": 1,
+    "Hp": 100,
+    "Speed": 1,
+    "Coin": 40
+  },
+  {
+    "Id": 5,
+    "Name": "",
+    "AnimatorName": "5",
+    "Damage": 1,
+    "Hp": 100,
+    "Speed": 1,
+    "Coin": 40
+  },
+  {
+    "Id": 6,
+    "Name": "",
+    "AnimatorName": "6",
+    "Damage": 1,
+    "Hp": 100,
+    "Speed": 1,
+    "Coin": 40
+  },
+  {
+    "Id": 7,
+    "Name": "",
+    "AnimatorName": "7",
+    "Damage": 1,
+    "Hp": 100,
+    "Speed": 1,
+    "Coin": 40
+  },
+  {
+    "Id": 8,
+    "Name": "",
+    "AnimatorName": "8",
+    "Damage": 1,
+    "Hp": 100,
+    "Speed": 1,
+    "Coin": 40
+  },
+  {
+    "Id": 9,
+    "Name": "",
+    "AnimatorName": "9",
+    "Damage": 1,
+    "Hp": 100,
+    "Speed": 1,
+    "Coin": 40
+  },
+  {
+    "Id": 10,
+    "Name": "",
+    "AnimatorName": "10",
+    "Damage": 1,
+    "Hp": 100,
+    "Speed": 1,
+    "Coin": 40
+  },
+  {
+    "Id": 11,
+    "Name": "",
+    "AnimatorName": "11",
+    "Damage": 1,
+    "Hp": 100,
+    "Speed": 1,
+    "Coin": 40
+  },
+  {
+    "Id": 12,
+    "Name": "",
+    "AnimatorName": "12",
+    "Damage": 1,
+    "Hp": 100,
+    "Speed": 1,
+    "Coin": 40
+  }
+]

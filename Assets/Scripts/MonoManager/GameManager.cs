@@ -13,11 +13,12 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
-    // 退出游戏时保存数据
+    // 退出游戏时保存玩家数据
     private void OnApplicationQuit()
     {
-        SaveData();
+        PlayerManager.GetInstance().SavePlayerData();
     }
+
     protected override void Init()
     {
         //保证 Canvas、Camera 不被销毁
@@ -28,18 +29,4 @@ public class GameManager : MonoSingleton<GameManager>
         // 打开开始面板
         UIManager.GetInstance().OpenStartPanel();
     }
-
-    public void SaveData()
-    {
-        PlayerManager.GetInstance().SaveData();
-    }
-
-    public void LoadData()
-    {
-        PlayerManager.GetInstance().LoadData();
-    }
-
-
-
-
 }

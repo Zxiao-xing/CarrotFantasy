@@ -100,17 +100,18 @@ public class GameController : MonoSingleton<GameController>
         }
     }
 
+    // todo：移到 MapMaker 里面去把
     public void CreatMonster(Round.RoundInfo roundInfo)
     {
         startPos = mapMaker.grids[mapMaker.monsterPos[0].xIndex, mapMaker.monsterPos[0].yIndex].transform.position;
         monsterNums = 0;
         diedMonsterCount = 0;
         nowRoundInfo = roundInfo;
+        // 出生特效
         bornEff = GetObject(ObjectFactoryType.GameFactory, "BornEff");
         bornEff.transform.SetParent(transform);
         bornEff.transform.position = startPos;
         InvokeRepeating("Creat", (float)1 / playSpeed, (float)1 / playSpeed);
-
     }
 
     //两种状态下杀死怪物:1.没到终点   2.到了终点

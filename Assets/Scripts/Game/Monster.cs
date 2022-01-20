@@ -6,14 +6,14 @@ using UnityEngine.EventSystems;
 public class Monster : MonoBehaviour
 {
     public List<Vector3> monsterPos = new List<Vector3>();
-    Animator am;
+    Animator m_animator;
 
     //属性
     public int id;
     public int allHp, nowHp;
     public float initSpeed, speed;
     public int nowPosIndex = 0;
-    public int prize = 10;
+    public int coin = 10;
     bool isReach = false;
     Slider hpslider;
     SpriteRenderer spriteRenderer;
@@ -26,7 +26,7 @@ public class Monster : MonoBehaviour
 
     private void Awake()
     {
-        am = GetComponent<Animator>();
+        m_animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         hpslider = GetComponentInChildren<Slider>();
         monsterPos = MapMaker.GetInstance().GetMonsterPosVect();
@@ -48,7 +48,7 @@ public class Monster : MonoBehaviour
             Killed(isReach);
             return;
         }
-        if(isDesSpeed)
+        if (isDesSpeed)
         {
             if (desTimer <= 0)
                 CancleDesSpeed();
@@ -72,7 +72,7 @@ public class Monster : MonoBehaviour
     public void GetMonsterProperty()
     {
         //通过更换动画控制器来改变怪物的形态
-        am.runtimeAnimatorController = FactoryManager.GetInstance().GetRuntimeAnimatorController("Monster/" + GameController.GetInstance().CurLevelGroup + "/" + id);
+        m_animator.runtimeAnimatorController = FactoryManager.GetInstance().GetRuntimeAnimatorController("Monster/" + GameController.GetInstance().CurLevelGroup + "/" + PlayerManager.GetInstance().MonsterInfoDict[id].AnimatorName);
     }
 
     //每一次从对象池拿出来时做的初始化状态操作
@@ -94,12 +94,12 @@ public class Monster : MonoBehaviour
         speed = initSpeed;//多次被减速只是刷新减速持续时间 速度不再递减
         speed -= shitDeBuffProperty.desSpeed;
         isDesSpeed = true;
-        desSpeedShitSP.enabled=true;
+        desSpeedShitSP.enabled = true;
     }
 
     private void CancleDesSpeed()
     {
-        desSpeedShitSP.enabled=false;
+        desSpeedShitSP.enabled = false;
         desTimer = 0;
         isDesSpeed = false;
         speed = initSpeed;
@@ -124,13 +124,13 @@ public class Monster : MonoBehaviour
         GameObject dieEff = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "DestoryEff");
         dieEff.transform.SetParent(GameController.GetInstance().transform);
         dieEff.transform.position = transform.position;
-        GameController.GetInstance().KillMonster(isreach,transform.position);
+        GameController.GetInstance().KillMonster(isreach, transform.position);
         if (isreach == false)
         {
             GameObject coinGo = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "CoinCanvas");
-             coinGo.transform.SetParent(GameController.GetInstance().transform);
+            coinGo.transform.SetParent(GameController.GetInstance().transform);
             coinGo.transform.localPosition = transform.localPosition;
-            coinGo.GetComponentInChildren<GetCoin>().ShowMoney(prize);
+            coinGo.GetComponentInChildren<GetCoin>().ShowMoney(coin);
         }
         FactoryManager.GetInstance().PushObject(ObjectFactoryType.GameFactory, "Monster", gameObject);
     }
