@@ -56,12 +56,13 @@ public class MapEditor : Editor
     void LoadMapFiles()
     {
         //读取某一个文件夹下面所有的.json文件,放进一个string数组
-        string[] files = Directory.GetFiles(Application.dataPath+"/Resources/Json/Levels/","*.json");//*代表读取所有
+        string[] files = Directory.GetFiles(Application.dataPath+ "/Resources/Json/Maps/", "*.json");//*代表读取所有
         foreach (var item in files)
         {
             FileInfo fileInfo = new FileInfo(item);
             mapFiles.Add(fileInfo);
-            fileName.Add(fileInfo.Name);
+            string name = fileInfo.Name.TrimEnd(".json".ToCharArray());
+            fileName.Add(name);
         }
     }
 }

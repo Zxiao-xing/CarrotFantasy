@@ -55,6 +55,8 @@ public class MapMaker : MonoSingleton<MapMaker>
         gridCannotBuildSp = GameController.GetInstance().GetSprite("NormalMordel/Game/cantBuild");
 #endif
 #if Tool
+        // 工具模式下不需要 GameController
+        GameController.DestoryInstance();
         LoadGridRes();
 #endif
         InitMap();
@@ -106,15 +108,16 @@ public class MapMaker : MonoSingleton<MapMaker>
                 pos = CorrectPos(new Vector3(i * m_gridWidth, j * m_gridHeight, 0));
                 //地图编辑时没有工厂就直接实例化
 #if Tool
-                GameObject gridGO= Instantiate(grid, pos, Quaternion.identity, transform);
+                gridGO= Instantiate(grid, pos, Quaternion.identity, transform);
 #endif
 #if Game
                 gridGO = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Grid");
                 gridGO.transform.SetParent(transform);
                 gridGO.transform.position = pos;
+#endif
                 // 适配格子大小
                 AdaptGridObjSize(gridGO.GetComponent<SpriteRenderer>());
-#endif
+
                 grids[i, j] = gridGO.GetComponent<Grid>();
                 grids[i, j].pos.xIndex = i;
                 grids[i, j].pos.yIndex = j;
@@ -170,6 +173,10 @@ public class MapMaker : MonoSingleton<MapMaker>
             Vector3 endPos = new Vector3(-m_mapWidth / 2 + x * m_gridWidth, -m_mapHeight / 2);
             Gizmos.DrawLine(startPos, endPos);
         }
+#if Tool
+        m_bgSpriteRenderer = transform.Find("BG").GetComponent<SpriteRenderer>();
+        m_roadSpriteRenderer = transform.Find("Road").GetComponent<SpriteRenderer>();
+#endif
         AdaptGridObjSize(m_bgSpriteRenderer, m_column, m_row);
         AdaptGridObjSize(m_roadSpriteRenderer, m_column, m_row - 2);
     }
@@ -270,14 +277,14 @@ public class MapMaker : MonoSingleton<MapMaker>
     // 加载地图和路
     public void LoadMapAndRoad()
     {
-#if Tool
-        m_roadSprite = Resources.Load<Sprite>("Pictures/NormalMordel/Game/" + currentBigLevel + "/Road" + currentLevel);
-        m_bgSprite = Resources.Load<Sprite>("Pictures/NormalMordel/Game/" + currentBigLevel + "/BG" + currentLevel / 4);      
-#endif
 #if Game
         m_roadSprite = GameController.GetInstance().GetSprite("NormalMordel/Game/" + m_curLevelGroupId + "/Road" + m_curLevelId);
         m_bgSprite = GameController.GetInstance().GetSprite("NormalMordel/Game/" + m_curLevelGroupId + "/BG" + m_curLevelId / 4);
+#elif Tool
+        m_roadSprite = Resources.Load<Sprite>("Pictures/NormalMordel/Game/" + m_curLevelGroupId + "/Road" + m_curLevelId);
+        m_bgSprite = Resources.Load<Sprite>("Pictures/NormalMordel/Game/" + m_curLevelGroupId + "/BG" + m_curLevelId / 4);      
 #endif
+
         m_roadSpriteRenderer.sprite = m_roadSprite;
         m_bgSpriteRenderer.sprite = m_bgSprite;
     }

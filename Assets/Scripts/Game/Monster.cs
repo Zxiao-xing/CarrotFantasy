@@ -72,7 +72,7 @@ public class Monster : MonoBehaviour
     public void GetMonsterProperty()
     {
         //通过更换动画控制器来改变怪物的形态
-        m_animator.runtimeAnimatorController = FactoryManager.GetInstance().GetRuntimeAnimatorController("Monster/" + GameController.GetInstance().CurLevelGroup + "/" + PlayerManager.GetInstance().MonsterInfoDict[id].AnimatorName);
+        m_animator.runtimeAnimatorController = FactoryManager.GetInstance().GetRuntimeAnimatorController("Monster/" + LevelManager.GetInstance().LevelGroupId + "/" + PlayerManager.GetInstance().MonsterInfoDict[id].AnimatorName);
     }
 
     //每一次从对象池拿出来时做的初始化状态操作

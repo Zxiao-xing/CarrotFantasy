@@ -76,6 +76,6 @@ public class Item : MonoBehaviour
 
         GameObject desGo = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "DestoryEff");
         desGo.transform.position = transform.position;
-        FactoryManager.GetInstance().PushObject(ObjectFactoryType.GameFactory, GameController.GetInstance().CurLevelGroup + "/Items/" + ID, gameObject);
+        FactoryManager.GetInstance().PushObject(ObjectFactoryType.GameFactory, LevelManager.GetInstance().LevelGroupId + "/Items/" + ID, gameObject);
     }
 }

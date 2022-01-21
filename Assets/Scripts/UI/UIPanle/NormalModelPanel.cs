@@ -68,8 +68,8 @@ public class NormalModelPanel : BasePanel
     public void ShowPrize(int prizeType)
     {
         StopGoOnGame(true);
-        prizeDesImg.sprite = GameController.GetInstance().GetSprite("MonsterNest/Prize/Instruction" + prizeType);
-        prizeIconImg.sprite = GameController.GetInstance().GetSprite("MonsterNest/Prize/Prize" + prizeType);
+        prizeDesImg.sprite = FactoryManager.GetInstance().GetSprite("MonsterNest/Prize/Instruction" + prizeType);
+        prizeIconImg.sprite = FactoryManager.GetInstance().GetSprite("MonsterNest/Prize/Prize" + prizeType);
         string _text = "";
         switch (prizeType)
         {

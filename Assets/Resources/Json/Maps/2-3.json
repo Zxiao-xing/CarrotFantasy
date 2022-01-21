@@ -16,31 +16,31 @@
     },
     {
       "isMonsterPoint": false,
-      "itemID": 3,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
-      "isMonsterPoint": true,
+      "isMonsterPoint": false,
       "itemID": -1,
-      "canBuild": false,
+      "canBuild": true,
+      "hasItem": true
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
       "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": true,
-      "itemID": -1,
-      "canBuild": false,
+      "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 3,
+      "itemID": 1,
       "canBuild": true,
       "hasItem": true
     },
@@ -57,54 +57,6 @@
       "hasItem": false
     },
     {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": true,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": true,
-      "hasItem": true
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": 3,
-      "canBuild": true,
-      "hasItem": true
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": true,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
       "isMonsterPoint": true,
       "itemID": -1,
       "canBuild": false,
@@ -117,91 +69,7 @@
       "hasItem": false
     },
     {
-      "isMonsterPoint": true,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
       "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": true,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": true,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": true,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": true,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": 2,
-      "canBuild": true,
-      "hasItem": true
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": true,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": true,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": true,
       "itemID": -1,
       "canBuild": false,
       "hasItem": false
@@ -231,85 +99,13 @@
       "hasItem": false
     },
     {
-      "isMonsterPoint": false,
-      "itemID": 5,
-      "canBuild": true,
-      "hasItem": true
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": true,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": 2,
-      "canBuild": true,
-      "hasItem": true
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
       "isMonsterPoint": true,
       "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
       "isMonsterPoint": true,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": true,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": true,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": true,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
       "itemID": -1,
       "canBuild": false,
       "hasItem": false
@@ -329,6 +125,18 @@
     {
       "isMonsterPoint": false,
       "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": 1,
       "canBuild": true,
       "hasItem": true
     },
@@ -341,37 +149,7 @@
     {
       "isMonsterPoint": false,
       "itemID": -1,
-      "canBuild": true,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": 4,
-      "canBuild": true,
-      "hasItem": true
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
       "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": true,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": true,
       "hasItem": false
     },
     {
@@ -383,11 +161,101 @@
     {
       "isMonsterPoint": false,
       "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
+      "itemID": 7,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": true,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": true,
       "itemID": -1,
       "canBuild": false,
       "hasItem": false
@@ -405,6 +273,18 @@
       "hasItem": false
     },
     {
+      "isMonsterPoint": true,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": true
+    },
+    {
       "isMonsterPoint": false,
       "itemID": -1,
       "canBuild": false,
@@ -414,6 +294,18 @@
       "isMonsterPoint": false,
       "itemID": -1,
       "canBuild": true,
+      "hasItem": true
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
       "hasItem": false
     },
     {
@@ -431,24 +323,12 @@
     {
       "isMonsterPoint": false,
       "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": 6,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": -1,
+      "itemID": 0,
       "canBuild": true,
       "hasItem": true
     },
@@ -473,18 +353,6 @@
     {
       "isMonsterPoint": false,
       "itemID": -1,
-      "canBuild": true,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
@@ -498,6 +366,30 @@
       "isMonsterPoint": false,
       "itemID": -1,
       "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
       "hasItem": false
     },
     {
@@ -508,6 +400,72 @@
     },
     {
       "isMonsterPoint": true,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": 2,
+      "canBuild": true,
+      "hasItem": true
+    },
+    {
+      "isMonsterPoint": true,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
       "itemID": -1,
       "canBuild": false,
       "hasItem": false
@@ -517,6 +475,48 @@
       "itemID": 3,
       "canBuild": true,
       "hasItem": true
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": true,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": true,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
     },
     {
       "isMonsterPoint": false,
@@ -581,48 +581,56 @@
   ],
   "monsterPath": [
     {
-      "xIndex": 10,
+      "xIndex": 5,
+      "yIndex": 5
+    },
+    {
+      "xIndex": 5,
       "yIndex": 4
     },
     {
-      "xIndex": 10,
-      "yIndex": 3
+      "xIndex": 1,
+      "yIndex": 4
     },
     {
-      "xIndex": 5,
-      "yIndex": 3
-    },
-    {
-      "xIndex": 5,
-      "yIndex": 5
-    },
-    {
-      "xIndex": 0,
-      "yIndex": 5
-    },
-    {
-      "xIndex": 0,
-      "yIndex": 3
-    },
-    {
-      "xIndex": 2,
-      "yIndex": 3
+      "xIndex": 1,
+      "yIndex": 1
     },
     {
       "xIndex": 2,
       "yIndex": 1
     },
     {
-      "xIndex": 4,
-      "yIndex": 1
+      "xIndex": 2,
+      "yIndex": 0
     },
     {
-      "xIndex": 4,
+      "xIndex": 5,
+      "yIndex": 0
+    },
+    {
+      "xIndex": 5,
       "yIndex": 2
     },
     {
       "xIndex": 8,
       "yIndex": 2
+    },
+    {
+      "xIndex": 8,
+      "yIndex": 1
+    },
+    {
+      "xIndex": 10,
+      "yIndex": 1
+    },
+    {
+      "xIndex": 10,
+      "yIndex": 5
+    },
+    {
+      "xIndex": 8,
+      "yIndex": 5
     }
   ],
   "roundInfo": [

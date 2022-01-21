@@ -28,9 +28,9 @@ public class ButtonUPTower : MonoBehaviour
     private void Start()
     {
         string path = "NormalMordel/Game/Tower/";
-        canUpLevel = GameController.GetInstance().GetSprite(path + "Btn_CanUpLevel");
-        cannotUpLevel = GameController.GetInstance().GetSprite(path + "Btn_CantUpLevel");
-        reachHighestLevel = GameController.GetInstance().GetSprite(path + "Btn_ReachHighestLevel");
+        canUpLevel = FactoryManager.GetInstance().GetSprite(path + "Btn_CanUpLevel");
+        cannotUpLevel = FactoryManager.GetInstance().GetSprite(path + "Btn_CantUpLevel");
+        reachHighestLevel = FactoryManager.GetInstance().GetSprite(path + "Btn_ReachHighestLevel");
         UpdateUI();
     }
 

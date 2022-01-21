@@ -43,12 +43,12 @@ public class ButtonTower : MonoBehaviour
     {
         if (GameController.GetInstance().coins >= towerPrice)
         {
-            image.sprite = GameController.GetInstance().GetSprite(spritePath + "CanClick1");
+            image.sprite = FactoryManager.GetInstance().GetSprite(spritePath + "CanClick1");
             button.interactable = true;
         }
         else
         {
-            image.sprite = GameController.GetInstance().GetSprite(spritePath + "CanClick0");
+            image.sprite = FactoryManager.GetInstance().GetSprite(spritePath + "CanClick0");
             button.interactable = false;
         }
     }
@@ -56,12 +56,12 @@ public class ButtonTower : MonoBehaviour
     void CreateTower()
     {
         //建塔
-        GameObject tower = GameController.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Tower/"+"ID"+towerID+ "/TowerSet/1");
+        GameObject tower = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Tower/"+"ID"+towerID+ "/TowerSet/1");
         tower.transform.SetParent(GameController.GetInstance().selectedGrid.transform);
         tower.transform.position = GameController.GetInstance().selectedGrid.transform.position+Vector3.forward;
         tower.transform.localEulerAngles = new Vector3(-90, 90, 0);
         //加特效
-        GameObject eff = GameController.GetInstance().GetObject(ObjectFactoryType.GameFactory, "BuildEff");
+        GameObject eff = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "BuildEff");
         eff.transform.SetParent(GameController.GetInstance().selectedGrid.transform);
         eff.transform.position = GameController.GetInstance().selectedGrid.transform.position;
         //处理格子

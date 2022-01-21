@@ -40,8 +40,17 @@ public class MonsterInfo
     public string AnimatorName;     // 怪物动画控制器名字
     public int Damage;              // 怪物对萝卜造成的伤害
     public int Hp;                  // 怪物 hp
-    public float Speed;               // 怪物默认速度
+    public float Speed;             // 怪物默认速度
     public int Coin;                // 击杀可获得的游戏机金币
+}
+
+public class TowerInfo
+{
+    public int Id;
+    public string Name;
+    public int BuyPrice;            // 购买金额，升级后就按统一的比例上调？
+    public int SellPrice;           // 出售金额，升级后就按统一的比例上调？
+    public int AttackRange;         // 攻击范围，
 }
 
 /// <summary>
@@ -57,7 +66,7 @@ public class PlayerManager : Singleton<PlayerManager>
     // 判断玩家是否存有数据的标签
     private static string s_hasPlayerInfoFlag = "HasPlayerInfo";
 
-    private static string s_playerInfoPath = "";                            // 玩家数据存储的路径
+    private static string s_playerInfoPath = "PlayerData";                  // 玩家数据存储的路径
     private static string s_monsterInfoPath = "MonsterData";                // 怪物数据存储的路径
 
     public PlayerManager()

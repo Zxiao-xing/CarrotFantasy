@@ -7,7 +7,7 @@ public class Prize : MonoBehaviour
     private void OnMouseDown()
     {
         GameController.GetInstance().GivePrize();
-        GameController.GetInstance().PushObject(ObjectFactoryType.GameFactory, "Prize", gameObject);
+        FactoryManager.GetInstance().PushObject(ObjectFactoryType.GameFactory, "Prize", gameObject);
     }
 
 }

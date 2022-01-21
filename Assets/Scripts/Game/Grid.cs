@@ -20,8 +20,6 @@ public struct GridPosIndex
 public class Grid : MonoBehaviour
 {
 
-    MapMaker mapMaker;
-
     SpriteRenderer spriteRenderer;
 
     public GridState state = new GridState();
@@ -35,11 +33,10 @@ public class Grid : MonoBehaviour
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        mapMaker = GameController.GetInstance().mapMaker;
         levelUPsign = transform.Find("LevelUP").gameObject;
         levelUPsign.SetActive(false);
 #if Tool
-        mapMaker = MapMaker._Ins;
+        //mapMaker = MapMaker.GetInstance();
 #endif     
     }
 
@@ -55,6 +52,7 @@ public class Grid : MonoBehaviour
 
     private void Update()
     {
+#if Game
         if (towerGo != null)
         {
             if (towerGo.GetComponent<TowerPersonalProperty>().towerLevel < 3 &&
@@ -70,6 +68,7 @@ public class Grid : MonoBehaviour
             }
 
         }
+#endif
     }
 
     public void Init()
@@ -79,7 +78,7 @@ public class Grid : MonoBehaviour
             Destroy(curretnItem);
         }
         spriteRenderer.enabled = true;
-        spriteRenderer.sprite = mapMaker.gridSp;
+        spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
         state.isMonsterPoint = false;
         state.itemID = -1;
         state.canBuild = true;
@@ -92,15 +91,15 @@ public class Grid : MonoBehaviour
             state.isMonsterPoint = !state.isMonsterPoint;
             if(state.isMonsterPoint)
             {
-                spriteRenderer.sprite = mapMaker.monsterPosSp;
+                spriteRenderer.sprite = MapMaker.GetInstance().monsterPosSp;
                 state.canBuild = false;
-                mapMaker.monsterPos.Add(pos);
+                MapMaker.GetInstance().monsterPos.Add(pos);
             }
             else
             {
                 state.canBuild = true;
-                mapMaker.monsterPos.Remove(pos);
-                spriteRenderer.sprite = mapMaker.gridSp;
+                MapMaker.GetInstance().monsterPos.Remove(pos);
+                spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
             }
         }
         else if (Input.GetKey(KeyCode.I))
@@ -128,8 +127,8 @@ public class Grid : MonoBehaviour
             else if(state.isMonsterPoint)
             {
                 state.canBuild = true;
-                mapMaker.monsterPos.Remove(pos);
-                spriteRenderer.sprite = mapMaker.gridSp;
+                MapMaker.GetInstance().monsterPos.Remove(pos);
+                spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
                 state.isMonsterPoint = false;
             }
             else
@@ -159,7 +158,7 @@ public class Grid : MonoBehaviour
     {
         if (state.canBuild)
         {
-            spriteRenderer.sprite = mapMaker.gridStartSp;
+            spriteRenderer.sprite = MapMaker.GetInstance().gridStartSp;
             spriteRenderer.DOFade(0, 2.3f).OnComplete(() =>
              {
                  spriteRenderer.enabled = false;
@@ -179,7 +178,7 @@ public class Grid : MonoBehaviour
         else
         {
             spriteRenderer.enabled = true;
-            spriteRenderer.sprite = mapMaker.gridSp;
+            spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
             if (towerGo == null)
             {
                 GameController.GetInstance().towerList.SetActive(true);
@@ -203,22 +202,24 @@ public class Grid : MonoBehaviour
     {
         int towerNums = GameController.GetInstance().towerList.transform.childCount;
         Vector3 pos = transform.position;
-        pos.y += mapMaker.m_gridHeight;
+        float gridHeight = MapMaker.GetInstance().m_gridHeight;
+        float gridWidth = MapMaker.GetInstance().m_gridWidth;
+        pos.y += gridHeight;
         if (this.pos.yIndex >= MapMaker.m_row - 2)
-            pos.y = transform.position.y - mapMaker.m_gridHeight;
+            pos.y = transform.position.y - gridHeight;
         if (towerNums < 5)
         {
             if (this.pos.xIndex == 0)
-                pos.x = transform.position.x + mapMaker.m_gridWidth * (towerNums - 1) * .5f;
+                pos.x = transform.position.x + gridWidth * (towerNums - 1) * .5f;
             else if (this.pos.xIndex == MapMaker.m_column - 1)
-                pos.x = transform.position.x - mapMaker.m_gridWidth * (towerNums - 1) * .5f;
+                pos.x = transform.position.x - gridWidth * (towerNums - 1) * .5f;
         }
         else
         {
             if (this.pos.xIndex <= 1)
-                pos.x = transform.position.x + mapMaker.m_gridWidth * (towerNums - 1) * .5f;
+                pos.x = transform.position.x + gridWidth * (towerNums - 1) * .5f;
             else if (this.pos.xIndex >= MapMaker.m_column - 2)
-                pos.x = transform.position.x - mapMaker.m_gridWidth * (towerNums - 1) * .5f;
+                pos.x = transform.position.x - gridWidth * (towerNums - 1) * .5f;
         }
         GameController.GetInstance().towerList.transform.position = pos;
 
@@ -255,7 +256,7 @@ public class Grid : MonoBehaviour
     private void ShowCannotBuild()
     {
         spriteRenderer.enabled = true;
-        spriteRenderer.sprite = mapMaker.gridCannotBuildSp;
+        spriteRenderer.sprite = MapMaker.GetInstance().gridCannotBuildSp;
         spriteRenderer.DOFade(0, 0.5f).SetLoops(2).OnComplete(() =>
         {
             spriteRenderer.enabled = false;
@@ -283,31 +284,31 @@ public class Grid : MonoBehaviour
         if (state.isMonsterPoint == false)
             return;
         spriteRenderer.enabled = true;
-        spriteRenderer.sprite = mapMaker.gridSp;
+        spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
     }
 
     void CreatItem()
     {
-#if Tool
-        curretnItem = Instantiate(mapMaker.itemPrefabs[state.itemID]);
-#endif
 #if Game
-        curretnItem = GameController.GetInstance().GetObject(ObjectFactoryType.GameFactory, GameController.GetInstance().CurLevelGroup + "/Items/" + state.itemID);
+        curretnItem = GameController.GetInstance().GetObject(ObjectFactoryType.GameFactory, LevelManager.GetInstance().LevelGroupId + "/Items/" + state.itemID);
+#elif Tool
+        curretnItem = Instantiate(MapMaker.GetInstance().itemPrefabs[state.itemID]);
 #endif
+
         curretnItem.transform.SetParent(GameController.GetInstance().transform);
         // curretnItem.transform.localScale = Vector3.one;
         curretnItem.GetComponent<Item>().ID = state.itemID;
         if (state.itemID <= 2)
         {
             Vector3 pos = transform.position;
-            pos.x += mapMaker.m_gridWidth / 2;
-            pos.y += mapMaker.m_gridHeight / 2;
+            pos.x += MapMaker.GetInstance().m_gridWidth / 2;
+            pos.y += MapMaker.GetInstance().m_gridHeight / 2;
             curretnItem.transform.position = pos;
         }
         else if (state.itemID <= 4)
         {
             Vector3 pos = transform.position;
-            pos.x -= mapMaker.m_gridWidth / 2;
+            pos.x -= MapMaker.GetInstance().m_gridWidth / 2;
             curretnItem.transform.position = pos;
         }
         else
@@ -318,12 +319,9 @@ public class Grid : MonoBehaviour
         curretnItem.transform.localPosition += Vector3.forward * -2;
     }
 
+    // 更新格子状态
     public void UpdateState(GridState state)
     {
-        if (mapMaker == null)
-        {
-            mapMaker = GameController.GetInstance().mapMaker;
-        }
         this.state = state;
         if (curretnItem != null)
         {
@@ -332,7 +330,7 @@ public class Grid : MonoBehaviour
         spriteRenderer.enabled = true;
         if (state.canBuild == true)
         {
-            spriteRenderer.sprite = mapMaker.gridSp;
+            spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
             if (state.hasItem && state.itemID != -1)
             {
                 CreatItem();
@@ -342,12 +340,12 @@ public class Grid : MonoBehaviour
         else
         {
             spriteRenderer.enabled = false;
-            //在编辑地图的时候怪物路径点会显示出来,便于编辑 游戏时就该隐藏
 #if Tool
+            //在编辑地图的时候怪物路径点会显示出来,便于编辑 游戏时就该隐藏
             if (state.isMonsterPoint)
             {
                 spriteRenderer.enabled = true;
-                spriteRenderer.sprite = mapMaker.monsterPosSp;
+                spriteRenderer.sprite = MapMaker.GetInstance().monsterPosSp;
             }         
 #endif
         }

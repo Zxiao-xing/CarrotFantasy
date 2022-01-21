@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class GameController : MonoSingleton<GameController>
 {
-    public int CurLevelGroup { get; private set; }
-    public int CurLevel { get; private set; }
-    public MapMaker mapMaker { get; private set; }
+    private MapMaker mapMaker;
     public bool isStop { get; private set; } = false;
 
     public int playSpeed { get; private set; } = 3;
@@ -40,21 +38,20 @@ public class GameController : MonoSingleton<GameController>
     NormalModelPanel normalModelPanel;
     int nowRoundIndex;
     #region 生命周期函数
+#if Game
     protected override void Init()
     {
         mapMaker = MapMaker.GetInstance();
-        //下标从0开始但是json文件存储的关卡名字从1开始编号
-        CurLevelGroup = (int)LevelManager.GetInstance().LevelGroupId + 1;
-        CurLevel = (int)LevelManager.GetInstance().LevelId + 1;
 
-        m_curLevelData = LevelManager.GetInstance().GetLevelInfoByLevelGroupId(CurLevelGroup - 1)[CurLevel - 1];
+        m_curLevelData = LevelManager.GetInstance().GetLevelInfoByLevelGroupId(LevelManager.GetInstance().LevelGroupId)[LevelManager.GetInstance().LevelId];
+        m_curLevelData = LevelManager.GetInstance().GetLevelInfoByLevelGroupId(LevelManager.GetInstance().LevelGroupId)[LevelManager.GetInstance().LevelId];
         monsterBuilder = new MonsterBuilder();
-    }
+}
 
     private void Start()
     {
         coins = PlayerManager.GetInstance().PlayerInfo.coins;
-        mapMaker.LoadLevel(CurLevelGroup, CurLevel);
+        mapMaker.LoadLevel(LevelManager.GetInstance().LevelGroupId, LevelManager.GetInstance().LevelId);
         Invoke("DelayToStart", 3);
         LoadTowerButtons();
 
@@ -65,6 +62,18 @@ public class GameController : MonoSingleton<GameController>
         normalModelPanel.allWaveTxt.text = "/" + m_curLevelData.TotalWave.ToString();
     }
 
+
+
+    private void Update()
+    {
+        if (IsInvoking("Creat") == false && isStop == false && monsterNums != nowRoundInfo.mMonsterIDList.Count)
+            InvokeRepeating("Creat", 1, 1);
+        if (diedMonsterCount != 0 && diedMonsterCount == monsterNums)
+            NextRound();
+}
+#endif
+    #endregion
+
     /// <summary>
     /// 开始游戏钱要播放一个三秒动画 所以延迟调用
     /// </summary>
@@ -73,16 +82,6 @@ public class GameController : MonoSingleton<GameController>
         level = new Level(mapMaker.roundInfo);
         AudioManager.GetInstance().PlayBG("NormalMordel/");
     }
-
-    private void Update()
-    {
-        if (IsInvoking("Creat") == false && isStop == false && monsterNums != nowRoundInfo.mMonsterIDList.Count)
-            InvokeRepeating("Creat", 1, 1);
-        if (diedMonsterCount != 0 && diedMonsterCount == monsterNums)
-            NextRound();
-    }
-    #endregion
-
     /// <summary>
     /// 生成本回合可以建造的炮塔按钮
     /// </summary>
@@ -91,7 +90,7 @@ public class GameController : MonoSingleton<GameController>
         GameObject go;
         for (int i = 0; i < m_curLevelData.TowerIdList.Count; i++)
         {
-            go = GetObject(ObjectFactoryType.UIFactory, "Btn_Tower");
+            go = FactoryManager.GetInstance().GetObject(ObjectFactoryType.UIFactory, "Btn_Tower");
             go.GetComponent<ButtonTower>().towerID = (int)m_curLevelData.TowerIdList[i];
             go.transform.SetParent(towerList.transform);
             //必须要再次设置一下物体的位置与大小
@@ -108,7 +107,7 @@ public class GameController : MonoSingleton<GameController>
         diedMonsterCount = 0;
         nowRoundInfo = roundInfo;
         // 出生特效
-        bornEff = GetObject(ObjectFactoryType.GameFactory, "BornEff");
+        bornEff = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "BornEff");
         bornEff.transform.SetParent(transform);
         bornEff.transform.position = startPos;
         InvokeRepeating("Creat", (float)1 / playSpeed, (float)1 / playSpeed);
@@ -125,7 +124,7 @@ public class GameController : MonoSingleton<GameController>
             int temp = Random.Range(1, 100);
             if (temp < 10)
             {
-                GameObject prizeGo = GetObject(ObjectFactoryType.GameFactory, "Prize");
+                GameObject prizeGo = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Prize");
                 prizeGo.transform.position = monsterPosition;
             }
         }
@@ -151,7 +150,7 @@ public class GameController : MonoSingleton<GameController>
         }
         if (monsterNums == nowRoundInfo.mMonsterIDList.Count)
         {
-            PushObject(ObjectFactoryType.GameFactory, "BornEff", bornEff);
+            FactoryManager.GetInstance().PushObject(ObjectFactoryType.GameFactory, "BornEff", bornEff);
             CancelInvoke();
             return;
         }
@@ -163,7 +162,7 @@ public class GameController : MonoSingleton<GameController>
         monsterNums++;
     }
 
-    #region 游戏逻辑相关
+#region 游戏逻辑相关
     public void ClickGrid(Grid grid)
     {
         if (grid == selectedGrid)
@@ -248,50 +247,23 @@ public class GameController : MonoSingleton<GameController>
         int allwaves = (int)m_curLevelData.TotalWave;
         Sprite carrotSp = null, gameModeSp;
         if (UIManager.GetInstance().mUIFacade.currentScene.GetType() == typeof(GameNormalState))
-            gameModeSp = GetSprite("NormalMordel/GameOverAndWin/gameover0-hd_10");
+            gameModeSp = FactoryManager.GetInstance().GetSprite("NormalMordel/GameOverAndWin/gameover0-hd_10");
         else//没有图片资源了 所以就这样吧
-            gameModeSp = GetSprite("NormalMordel/GameOverAndWin/gameover0-hd_10");
+            gameModeSp = FactoryManager.GetInstance().GetSprite("NormalMordel/GameOverAndWin/gameover0-hd_10");
         if (isVictory)//只有是胜利结局才去加载萝卜奖励图标资源
         {
             int hp = mapMaker.m_carrot.GetComponent<Carrot>().nowHP;
             if (hp >= 8)
-                carrotSp = GetSprite("GameOption/Normal/Level/Carrot_1");
+                carrotSp = FactoryManager.GetInstance().GetSprite("GameOption/Normal/Level/Carrot_1");
             else if (hp >= 5)
-                carrotSp = GetSprite("GameOption/Normal/Level/Carrot_2");
+                carrotSp = FactoryManager.GetInstance().GetSprite("GameOption/Normal/Level/Carrot_2");
             else
-                carrotSp = GetSprite("GameOption/Normal/Level/Carrot_3");
+                carrotSp = FactoryManager.GetInstance().GetSprite("GameOption/Normal/Level/Carrot_3");
         }
         normalModelPanel.GameOverUI(isVictory, waves, allwaves, gameModeSp, carrotSp);
     }
 
-    #endregion
-
-    #region factoryManager的函数封装
-    public GameObject GetObject(ObjectFactoryType factoryType, string itemPath)
-    {
-        return FactoryManager.GetInstance().GetObject(factoryType, itemPath);
-    }
-
-    public void PushObject(ObjectFactoryType factoryType, string itemPath, GameObject go)
-    {
-        FactoryManager.GetInstance().PushObject(factoryType, itemPath, go);
-    }
-
-    public Sprite GetSprite(string spritePath)
-    {
-        return FactoryManager.GetInstance().GetSprite(spritePath);
-    }
-
-    public AudioClip GetAudioClip(string clipPath)
-    {
-        return FactoryManager.GetInstance().GetAudioClip(clipPath);
-    }
-
-    public RuntimeAnimatorController GetRunTimeController(string controllerPath)
-    {
-        return FactoryManager.GetInstance().GetRuntimeAnimatorController(controllerPath);
-    }
-    #endregion
+#endregion
 
 }
 
