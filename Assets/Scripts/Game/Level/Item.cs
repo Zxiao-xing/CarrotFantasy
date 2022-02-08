@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 public class Item : MonoBehaviour
 {
+    public GridTool m_gridTool;
+
     private int HP;
     private int nowHP;
     public int ID;
@@ -49,6 +51,11 @@ public class Item : MonoBehaviour
 
     private void OnMouseDown()
     {
+        // 暂时这样
+        if (MapMakerTool.HasInstance())
+        {
+            return;
+        }
         if (EventSystem.current.IsPointerOverGameObject())
             return;
         GameController.GetInstance().SetFirePoint(transform);

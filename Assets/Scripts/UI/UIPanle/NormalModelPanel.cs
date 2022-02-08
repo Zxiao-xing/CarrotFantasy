@@ -27,6 +27,12 @@ public class NormalModelPanel : BasePanel
     [SerializeField] Image prizeDesImg, prizeIconImg;
     [SerializeField] Text prizeNameTxt;
 
+    private void OnEnable()
+    {
+        // 创建 GameController
+        FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "GameController");
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -40,7 +46,6 @@ public class NormalModelPanel : BasePanel
 
         prizeUIGo = transform.Find("PrizeUI").gameObject;
         FinalWaveGo = transform.Find("Img_FinalWave").gameObject;
-
     }
 
     public void ChangePlaySpeed()

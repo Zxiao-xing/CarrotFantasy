@@ -20,7 +20,7 @@ public struct GridPosIndex
 public class Grid : MonoBehaviour
 {
 
-    SpriteRenderer spriteRenderer;
+    SpriteRenderer m_spriteRenderer;
 
     public GridState state = new GridState();
     public GridPosIndex pos = new GridPosIndex();
@@ -32,27 +32,18 @@ public class Grid : MonoBehaviour
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        m_spriteRenderer = GetComponent<SpriteRenderer>();
         levelUPsign = transform.Find("LevelUP").gameObject;
         levelUPsign.SetActive(false);
-#if Tool
-        //mapMaker = MapMaker.GetInstance();
-#endif     
     }
 
     private void Start()
     {
-#if Tool
-        Init();
-#endif
-#if Game
-        // ShowGridShape();
-#endif
+        ShowGridShape();
     }
 
     private void Update()
     {
-#if Game
         if (towerGo != null)
         {
             if (towerGo.GetComponent<TowerPersonalProperty>().towerLevel < 3 &&
@@ -68,7 +59,6 @@ public class Grid : MonoBehaviour
             }
 
         }
-#endif
     }
 
     public void Init()
@@ -77,71 +67,13 @@ public class Grid : MonoBehaviour
         {
             Destroy(curretnItem);
         }
-        spriteRenderer.enabled = true;
-        spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
+        m_spriteRenderer.enabled = true;
+        m_spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
         state.isMonsterPoint = false;
         state.itemID = -1;
         state.canBuild = true;
     }
-#if Tool
-    private void OnMouseDown()
-    {
-        if (Input.GetKey(KeyCode.M))
-        {
-            state.isMonsterPoint = !state.isMonsterPoint;
-            if(state.isMonsterPoint)
-            {
-                spriteRenderer.sprite = MapMaker.GetInstance().monsterPosSp;
-                state.canBuild = false;
-                MapMaker.GetInstance().monsterPos.Add(pos);
-            }
-            else
-            {
-                state.canBuild = true;
-                MapMaker.GetInstance().monsterPos.Remove(pos);
-                spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
-            }
-        }
-        else if (Input.GetKey(KeyCode.I))
-        {
-            if (curretnItem != null)
-                Destroy(curretnItem);
-            state.itemID++;
-            if(state.itemID > 7)
-            {
-                state.itemID = -1;
-            }
-            else
-            {
-                CreatItem();                 
-            }
-        }
 
-        else
-        {
-            if(state.itemID != -1)
-            {
-                state.itemID = -1;
-                Destroy(curretnItem);
-            }
-            else if(state.isMonsterPoint)
-            {
-                state.canBuild = true;
-                MapMaker.GetInstance().monsterPos.Remove(pos);
-                spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
-                state.isMonsterPoint = false;
-            }
-            else
-            {
-                state.canBuild = !state.canBuild;
-            }
-        }
-        spriteRenderer.enabled = state.canBuild;
-        if (state.isMonsterPoint)
-            spriteRenderer.enabled = true;
-    }
-#endif
-#if Game
     private void OnMouseDown()
     {
         //选择的UI就不执行
@@ -149,7 +81,6 @@ public class Grid : MonoBehaviour
             return;
         GameController.GetInstance().ClickGrid(this);
     }
-#endif
 
     /// <summary>
     /// 在开始游戏时让可以建塔的格子闪烁一下,提示玩家此处可建塔
@@ -158,13 +89,13 @@ public class Grid : MonoBehaviour
     {
         if (state.canBuild)
         {
-            spriteRenderer.sprite = MapMaker.GetInstance().gridStartSp;
-            spriteRenderer.DOFade(0, 2.3f).OnComplete(() =>
+            m_spriteRenderer.sprite = MapMaker.GetInstance().gridStartSp;
+            m_spriteRenderer.DOFade(0, 2.3f).OnComplete(() =>
              {
-                 spriteRenderer.enabled = false;
-                 Color color = spriteRenderer.color;
+                 m_spriteRenderer.enabled = false;
+                 Color color = m_spriteRenderer.color;
                  color.a = 1;
-                 spriteRenderer.color = color;
+                 m_spriteRenderer.color = color;
              });
         }
     }
@@ -177,8 +108,8 @@ public class Grid : MonoBehaviour
         }
         else
         {
-            spriteRenderer.enabled = true;
-            spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
+            m_spriteRenderer.enabled = true;
+            m_spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
             if (towerGo == null)
             {
                 GameController.GetInstance().towerList.SetActive(true);
@@ -255,20 +186,20 @@ public class Grid : MonoBehaviour
     /// </summary>
     private void ShowCannotBuild()
     {
-        spriteRenderer.enabled = true;
-        spriteRenderer.sprite = MapMaker.GetInstance().gridCannotBuildSp;
-        spriteRenderer.DOFade(0, 0.5f).SetLoops(2).OnComplete(() =>
+        m_spriteRenderer.enabled = true;
+        m_spriteRenderer.sprite = MapMaker.GetInstance().gridCannotBuildSp;
+        m_spriteRenderer.DOFade(0, 0.5f).SetLoops(2).OnComplete(() =>
         {
-            spriteRenderer.enabled = false;
-            Color color = spriteRenderer.color;
+            m_spriteRenderer.enabled = false;
+            Color color = m_spriteRenderer.color;
             color.a = 1;
-            spriteRenderer.color = color;
+            m_spriteRenderer.color = color;
         });
     }
 
     public void HideGrid()
     {
-        spriteRenderer.enabled = false;
+        m_spriteRenderer.enabled = false;
         if (towerGo == false)
             GameController.GetInstance().towerList.SetActive(false);
         else
@@ -279,25 +210,23 @@ public class Grid : MonoBehaviour
 
     }
 
-    public void ClaerMonsterPos()
+    public void ClearMonsterPos()
     {
         if (state.isMonsterPoint == false)
             return;
-        spriteRenderer.enabled = true;
-        spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
+        m_spriteRenderer.enabled = true;
+        m_spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
     }
 
     void CreatItem()
     {
-#if Game
-        curretnItem = GameController.GetInstance().GetObject(ObjectFactoryType.GameFactory, LevelManager.GetInstance().LevelGroupId + "/Items/" + state.itemID);
-#elif Tool
-        curretnItem = Instantiate(MapMaker.GetInstance().itemPrefabs[state.itemID]);
-#endif
+        curretnItem = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, LevelManager.GetInstance().LevelGroupId + "/Items/" + state.itemID);
 
         curretnItem.transform.SetParent(GameController.GetInstance().transform);
-        // curretnItem.transform.localScale = Vector3.one;
         curretnItem.GetComponent<Item>().ID = state.itemID;
+        // 之后用来改大小进行适配
+        SpriteRenderer spriteRenderer = curretnItem.GetComponent<SpriteRenderer>();
+        // 这个逻辑到时候改一下
         if (state.itemID <= 2)
         {
             Vector3 pos = transform.position;
@@ -327,10 +256,10 @@ public class Grid : MonoBehaviour
         {
             Destroy(curretnItem);
         }
-        spriteRenderer.enabled = true;
+        m_spriteRenderer.enabled = true;
         if (state.canBuild == true)
         {
-            spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
+            m_spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
             if (state.hasItem && state.itemID != -1)
             {
                 CreatItem();
@@ -339,15 +268,7 @@ public class Grid : MonoBehaviour
         }
         else
         {
-            spriteRenderer.enabled = false;
-#if Tool
-            //在编辑地图的时候怪物路径点会显示出来,便于编辑 游戏时就该隐藏
-            if (state.isMonsterPoint)
-            {
-                spriteRenderer.enabled = true;
-                spriteRenderer.sprite = MapMaker.GetInstance().monsterPosSp;
-            }         
-#endif
+            m_spriteRenderer.enabled = false;
         }
     }
 

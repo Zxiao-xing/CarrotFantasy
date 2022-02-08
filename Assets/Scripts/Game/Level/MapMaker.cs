@@ -26,7 +26,7 @@ public class MapMaker : MonoSingleton<MapMaker>
     private int m_curLevelGroupId;
     [SerializeField]
     private int m_curLevelId;
-    [HideInInspector] 
+    [HideInInspector]
     public GameObject[] itemPrefabs;
     public List<GridPosIndex> monsterPos { get; private set; } = new List<GridPosIndex>();
     //每一波怪物的ID列表  如 1，1，1，2，2，2，3，3(出现几次代表有几个)
@@ -46,36 +46,25 @@ public class MapMaker : MonoSingleton<MapMaker>
 
     protected override void Init()
     {
-        m_bgSpriteRenderer = transform.Find("BG").GetComponent<SpriteRenderer>();
-        m_roadSpriteRenderer = transform.Find("Road").GetComponent<SpriteRenderer>();
-        CalculateSize();
-#if Game
-        gridSp = GameController.GetInstance().GetSprite("NormalMordel/Game/Grid");
-        gridStartSp = GameController.GetInstance().GetSprite("NormalMordel/Game/StartSprite");
-        gridCannotBuildSp = GameController.GetInstance().GetSprite("NormalMordel/Game/cantBuild");
-#endif
-#if Tool
-        // 工具模式下不需要 GameController
-        GameController.DestoryInstance();
-        LoadGridRes();
-#endif
-        InitMap();
-    }
+        GameObject bgGo = new GameObject("BG");
+        bgGo.transform.parent = transform;
+        m_bgSpriteRenderer = bgGo.AddComponent<SpriteRenderer>();
 
-    // 在工具模式下加载地图资源
-    void LoadGridRes()
-    {
-        monsterPosSp = Resources.Load<Sprite>("Pictures/NormalMordel/Game/1/Monster/3-2");
-        gridSp = Resources.Load<Sprite>("Pictures/NormalMordel/Game/Grid");
-        itemPrefabs = new GameObject[8];
-        for (int i = 0; i < 8; ++i)
-        {
-            itemPrefabs[i] = Resources.Load<GameObject>("Prefabs/Game/1/Items/" + i);
-            if (itemPrefabs[i] == null)
-            {
-                Debug.Log("错路径:" + "Prefabs/Game/1/Items/" + i);
-            }
-        }
+        GameObject roadGo = new GameObject("Road");
+        roadGo.transform.parent = transform;
+        Vector3 pos = roadGo.transform.position;
+        pos.y -= 1.25f;
+        roadGo.transform.position = pos;
+        m_roadSpriteRenderer = roadGo.AddComponent<SpriteRenderer>();
+        // 路显示在地图前面
+        m_roadSpriteRenderer.sortingOrder++;
+        gridSp = FactoryManager.GetInstance().GetSprite("NormalMordel/Game/Grid");
+        gridStartSp = FactoryManager.GetInstance().GetSprite("NormalMordel/Game/StartSprite");
+        gridCannotBuildSp = FactoryManager.GetInstance().GetSprite("NormalMordel/Game/cantBuild");
+
+        CalculateSize();
+
+        InitMap();
     }
 
     // 计算地图和格子的大小
@@ -95,9 +84,6 @@ public class MapMaker : MonoSingleton<MapMaker>
     // 初始化地图
     private void InitMap()
     {
-        // 路和地图适配格子大小
-        AdaptGridObjSize(m_bgSpriteRenderer, m_column, m_row);
-        AdaptGridObjSize(m_roadSpriteRenderer, m_column, m_row - 2);
         // 创建格子
         Vector3 pos;
         GameObject gridGO;
@@ -106,15 +92,9 @@ public class MapMaker : MonoSingleton<MapMaker>
             for (int j = 0; j < m_row; ++j)
             {
                 pos = CorrectPos(new Vector3(i * m_gridWidth, j * m_gridHeight, 0));
-                //地图编辑时没有工厂就直接实例化
-#if Tool
-                gridGO= Instantiate(grid, pos, Quaternion.identity, transform);
-#endif
-#if Game
                 gridGO = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Grid");
                 gridGO.transform.SetParent(transform);
                 gridGO.transform.position = pos;
-#endif
                 // 适配格子大小
                 AdaptGridObjSize(gridGO.GetComponent<SpriteRenderer>());
 
@@ -134,7 +114,7 @@ public class MapMaker : MonoSingleton<MapMaker>
     // spriteRenderer 适配到给定数量的格子大小
     private void AdaptGridObjSize(SpriteRenderer spriteRenderer, float columnGrid, float rowGrid)
     {
-        if(spriteRenderer == null)
+        if (spriteRenderer == null)
         {
             return;
         }
@@ -149,89 +129,6 @@ public class MapMaker : MonoSingleton<MapMaker>
     {
         pos = new Vector3(pos.x - m_mapWidth / 2 + m_gridWidth / 2, pos.y - m_mapHeight / 2 + m_gridHeight / 2);
         return pos;
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (isDraw == false)
-        {
-            return;
-        }
-        CalculateSize();
-        Gizmos.color = Color.red;
-        //画行
-        for (int y = 0; y <= m_row; y++)
-        {
-            Vector3 startPos = new Vector3(-m_mapWidth / 2, -m_mapHeight / 2 + y * m_gridHeight);
-            Vector3 endPos = new Vector3(m_mapWidth / 2, -m_mapHeight / 2 + y * m_gridHeight);
-            Gizmos.DrawLine(startPos, endPos);
-        }
-        //画列
-        for (int x = 0; x <= m_column; x++)
-        {
-            Vector3 startPos = new Vector3(-m_mapWidth / 2 + m_gridWidth * x, m_mapHeight / 2);
-            Vector3 endPos = new Vector3(-m_mapWidth / 2 + x * m_gridWidth, -m_mapHeight / 2);
-            Gizmos.DrawLine(startPos, endPos);
-        }
-#if Tool
-        m_bgSpriteRenderer = transform.Find("BG").GetComponent<SpriteRenderer>();
-        m_roadSpriteRenderer = transform.Find("Road").GetComponent<SpriteRenderer>();
-#endif
-        AdaptGridObjSize(m_bgSpriteRenderer, m_column, m_row);
-        AdaptGridObjSize(m_roadSpriteRenderer, m_column, m_row - 2);
-    }
-
-    /// <summary>
-    /// 给MapEditor调用的函数
-    /// </summary>
-    public void SaveLevel()
-    {
-        MapInfo levelInfo = new MapInfo
-        {
-            LevelGroupId = this.m_curLevelGroupId,
-            LevelId = this.m_curLevelId,
-            monsterPath = this.monsterPos,
-            roundInfo = this.roundInfo
-        };
-
-        for (int i = 0; i < m_column; ++i)
-        {
-            for (int j = 0; j < m_row; ++j)
-            {
-                levelInfo.gridPoints.Add(grids[i, j].state);
-            }
-        }
-        string jsonStr = JsonMapper.ToJson(levelInfo);
-        StreamWriter sw = new StreamWriter(Application.dataPath + "/Resources/Json/Maps/" + m_curLevelGroupId + "-" + m_curLevelId + ".json");
-        sw.Write(jsonStr);
-        sw.Close();
-    }
-
-    public void ClearMonsterPos()
-    {
-        if (monsterPos.Count == 0)
-            return;
-        monsterPos.Clear();
-        for (int i = 0; i < m_column; ++i)
-        {
-            for (int j = 0; j < m_row; ++j)
-            {
-                grids[i, j].ClaerMonsterPos();
-            }
-        }
-    }
-
-    public void ClearAll()
-    {
-        if (monsterPos.Count > 0)
-            monsterPos.Clear();
-        for (int i = 0; i < m_column; ++i)
-        {
-            for (int j = 0; j < m_row; ++j)
-            {
-                grids[i, j].Init();
-            }
-        }
     }
 
     //加载关卡-按照文件名称
@@ -250,20 +147,16 @@ public class MapMaker : MonoSingleton<MapMaker>
                 grids[i, j].UpdateState(mapInfo.gridPoints[i * m_row + j]);
             }
         }
-#if Game
         // 初始化怪物生成点，位置在怪物路径的第一个
-        m_startPoint = GameController.GetInstance().GetObject(ObjectFactoryType.GameFactory, "startPoint");
+        m_startPoint = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "startPoint");
         m_startPoint.transform.SetParent(transform);
         m_startPoint.transform.position = grids[monsterPos[0].xIndex, monsterPos[0].yIndex].transform.position;
         AdaptGridObjSize(m_startPoint.GetComponent<SpriteRenderer>(), 0.5f, 1);
-        //startPoint.transform.localScale = Vector3.one;
         // 初始化萝卜，位置在怪物路径的最后一个
-        m_carrot = GameController.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Carrot");
+        m_carrot = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Carrot");
         m_carrot.transform.SetParent(transform);
         m_carrot.transform.position = grids[monsterPos[monsterPos.Count - 1].xIndex, monsterPos[monsterPos.Count - 1].yIndex].transform.position;
         AdaptGridObjSize(m_carrot.GetComponent<SpriteRenderer>(), 0.5f, 1);
-        //carrot.transform.localScale = Vector3.one;
-#endif
     }
 
     //加载关卡-按大关卡数加小关卡数
@@ -277,16 +170,15 @@ public class MapMaker : MonoSingleton<MapMaker>
     // 加载地图和路
     public void LoadMapAndRoad()
     {
-#if Game
-        m_roadSprite = GameController.GetInstance().GetSprite("NormalMordel/Game/" + m_curLevelGroupId + "/Road" + m_curLevelId);
-        m_bgSprite = GameController.GetInstance().GetSprite("NormalMordel/Game/" + m_curLevelGroupId + "/BG" + m_curLevelId / 4);
-#elif Tool
-        m_roadSprite = Resources.Load<Sprite>("Pictures/NormalMordel/Game/" + m_curLevelGroupId + "/Road" + m_curLevelId);
-        m_bgSprite = Resources.Load<Sprite>("Pictures/NormalMordel/Game/" + m_curLevelGroupId + "/BG" + m_curLevelId / 4);      
-#endif
+        m_roadSprite = FactoryManager.GetInstance().GetSprite("NormalMordel/Game/" + m_curLevelGroupId + "/Road" + m_curLevelId);
+        m_bgSprite = FactoryManager.GetInstance().GetSprite("NormalMordel/Game/" + m_curLevelGroupId + "/BG" + m_curLevelId / 4);
 
         m_roadSpriteRenderer.sprite = m_roadSprite;
         m_bgSpriteRenderer.sprite = m_bgSprite;
+
+        // 路和地图适配格子大小
+        AdaptGridObjSize(m_bgSpriteRenderer, m_column, m_row);
+        AdaptGridObjSize(m_roadSpriteRenderer, m_column, m_row - 2);
     }
 
     public List<Vector3> GetMonsterPosVect()

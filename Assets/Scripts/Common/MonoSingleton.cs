@@ -10,7 +10,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : Component
     // 保证单例物体的唯一性
     protected virtual void Awake()
     {
-        if(s_instance != null && s_instance.gameObject != gameObject)
+        if (s_instance != null && s_instance.gameObject != gameObject)
         {
             if (Application.isPlaying)
             {
@@ -21,7 +21,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : Component
                 DestroyImmediate(gameObject);
             }
         }
-        else if(s_instance == null)
+        else if (s_instance == null)
         {
             s_instance = GetComponent<T>();
         }
@@ -34,7 +34,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : Component
     // 确保单例能随着物体摧毁
     protected virtual void OnDestroy()
     {
-        if(s_instance != null && s_instance.gameObject == gameObject)
+        if (s_instance != null && s_instance.gameObject == gameObject)
         {
             s_instance = null;
         }
@@ -43,14 +43,14 @@ public class MonoSingleton<T> : MonoBehaviour where T : Component
     // 获取单例
     public static T GetInstance()
     {
-        if(s_instance == null)
+        if (s_instance == null)
         {
             // 先从场景中找
             Type type = typeof(T);
             s_instance = (T)FindObjectOfType(type);
 
             // 没找到再创建
-            if(s_instance == null)
+            if (s_instance == null)
             {
                 GameObject go = new GameObject(type.Name);
                 s_instance = go.AddComponent<T>();
@@ -61,14 +61,14 @@ public class MonoSingleton<T> : MonoBehaviour where T : Component
 
     public static void DestoryInstance()
     {
-        if(s_instance != null)
+        if (s_instance != null)
         {
             Destroy(s_instance.gameObject);
         }
     }
 
     // 判断是否存在单例
-    public bool HasInstance()
+    public static bool HasInstance()
     {
         return (s_instance != null);
     }

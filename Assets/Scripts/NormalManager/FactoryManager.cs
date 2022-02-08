@@ -10,47 +10,47 @@ public enum ObjectFactoryType
 }
 public class FactoryManager : Singleton<FactoryManager>
 {
-    Dictionary<ObjectFactoryType, BaseObjectFactory> objectFactoryDict = new Dictionary<ObjectFactoryType, BaseObjectFactory>();
-    AudioClipFactory audioClipFactory;
-    SpriteFactory spriteFactory;
-    RunTimeAnimatorFactory runTimeAnimatorFactory;
+    Dictionary<ObjectFactoryType, BaseObjectFactory> m_objectFactoryDict = new Dictionary<ObjectFactoryType, BaseObjectFactory>();
+    AudioClipFactory m_audioClipFactory;
+    SpriteFactory m_spriteFactory;
+    RunTimeAnimatorFactory m_runTimeAnimatorFactory;
     JsonFactory m_jsonFactory;
 
     protected override void Init()
     {
-        objectFactoryDict[ObjectFactoryType.UIFactory] = new UIFactory();
-        objectFactoryDict[ObjectFactoryType.GameFactory] = new GameFactory();
-        objectFactoryDict[ObjectFactoryType.UIPanelFactory] = new UIPanelFactory();
+        m_objectFactoryDict[ObjectFactoryType.UIFactory] = new UIFactory();
+        m_objectFactoryDict[ObjectFactoryType.GameFactory] = new GameFactory();
+        m_objectFactoryDict[ObjectFactoryType.UIPanelFactory] = new UIPanelFactory();
 
-        audioClipFactory = new AudioClipFactory();
-        spriteFactory = new SpriteFactory();
-        runTimeAnimatorFactory = new RunTimeAnimatorFactory();
+        m_audioClipFactory = new AudioClipFactory();
+        m_spriteFactory = new SpriteFactory();
+        m_runTimeAnimatorFactory = new RunTimeAnimatorFactory();
         m_jsonFactory = new JsonFactory();
     }
 
     public GameObject GetObject(ObjectFactoryType factoryType, string itemName)
     {
-        return objectFactoryDict[factoryType].PopObject(itemName);
+        return m_objectFactoryDict[factoryType].PopObject(itemName);
     }
 
     public void PushObject(ObjectFactoryType factoryType, string itemName, GameObject go)
     {
-        objectFactoryDict[factoryType].PushObject(itemName, go);
+        m_objectFactoryDict[factoryType].PushObject(itemName, go);
     }
 
     public Sprite GetSprite(string spriteName)
     {
-        return spriteFactory.GetResource(spriteName); ;
+        return m_spriteFactory.GetResource(spriteName); ;
     }
 
     public AudioClip GetAudioClip(string clipName)
     {
-        return audioClipFactory.GetResource(clipName);
+        return m_audioClipFactory.GetResource(clipName);
     }
 
     public RuntimeAnimatorController GetRuntimeAnimatorController(string controllerName)
     {
-        return runTimeAnimatorFactory.GetResource(controllerName);
+        return m_runTimeAnimatorFactory.GetResource(controllerName);
     }
 
     // 获取 json 文本
@@ -63,5 +63,10 @@ public class FactoryManager : Singleton<FactoryManager>
     public T GetJsonObject<T>(string fileName)
     {
         return m_jsonFactory.GetJsonObject<T>(fileName);
+    }
+
+    public void SaveJsonFile<T>(T obj, string fileName)
+    {
+        m_jsonFactory.SaveJsonFile(obj, fileName);
     }
 }

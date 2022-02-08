@@ -16,7 +16,7 @@ public class GameController : MonoSingleton<GameController>
     GameObject monster, bornEff;
     int monsterNums;
     Vector3 startPos;
-    Level level;
+    RoundHelper level;
     private int diedMonsterCount;//死亡怪物数目 用于回合数的切换
     [HideInInspector]
     public Grid selectedGrid;
@@ -38,7 +38,6 @@ public class GameController : MonoSingleton<GameController>
     NormalModelPanel normalModelPanel;
     int nowRoundIndex;
     #region 生命周期函数
-#if Game
     protected override void Init()
     {
         mapMaker = MapMaker.GetInstance();
@@ -46,7 +45,7 @@ public class GameController : MonoSingleton<GameController>
         m_curLevelData = LevelManager.GetInstance().GetLevelInfoByLevelGroupId(LevelManager.GetInstance().LevelGroupId)[LevelManager.GetInstance().LevelId];
         m_curLevelData = LevelManager.GetInstance().GetLevelInfoByLevelGroupId(LevelManager.GetInstance().LevelGroupId)[LevelManager.GetInstance().LevelId];
         monsterBuilder = new MonsterBuilder();
-}
+    }
 
     private void Start()
     {
@@ -70,8 +69,7 @@ public class GameController : MonoSingleton<GameController>
             InvokeRepeating("Creat", 1, 1);
         if (diedMonsterCount != 0 && diedMonsterCount == monsterNums)
             NextRound();
-}
-#endif
+    }
     #endregion
 
     /// <summary>
@@ -79,7 +77,7 @@ public class GameController : MonoSingleton<GameController>
     /// </summary>
     void DelayToStart()
     {
-        level = new Level(mapMaker.roundInfo);
+        level = new RoundHelper(mapMaker.roundInfo);
         AudioManager.GetInstance().PlayBG("NormalMordel/");
     }
     /// <summary>
@@ -162,7 +160,7 @@ public class GameController : MonoSingleton<GameController>
         monsterNums++;
     }
 
-#region 游戏逻辑相关
+    #region 游戏逻辑相关
     public void ClickGrid(Grid grid)
     {
         if (grid == selectedGrid)
@@ -263,7 +261,7 @@ public class GameController : MonoSingleton<GameController>
         normalModelPanel.GameOverUI(isVictory, waves, allwaves, gameModeSp, carrotSp);
     }
 
-#endregion
+    #endregion
 
 }
 

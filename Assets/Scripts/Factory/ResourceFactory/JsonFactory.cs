@@ -29,4 +29,13 @@ public class JsonFactory : IResourceFactory<string>
         string jsonText = GetResource(fileName);
         return JsonMapper.ToObject<T>(jsonText);
     }
+
+    public void SaveJsonFile<T>(T obj, string fileName)
+    {
+        string jsonStr = JsonMapper.ToJson(obj);
+        string path = m_jsonFilePath + fileName + ".json";
+        StreamWriter sw = new StreamWriter(path);
+        sw.Write(jsonStr);
+        sw.Close();
+    }
 }

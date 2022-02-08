@@ -4,11 +4,11 @@ using UnityEngine;
 /// <summary>
 ///管理所有的回合 处理回合数的改变和开启下一关
 /// </summary>
-public class Level
+public class RoundHelper
 {
     public List<Round> roundList { get; private set; }//本关卡的所有回合数集合
-    public  int currentRound { get; private set; }
-    public Level(List<Round.RoundInfo> roundInfos)
+    public int currentRound { get; private set; }
+    public RoundHelper(List<Round.RoundInfo> roundInfos)
     {
         currentRound = 0;
         roundList = new List<Round>(roundInfos.Count);
@@ -16,7 +16,7 @@ public class Level
         {
             roundList.Add(new Round(roundInfos[i]));
         }
-       HandelRound();
+        HandelRound();
     }
 
     private void HandelRound()
