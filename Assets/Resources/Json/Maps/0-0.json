@@ -4,115 +4,115 @@
   "gridPoints": [
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": true,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": true,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
@@ -124,13 +124,13 @@
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
@@ -142,79 +142,79 @@
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": true,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": true,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
@@ -226,25 +226,25 @@
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
@@ -256,25 +256,25 @@
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
@@ -286,79 +286,79 @@
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": true,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": true,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
@@ -370,55 +370,55 @@
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
@@ -430,25 +430,13 @@
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
-      "canBuild": false,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": 0,
-      "canBuild": true,
-      "hasItem": false
-    },
-    {
-      "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
@@ -456,125 +444,137 @@
       "isMonsterPoint": false,
       "itemID": -1,
       "canBuild": true,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": -1,
+      "canBuild": false,
+      "hasItem": false
+    },
+    {
+      "isMonsterPoint": false,
+      "itemID": 0,
+      "canBuild": true,
       "hasItem": true
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": true,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": true,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": true,
       "hasItem": false
     },
     {
       "isMonsterPoint": false,
-      "itemID": 0,
+      "itemID": -1,
       "canBuild": false,
       "hasItem": false
     }

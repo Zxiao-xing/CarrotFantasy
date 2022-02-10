@@ -5,7 +5,7 @@ public class GridTool : MonoBehaviour
 {
     private SpriteRenderer m_spriteRenderer;
 
-    public GridState state = new GridState();
+    public GridState m_state = new GridState();
     public GridPosIndex pos = new GridPosIndex();
     GameObject curretnItem;
     [HideInInspector]
@@ -29,15 +29,15 @@ public class GridTool : MonoBehaviour
         }
         m_spriteRenderer.enabled = true;
         m_spriteRenderer.sprite = MapMakerTool.GetInstance().gridSp;
-        state.isMonsterPoint = false;
-        state.itemID = -1;
-        state.canBuild = true;
+        m_state.isMonsterPoint = false;
+        m_state.itemID = -1;
+        m_state.canBuild = true;
     }
 
     // 清除怪物路径
     public void ClearMonsterPos()
     {
-        if (state.isMonsterPoint == false)
+        if (m_state.isMonsterPoint == false)
         {
             return;
         }
@@ -48,7 +48,12 @@ public class GridTool : MonoBehaviour
     // 更新格子状态
     public void UpdateState(GridState state)
     {
-        this.state = state;
+        // todo:这个是用来刷掉以前的关卡数据的，刷完就删了
+        if(m_state.hasItem == false)
+        {
+            m_state.itemID = -1;
+        }
+        m_state = state;
         if (curretnItem != null)
         {
             Destroy(curretnItem);
@@ -70,7 +75,7 @@ public class GridTool : MonoBehaviour
             m_spriteRenderer.enabled = true;
             //m_spriteRenderer.enabled = false;
             m_spriteRenderer.sprite = MapMakerTool.GetInstance().gridCannotBuildSp;
-            //在编辑地图的时候怪物路径点会显示出来,便于编辑 游戏时就该隐藏
+            //在编辑地图的时候怪物路径点会显示出来,便于编辑游戏时就该隐藏
             if (state.isMonsterPoint)
             {
                 m_spriteRenderer.sprite = MapMakerTool.GetInstance().m_monsterPosSprite;
@@ -81,20 +86,21 @@ public class GridTool : MonoBehaviour
     // 创建物体
     private void CreatItem()
     {
-        curretnItem = Instantiate(MapMakerTool.GetInstance().itemPrefabs[state.itemID]);
+        curretnItem = Instantiate(MapMakerTool.GetInstance().itemPrefabs[m_state.itemID]);
 
         curretnItem.transform.SetParent(MapMakerTool.GetInstance().transform);
         // curretnItem.transform.localScale = Vector3.one;
-        curretnItem.GetComponent<Item>().ID = state.itemID;
+        curretnItem.GetComponent<Item>().ID = m_state.itemID;
         curretnItem.GetComponent<Item>().m_gridTool = this;
-        if (state.itemID <= 2)
+        // todo: 适配一下格子大小
+        if (m_state.itemID <= 2)
         {
             Vector3 pos = transform.position;
             pos.x += MapMakerTool.GetInstance().m_gridWidth / 2;
             pos.y += MapMakerTool.GetInstance().m_gridHeight / 2;
             curretnItem.transform.position = pos;
         }
-        else if (state.itemID <= 4)
+        else if (m_state.itemID <= 4)
         {
             Vector3 pos = transform.position;
             pos.x -= MapMakerTool.GetInstance().m_gridWidth / 2;
@@ -114,7 +120,7 @@ public class GridTool : MonoBehaviour
     /// </summary>
     private void ShowGridShape()
     {
-        if (state.canBuild)
+        if (m_state.canBuild)
         {
             m_spriteRenderer.sprite = MapMakerTool.GetInstance().gridStartSp;
             m_spriteRenderer.DOFade(0, 2.3f).OnComplete(() =>

@@ -21,14 +21,12 @@ public class MapMakerTool : MonoSingleton<MapMakerTool>
     public const int m_row = 8;
 
     // 需要保存的信息
-    [SerializeField]
-    private int m_curLevelGroupId;              // 当前关卡组 id
-    [SerializeField]
-    private int m_curLevelId;                   // 当前关卡 id
-    public List<GridPosIndex> m_monsterPath { get; private set; } = new List<GridPosIndex>();          // 怪物路径
-    public List<Round.RoundInfo> roundInfo = new List<Round.RoundInfo>();                           // 每轮怪物
-    public GridTool[,] m_gridArr = new GridTool[m_column, m_row];                                       // 格子信息
-
+    //[SerializeField]
+    public int m_curLevelGroupId;              // 当前关卡组 id
+    public int m_curLevelId;                   // 当前关卡 id
+    public List<GridPosIndex> m_monsterPathList { get; private set; } = new List<GridPosIndex>();           // 怪物路径
+    public List<Round.RoundInfo> m_roundInfo = new List<Round.RoundInfo>();                                 // 每轮怪物
+    public GridTool[,] m_gridArr = new GridTool[m_column, m_row];                                           // 格子信息
 
     // 显示所需
     [SerializeField]
@@ -48,6 +46,7 @@ public class MapMakerTool : MonoSingleton<MapMakerTool>
     [HideInInspector]
     public Sprite gridSp, gridStartSp, gridCannotBuildSp;//点击格子后显示格子三种状态资源
 
+    [HideInInspector]
     public GameObject[] itemPrefabs;
 
     private bool m_isEditMonsterPath = false;             // 是否正在编辑怪物路径
@@ -64,6 +63,7 @@ public class MapMakerTool : MonoSingleton<MapMakerTool>
             Destroy(this.gameObject);
             return;
         }
+
         // 单独启动这个场景需要启动相机
         m_camera.SetActive(true);
 
@@ -77,6 +77,7 @@ public class MapMakerTool : MonoSingleton<MapMakerTool>
     private void Update()
     {
         ShowEditingPath();
+        HandleKeyInput();
     }
 
     // 编辑路径时候的显示
@@ -85,97 +86,11 @@ public class MapMakerTool : MonoSingleton<MapMakerTool>
         // 当正在编辑路径，且不是路径起点时进行处理
         if (m_isEditMonsterPath && m_editMosterPathList.Count > 0)
         {
-            GridPosIndex lastPos = m_editMosterPathList[m_editMosterPathList.Count - 1];
-            int xOffset = m_lastMousePos.xIndex - lastPos.xIndex;
-            int yOffset = m_lastMousePos.yIndex - lastPos.yIndex;
-            // 当上一次鼠标位置是一条直线时，需要清理上一次的显示，清理的时候不包括端点
-            if (xOffset != 0 && yOffset == 0)
-            {
-                int offset = xOffset / Mathf.Abs(xOffset);
-                int j = m_lastMousePos.yIndex;
-                for (int i = lastPos.xIndex + offset; i != m_lastMousePos.xIndex + offset; i += offset)
-                {
-                    m_gridArr[i, j].SetSprite(null, false);
-                }
-            }
-            else if (xOffset == 0 && yOffset != 0)
-            {
-                int offset = yOffset / Mathf.Abs(yOffset);
-                int j = m_lastMousePos.xIndex;
-                for (int i = lastPos.yIndex + offset; i != m_lastMousePos.yIndex + offset; i += offset)
-                {
-                    m_gridArr[j, i].SetSprite(null, false);
-                }
-            }
-
-            // 当前鼠标位置和上一个已确定路径的显示逻辑
-            Vector3 vec = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit2D = Physics2D.Raycast(new Vector2(vec.x, vec.y), new Vector3(vec.x, vec.y, 0.1f));
-            if (hit2D.collider != null)
-            {
-                GridTool gridTool = hit2D.collider.gameObject.GetComponent<GridTool>();
-
-                xOffset = gridTool.pos.xIndex - lastPos.xIndex;
-                yOffset = gridTool.pos.yIndex - lastPos.yIndex;
-                // 路径上有其他的 item 就不允许修路
-                m_canBePath = true;
-                if (xOffset != 0)
-                {
-                    int offset = xOffset / Mathf.Abs(xOffset);
-                    int j = gridTool.pos.yIndex;
-                    for (int i = lastPos.xIndex + offset; i != gridTool.pos.xIndex + offset; i += offset)
-                    {
-                        if (m_gridArr[i, j].state.hasItem)
-                        {
-                            m_canBePath = false;
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    int offset = yOffset / Mathf.Abs(yOffset);
-                    int j = gridTool.pos.yIndex;
-                    for (int i = lastPos.yIndex + offset; i != gridTool.pos.yIndex + offset; i += offset)
-                    {
-                        if (m_gridArr[j, i].state.hasItem)
-                        {
-                            m_canBePath = false;
-                            break;
-                        }
-                    }
-                }
-
-                // 若路上没有 item，再判断是否在同一个直线上
-                if (m_canBePath)
-                {
-                    if (xOffset != 0 && yOffset == 0)
-                    {
-                        int offset = xOffset / Mathf.Abs(xOffset);
-                        int j = m_lastMousePos.yIndex;
-                        for (int i = lastPos.xIndex + offset; i != gridTool.pos.xIndex + offset; i += offset)
-                        {
-                            m_gridArr[i, j].SetSprite(gridSp, true);
-                        }
-                    }
-                    else if (xOffset == 0 && yOffset != 0)
-                    {
-                        int offset = yOffset / Mathf.Abs(yOffset);
-                        int j = m_lastMousePos.xIndex;
-                        for (int i = lastPos.yIndex + offset; i != gridTool.pos.yIndex + offset; i += offset)
-                        {
-                            m_gridArr[j, i].SetSprite(gridSp, true);
-                        }
-                    }
-                    else
-                    {
-                        // 不在一条直线上，不可以修路
-                        m_canBePath = false;
-                    }
-                }
-
-            }
-            // 显示当前已经确定的路径
+            // 取消上次显示的路径
+            HideLastMousePath();
+            // 显示当前的路径
+            ShowCurMousePath();
+            // 刷新当前已经确定的路径
             ShowCurMonsterPath();
         }
     }
@@ -184,27 +99,207 @@ public class MapMakerTool : MonoSingleton<MapMakerTool>
     private void ShowCurMonsterPath()
     {
         List<GridPosIndex> gridIndexList;
-        // 先移除另一个的
+
         if (m_isEditMonsterPath)
         {
-            foreach (var gridIndex in m_monsterPath)
-            {
-                m_gridArr[gridIndex.xIndex, gridIndex.yIndex].SetSprite(null, false);
-            }
             gridIndexList = m_editMosterPathList;
         }
         else
         {
-            foreach (var gridIndex in m_editMosterPathList)
-            {
-                m_gridArr[gridIndex.xIndex, gridIndex.yIndex].SetSprite(null, false);
-            }
-            gridIndexList = m_monsterPath;
+            gridIndexList = m_monsterPathList;
         }
 
-        foreach (var gridIndex in gridIndexList)
+        // 设置当前路径状态，这个可以优化，当前是全量形式，可以改为增量
+        for (int i = 0; i < gridIndexList.Count; i++)
         {
-            m_gridArr[gridIndex.xIndex, gridIndex.yIndex].SetSprite(m_monsterPosSprite, true);
+            m_gridArr[gridIndexList[i].xIndex, gridIndexList[i].yIndex].SetSprite(m_monsterPosSprite, true);
+            m_gridArr[gridIndexList[i].xIndex, gridIndexList[i].yIndex].m_state.canBuild = false;
+            m_gridArr[gridIndexList[i].xIndex, gridIndexList[i].yIndex].m_state.isMonsterPoint = true;
+            // 设置路上可以 build 的图案
+            if (i != 0)
+            {
+                if (gridIndexList[i].xIndex == gridIndexList[i - 1].xIndex)
+                {
+                    int offset = gridIndexList[i].yIndex -  gridIndexList[i - 1].yIndex;
+                    offset /= Mathf.Abs(offset);
+                    for (int j = gridIndexList[i - 1].yIndex + offset; j != gridIndexList[i].yIndex; j += offset)
+                    {
+                        GridState state = m_gridArr[gridIndexList[i].xIndex, j].m_state;
+                        state.canBuild = false;
+                        m_gridArr[gridIndexList[i].xIndex, j].UpdateState(state);
+                    }
+                }
+                else
+                {
+                    int offset = gridIndexList[i].xIndex - gridIndexList[i - 1].xIndex;
+                    offset /= Mathf.Abs(offset);
+                    for (int j = gridIndexList[i - 1].xIndex + offset; j != gridIndexList[i].xIndex; j += offset)
+                    {
+                        GridState state = m_gridArr[j, gridIndexList[i].yIndex].m_state;
+                        state.canBuild = false;
+                        m_gridArr[j, gridIndexList[i].yIndex].UpdateState(state);
+                    }
+                }
+            }
+        }
+    }
+
+    // 根据是否是编辑路径状态来清除非当前显示的路径
+    private void ClearLastMonsterPath()
+    {
+        List<GridPosIndex> lastGridIndexList;
+        if (m_isEditMonsterPath)
+        {
+            lastGridIndexList = m_monsterPathList;
+        }
+        else
+        {
+            lastGridIndexList = m_editMosterPathList;
+        }
+        // 移除上一个的
+        for (int i = 0; i < lastGridIndexList.Count; i++)
+        {
+            m_gridArr[lastGridIndexList[i].xIndex, lastGridIndexList[i].yIndex].SetSprite(null, false);
+            m_gridArr[lastGridIndexList[i].xIndex, lastGridIndexList[i].yIndex].m_state.canBuild = true;
+            m_gridArr[lastGridIndexList[i].xIndex, lastGridIndexList[i].yIndex].m_state.isMonsterPoint = false;
+            // 把路上 cantbuild 的图案清掉
+            if (i != 0)
+            {
+                if (lastGridIndexList[i].xIndex == lastGridIndexList[i - 1].xIndex)
+                {
+                    int offset = lastGridIndexList[i].yIndex - lastGridIndexList[i - 1].yIndex;
+                    offset /= Mathf.Abs(offset);
+                    for (int j = lastGridIndexList[i - 1].yIndex + offset; j != lastGridIndexList[i].yIndex; j += offset)
+                    {
+                        GridState state = m_gridArr[lastGridIndexList[i].xIndex, j].m_state;
+                        state.canBuild = true;
+                        m_gridArr[lastGridIndexList[i].xIndex, j].UpdateState(state);
+                    }
+                }
+                else
+                {
+                    int offset = lastGridIndexList[i].xIndex - lastGridIndexList[i - 1].xIndex;
+                    offset /= Mathf.Abs(offset);
+                    for (int j = lastGridIndexList[i - 1].xIndex + offset; j != lastGridIndexList[i].xIndex; j += offset)
+                    {
+                        GridState state = m_gridArr[j, lastGridIndexList[i].yIndex].m_state;
+                        state.canBuild = true;
+                        m_gridArr[j, lastGridIndexList[i].yIndex].UpdateState(state);
+                    }
+                }
+            }
+        }
+    }
+
+    // 当前鼠标位置和上一个已确定路径的显示
+    private void ShowCurMousePath()
+    {
+        Vector3 vec = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D hit2D = Physics2D.Raycast(new Vector2(vec.x, vec.y), new Vector3(vec.x, vec.y, 0.1f));
+        if (hit2D.collider != null)
+        {
+            GridTool gridTool = hit2D.collider.gameObject.GetComponent<GridTool>();
+
+            // 如果命中的是 gridTool
+            if (gridTool != null)
+            {
+                GridPosIndex lastPos = m_editMosterPathList[m_editMosterPathList.Count - 1];
+
+                int xOffset = gridTool.pos.xIndex - lastPos.xIndex;
+                int yOffset = gridTool.pos.yIndex - lastPos.yIndex;
+
+                // 是否允许修路
+                m_canBePath = true;
+
+                // 修路条件：1.在同一条直线上；2.路上没有其他 item；3.路上都是 canbuild
+                int offset = 0;
+                if (xOffset != 0 && yOffset == 0)
+                {
+                    offset = xOffset / Mathf.Abs(xOffset);
+                    int j = gridTool.pos.yIndex;
+                    for (int i = lastPos.xIndex + offset; i != gridTool.pos.xIndex + offset; i += offset)
+                    {
+                        if (m_gridArr[i, j].m_state.hasItem || m_gridArr[i, j].m_state.canBuild == false)
+                        {
+                            m_canBePath = false;
+                            break;
+                        }
+                    }
+
+                    // 给路径上的格子都显示格子sprite，以显示将要设置的路径
+                    if (m_canBePath)
+                    {
+                        for (int i = lastPos.xIndex + offset; i != gridTool.pos.xIndex + offset; i += offset)
+                        {
+                            m_gridArr[i, j].SetSprite(gridSp, true);
+                        }
+                    }
+                }
+                else if (yOffset != 0 && xOffset == 0)
+                {
+                    offset = yOffset / Mathf.Abs(yOffset);
+                    int j = gridTool.pos.xIndex;
+                    for (int i = lastPos.yIndex + offset; i != gridTool.pos.yIndex + offset; i += offset)
+                    {
+                        if (m_gridArr[j, i].m_state.hasItem || m_gridArr[j, i].m_state.canBuild == false)
+                        {
+                            m_canBePath = false;
+                            break;
+                        }
+                    }
+
+                    if (m_canBePath)
+                    {
+                        for (int i = lastPos.yIndex + offset; i != gridTool.pos.yIndex + offset; i += offset)
+                        {
+                            m_gridArr[j, i].SetSprite(gridSp, true);
+                        }
+                    }
+                }
+                else
+                {
+                    // 不是直线
+                    m_canBePath = false;
+                }
+
+                if (m_canBePath)
+                {
+                    m_lastMousePos = gridTool.pos;
+                }
+                else
+                {
+                    m_lastMousePos = m_editMosterPathList[m_editMosterPathList.Count - 1];
+                }
+            }
+
+        }
+    }
+
+    // 隐藏上一次鼠标位置显示的路径
+    private void HideLastMousePath()
+    {
+        GridPosIndex lastPos = m_editMosterPathList[m_editMosterPathList.Count - 1];
+
+        int xOffset = m_lastMousePos.xIndex - lastPos.xIndex;
+        int yOffset = m_lastMousePos.yIndex - lastPos.yIndex;
+        // 当上一次鼠标位置是一条直线时，需要清理上一次的显示，清理的时候不包括端点
+        if (xOffset != 0 && yOffset == 0)
+        {
+            int offset = xOffset / Mathf.Abs(xOffset);
+            int j = m_lastMousePos.yIndex;
+            for (int i = lastPos.xIndex + offset; i != m_lastMousePos.xIndex + offset; i += offset)
+            {
+                m_gridArr[i, j].SetSprite(null, false);
+            }
+        }
+        else if (xOffset == 0 && yOffset != 0)
+        {
+            int offset = yOffset / Mathf.Abs(yOffset);
+            int j = m_lastMousePos.xIndex;
+            for (int i = lastPos.yIndex + offset; i != m_lastMousePos.yIndex + offset; i += offset)
+            {
+                m_gridArr[j, i].SetSprite(null, false);
+            }
         }
     }
 
@@ -234,30 +329,30 @@ public class MapMakerTool : MonoSingleton<MapMakerTool>
                     // 删除格子上的 item
                     if (Input.GetKeyDown(KeyCode.D))
                     {
-                        item.m_gridTool.state.hasItem = false;
+                        item.m_gridTool.m_state.hasItem = false;
                         Destroy(hitGo);
                         return;
                     }
                     else if (Input.GetKeyDown(KeyCode.W))       // 下一个 item
                     {
-                        item.m_gridTool.state.itemID++;
+                        item.m_gridTool.m_state.itemID++;
                         // 超过最大的 item 数就再次从 0 开始，建议这个还是不要固定死了，到时候康康
                         if (item.ID == 7)
                         {
-                            item.m_gridTool.state.itemID = 0;
+                            item.m_gridTool.m_state.itemID = 0;
                         }
 
-                        item.m_gridTool.UpdateState(item.m_gridTool.state);
+                        item.m_gridTool.UpdateState(item.m_gridTool.m_state);
                         return;
                     }
                     else if (Input.GetKeyDown(KeyCode.S))       // 上一个 item
                     {
-                        item.m_gridTool.state.itemID--;
-                        if (item.m_gridTool.state.itemID < 0)
+                        item.m_gridTool.m_state.itemID--;
+                        if (item.m_gridTool.m_state.itemID < 0)
                         {
-                            item.m_gridTool.state.itemID = 7;
+                            item.m_gridTool.m_state.itemID = 7;
                         }
-                        item.m_gridTool.UpdateState(item.m_gridTool.state);
+                        item.m_gridTool.UpdateState(item.m_gridTool.m_state);
                         return;
                     }
                 }
@@ -272,12 +367,20 @@ public class MapMakerTool : MonoSingleton<MapMakerTool>
                             if (Input.GetKeyDown(KeyCode.Q))            // 退出路径编辑状态
                             {
                                 m_isEditMonsterPath = false;
-                                // 清空临时存储的路径，如果后面要添加专门的清空操作就改改
-                                m_editMosterPathList.Clear();
+                                // 清除上一个路径，显示当前路径
+                                ClearLastMonsterPath();
+                                ShowCurMonsterPath();
                             }
                             else if (Input.GetKeyDown(KeyCode.Space))       // 确定编辑
                             {
                                 // 修完路要点击确定才能进行覆盖，然后进行一系列操作
+                                m_monsterPathList = new List<GridPosIndex>(m_editMosterPathList);
+                                m_editMosterPathList.Clear();
+                                m_isEditMonsterPath = false;
+
+                                //// 清除上一个路径，显示当前路径
+                                //ClearLastMonsterPath();
+                                //ShowCurMonsterPath();
 
                             }
                             else if (Input.GetMouseButtonDown(0))               // 添加路径
@@ -290,42 +393,77 @@ public class MapMakerTool : MonoSingleton<MapMakerTool>
                                 else if (m_canBePath)         // 若可以修路
                                 {
                                     // 看一下是否和上上个路径在同一条直线上，在就移除上一个
-                                    GridPosIndex gridPosIndex1 = m_editMosterPathList[m_editMosterPathList.Count - 2];
-                                    GridPosIndex gridPosIndex2 = m_editMosterPathList[m_editMosterPathList.Count - 1];
-                                    if ((gridPosIndex1.xIndex == gridPosIndex2.xIndex && gridPosIndex1.xIndex == gridTool.pos.xIndex) || (gridPosIndex1.yIndex == gridPosIndex2.yIndex && gridPosIndex1.yIndex == gridTool.pos.yIndex))
+                                    if(m_editMosterPathList.Count > 1)
                                     {
-                                        m_editMosterPathList.RemoveAt(m_editMosterPathList.Count - 1);
+                                        GridPosIndex gridPosIndex1 = m_editMosterPathList[m_editMosterPathList.Count - 2];
+                                        GridPosIndex gridPosIndex2 = m_editMosterPathList[m_editMosterPathList.Count - 1];
+                                        if ((gridPosIndex1.xIndex == gridPosIndex2.xIndex && gridPosIndex1.xIndex == gridTool.pos.xIndex) || (gridPosIndex1.yIndex == gridPosIndex2.yIndex && gridPosIndex1.yIndex == gridTool.pos.yIndex))
+                                        {
+                                            m_editMosterPathList.Remove(gridPosIndex2);
+                                            m_gridArr[gridPosIndex2.xIndex, gridPosIndex2.yIndex].m_state.isMonsterPoint = false;
+                                        }
                                     }
+
                                     m_editMosterPathList.Add(gridTool.pos);
                                 }
                             }
-                            else if (Input.GetMouseButtonDown(2))               // 移除路径
+                            else if (Input.GetMouseButtonDown(1))               // 移除路径
                             {
-
+                                if (m_editMosterPathList[m_editMosterPathList.Count - 1].Equals(gridTool.pos))
+                                {
+                                    gridTool.m_state.canBuild = true;
+                                    gridTool.m_state.isMonsterPoint = false;
+                                    m_editMosterPathList.Remove(gridTool.pos);
+                                    // 把路上的 canbuild 属性改一下
+                                    if(m_editMosterPathList.Count > 0)
+                                    {
+                                        GridPosIndex lastIndex = gridTool.pos;
+                                        GridPosIndex curIndex = m_editMosterPathList[m_editMosterPathList.Count - 1];
+                                        if(lastIndex.xIndex == curIndex.xIndex)
+                                        {
+                                            int offset = lastIndex.yIndex - curIndex.yIndex;
+                                            offset /= Mathf.Abs(offset);
+                                            for(int i = curIndex.yIndex + offset; i != lastIndex.yIndex; i += offset)
+                                            {
+                                                m_gridArr[curIndex.xIndex, i].m_state.canBuild = true;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            int offset = lastIndex.xIndex - curIndex.xIndex;
+                                            offset /= Mathf.Abs(offset);
+                                            for (int i = curIndex.xIndex + offset; i != lastIndex.xIndex; i += offset)
+                                            {
+                                                m_gridArr[i, curIndex.yIndex].m_state.canBuild = true;
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                         else
                         {
-                            ref GridState state = ref gridTool.state;
+                            ref GridState state = ref gridTool.m_state;
                             // 添加一个 item
                             if (Input.GetKeyDown(KeyCode.A))
                             {
                                 state.hasItem = true;
                                 state.itemID = 0;
-                                gridTool.UpdateState(gridTool.state);
+                                gridTool.UpdateState(gridTool.m_state);
                                 return;
                             }
                             else if (Input.GetKeyDown(KeyCode.M))       // 编辑路径
                             {
                                 // 进入编辑路径模式
                                 m_isEditMonsterPath = true;
-                                // 显示当前的路径
+                                // 清除上一个路径，显示当前路径
+                                ClearLastMonsterPath();
                                 ShowCurMonsterPath();
                             }
                             else if (Input.GetMouseButtonDown(0))           // 按下鼠标左键修改该位置能否建造的属性
                             {
                                 state.canBuild = !state.canBuild;
-                                gridTool.UpdateState(gridTool.state);
+                                gridTool.UpdateState(gridTool.m_state);
                                 return;
                             }
                         }
@@ -448,23 +586,27 @@ public class MapMakerTool : MonoSingleton<MapMakerTool>
     /// </summary>
     public void SaveLevel()
     {
+        // 若处于路径编辑状态，则恢复之前状态再保存
+        ClearLastMonsterPath();
+        ShowCurMonsterPath();
+
         MapInfo mapInfo = new MapInfo
         {
             LevelGroupId = m_curLevelGroupId,
             LevelId = m_curLevelId,
-            monsterPath = this.m_monsterPath,
-            roundInfo = this.roundInfo
+            monsterPath = m_monsterPathList,
+            roundInfo = m_roundInfo
         };
 
         for (int i = 0; i < m_column; ++i)
         {
             for (int j = 0; j < m_row; ++j)
             {
-                mapInfo.gridPoints.Add(m_gridArr[i, j].state);
+                mapInfo.gridPoints.Add(m_gridArr[i, j].m_state);
             }
         }
 
-        FactoryManager.GetInstance().SaveJsonFile(mapInfo, m_curLevelGroupId + "-" + m_curLevelId);
+        FactoryManager.GetInstance().SaveJsonFile(mapInfo, $"Maps/{m_curLevelGroupId}-{m_curLevelId}");
     }
 
     //加载关卡-按大关卡数加小关卡数
@@ -482,8 +624,8 @@ public class MapMakerTool : MonoSingleton<MapMakerTool>
         m_curLevelGroupId = mapInfo.LevelGroupId;
         m_curLevelId = mapInfo.LevelId;
         LoadMapAndRoad();
-        m_monsterPath = mapInfo.monsterPath;
-        roundInfo = mapInfo.roundInfo;
+        m_monsterPathList = mapInfo.monsterPath;
+        m_roundInfo = mapInfo.roundInfo;
         for (int i = 0; i < m_column; ++i)
         {
             for (int j = 0; j < m_row; ++j)
@@ -505,9 +647,9 @@ public class MapMakerTool : MonoSingleton<MapMakerTool>
 
     public void ClearMonsterPos()
     {
-        if (m_monsterPath.Count == 0)
+        if (m_monsterPathList.Count == 0)
             return;
-        m_monsterPath.Clear();
+        m_monsterPathList.Clear();
         for (int i = 0; i < m_column; ++i)
         {
             for (int j = 0; j < m_row; ++j)
@@ -519,8 +661,8 @@ public class MapMakerTool : MonoSingleton<MapMakerTool>
 
     public void ClearAll()
     {
-        if (m_monsterPath.Count > 0)
-            m_monsterPath.Clear();
+        if (m_monsterPathList.Count > 0)
+            m_monsterPathList.Clear();
         for (int i = 0; i < m_column; ++i)
         {
             for (int j = 0; j < m_row; ++j)

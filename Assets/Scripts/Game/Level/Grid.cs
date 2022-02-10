@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
+using System;
 
 public struct GridState
 {
@@ -12,9 +13,18 @@ public struct GridState
     public bool hasItem;
 }
 
-public struct GridPosIndex
+public struct GridPosIndex : IEquatable<GridPosIndex>
 {
     public int xIndex, yIndex;
+
+    public bool Equals(GridPosIndex other)
+    {
+        if(other.xIndex == xIndex && other.yIndex == yIndex)
+        {
+            return true;
+        }
+        return false;
+    }
 }
 
 public class Grid : MonoBehaviour
