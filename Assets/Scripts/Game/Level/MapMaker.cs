@@ -41,8 +41,8 @@ public class MapMaker : MonoSingleton<MapMaker>
     SpriteRenderer m_bgSpriteRenderer;
     SpriteRenderer m_roadSpriteRenderer;
 
-    private GameObject m_startPoint;                    // 产怪起点
-    public GameObject m_carrot { get; private set; }    // 终点萝卜
+    private GameObject m_startBoard;                       // 产怪起点的路牌
+    public GameObject EndCarrot { get; private set; }    // 终点的萝卜
 
     protected override void Init()
     {
@@ -106,13 +106,13 @@ public class MapMaker : MonoSingleton<MapMaker>
     }
 
     // spriteRenderer 适配到计算出的单个格子大小
-    private void AdaptGridObjSize(SpriteRenderer spriteRenderer)
+    public void AdaptGridObjSize(SpriteRenderer spriteRenderer)
     {
         AdaptGridObjSize(spriteRenderer, 1, 1);
     }
 
     // spriteRenderer 适配到给定数量的格子大小
-    private void AdaptGridObjSize(SpriteRenderer spriteRenderer, float columnGrid, float rowGrid)
+    public void AdaptGridObjSize(SpriteRenderer spriteRenderer, float columnGrid, float rowGrid)
     {
         if (spriteRenderer == null)
         {
@@ -125,7 +125,7 @@ public class MapMaker : MonoSingleton<MapMaker>
     }
 
 
-    Vector3 CorrectPos(Vector3 pos)
+    private Vector3 CorrectPos(Vector3 pos)
     {
         pos = new Vector3(pos.x - m_mapWidth / 2 + m_gridWidth / 2, pos.y - m_mapHeight / 2 + m_gridHeight / 2);
         return pos;
@@ -148,15 +148,15 @@ public class MapMaker : MonoSingleton<MapMaker>
             }
         }
         // 初始化怪物生成点，位置在怪物路径的第一个
-        m_startPoint = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "startPoint");
-        m_startPoint.transform.SetParent(transform);
-        m_startPoint.transform.position = grids[monsterPos[0].xIndex, monsterPos[0].yIndex].transform.position;
-        AdaptGridObjSize(m_startPoint.GetComponent<SpriteRenderer>(), 0.5f, 1);
+        m_startBoard = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "startPoint");
+        m_startBoard.transform.SetParent(transform);
+        m_startBoard.transform.position = grids[monsterPos[0].xIndex, monsterPos[0].yIndex].transform.position;
+        AdaptGridObjSize(m_startBoard.GetComponent<SpriteRenderer>(), 0.5f, 1);
         // 初始化萝卜，位置在怪物路径的最后一个
-        m_carrot = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Carrot");
-        m_carrot.transform.SetParent(transform);
-        m_carrot.transform.position = grids[monsterPos[monsterPos.Count - 1].xIndex, monsterPos[monsterPos.Count - 1].yIndex].transform.position;
-        AdaptGridObjSize(m_carrot.GetComponent<SpriteRenderer>(), 0.5f, 1);
+        EndCarrot = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Carrot");
+        EndCarrot.transform.SetParent(transform);
+        EndCarrot.transform.position = grids[monsterPos[monsterPos.Count - 1].xIndex, monsterPos[monsterPos.Count - 1].yIndex].transform.position;
+        AdaptGridObjSize(EndCarrot.GetComponent<SpriteRenderer>(), 0.5f, 1);
     }
 
     //加载关卡-按大关卡数加小关卡数

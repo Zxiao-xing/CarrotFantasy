@@ -1,0 +1,242 @@
+[
+  {
+    "Id": 0,
+    "BelongedLevelGroupId": 0,
+    "Name": "0",
+    "Size": 2,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 1,
+    "BelongedLevelGroupId": 0,
+    "Name": "1",
+    "Size": 2,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 2,
+    "BelongedLevelGroupId": 0,
+    "Name": "2",
+    "Size": 2,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 3,
+    "BelongedLevelGroupId": 0,
+    "Name": "3",
+    "Size": 1,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 4,
+    "BelongedLevelGroupId": 0,
+    "Name": "4",
+    "Size": 1,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 5,
+    "BelongedLevelGroupId": 0,
+    "Name": "5",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 6,
+    "BelongedLevelGroupId": 0,
+    "Name": "6",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 7,
+    "BelongedLevelGroupId": 0,
+    "Name": "7",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 8,
+    "BelongedLevelGroupId": 0,
+    "Name": "8",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 9,
+    "BelongedLevelGroupId": 0,
+    "Name": "9",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 10,
+    "BelongedLevelGroupId": 1,
+    "Name": "0",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 11,
+    "BelongedLevelGroupId": 1,
+    "Name": "1",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 12,
+    "BelongedLevelGroupId": 1,
+    "Name": "2",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 13,
+    "BelongedLevelGroupId": 1,
+    "Name": "3",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 14,
+    "BelongedLevelGroupId": 1,
+    "Name": "4",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 15,
+    "BelongedLevelGroupId": 1,
+    "Name": "5",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 16,
+    "BelongedLevelGroupId": 1,
+    "Name": "6",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 17,
+    "BelongedLevelGroupId": 1,
+    "Name": "7",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 18,
+    "BelongedLevelGroupId": 1,
+    "Name": "8",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 19,
+    "BelongedLevelGroupId": 1,
+    "Name": "9",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 20,
+    "BelongedLevelGroupId": 2,
+    "Name": "0",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 21,
+    "BelongedLevelGroupId": 2,
+    "Name": "1",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 22,
+    "BelongedLevelGroupId": 2,
+    "Name": "2",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 23,
+    "BelongedLevelGroupId": 2,
+    "Name": "3",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 24,
+    "BelongedLevelGroupId": 2,
+    "Name": "4",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 25,
+    "BelongedLevelGroupId": 2,
+    "Name": "5",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 26,
+    "BelongedLevelGroupId": 2,
+    "Name": "6",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 27,
+    "BelongedLevelGroupId": 2,
+    "Name": "7",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 28,
+    "BelongedLevelGroupId": 2,
+    "Name": "8",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  },
+  {
+    "Id": 29,
+    "BelongedLevelGroupId": 2,
+    "Name": "9",
+    "Size": 0,
+    "Hp": 100,
+    "Coin": 100
+  }
+]

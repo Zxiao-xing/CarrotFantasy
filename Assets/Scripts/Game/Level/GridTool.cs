@@ -7,9 +7,9 @@ public class GridTool : MonoBehaviour
 
     public GridState m_state = new GridState();
     public GridPosIndex pos = new GridPosIndex();
-    GameObject curretnItem;
-    [HideInInspector]
-    public GameObject towerGo = null;//格子上建的塔
+    GameObject m_item;
+    //[HideInInspector]
+    //public GameObject towerGo = null;//格子上建的塔
 
     private void Awake()
     {
@@ -23,15 +23,17 @@ public class GridTool : MonoBehaviour
 
     public void Init()
     {
-        if (curretnItem != null)
+        if (m_item != null)
         {
-            Destroy(curretnItem);
+            Destroy(m_item);
         }
         m_spriteRenderer.enabled = true;
-        m_spriteRenderer.sprite = MapMakerTool.GetInstance().gridSp;
+        m_spriteRenderer.sprite = MapMakerTool.GetInstance().m_gridSprite;
         m_state.isMonsterPoint = false;
         m_state.itemID = -1;
         m_state.canBuild = true;
+
+        ShowGridShape();
     }
 
     // 清除怪物路径
@@ -42,21 +44,16 @@ public class GridTool : MonoBehaviour
             return;
         }
         m_spriteRenderer.enabled = true;
-        m_spriteRenderer.sprite = MapMakerTool.GetInstance().gridSp;
+        m_spriteRenderer.sprite = MapMakerTool.GetInstance().m_gridSprite;
     }
 
     // 更新格子状态
     public void UpdateState(GridState state)
     {
-        // todo:这个是用来刷掉以前的关卡数据的，刷完就删了
-        if(m_state.hasItem == false)
-        {
-            m_state.itemID = -1;
-        }
         m_state = state;
-        if (curretnItem != null)
+        if (m_item != null)
         {
-            Destroy(curretnItem);
+            Destroy(m_item);
         }
         m_spriteRenderer.enabled = true;
         if (state.canBuild == true)
@@ -67,52 +64,71 @@ public class GridTool : MonoBehaviour
             {
                 CreatItem();
             }
-            //ShowGridShape();
         }
         else
         {
             // 不能建造显示那个不能建造的图标
             m_spriteRenderer.enabled = true;
             //m_spriteRenderer.enabled = false;
-            m_spriteRenderer.sprite = MapMakerTool.GetInstance().gridCannotBuildSp;
-            //在编辑地图的时候怪物路径点会显示出来,便于编辑游戏时就该隐藏
-            if (state.isMonsterPoint)
+            if(state.isMonsterPoint == false)
             {
-                m_spriteRenderer.sprite = MapMakerTool.GetInstance().m_monsterPosSprite;
+                m_spriteRenderer.sprite = MapMakerTool.GetInstance().m_gridCantBuildSprite;
             }
+            //在编辑地图的时候怪物路径点会显示出来,便于编辑游戏时就该隐藏
+            //if (state.isMonsterPoint)
+            //{
+            //    m_spriteRenderer.sprite = MapMakerTool.GetInstance().m_monsterPosSprite;
+            //}
         }
     }
 
     // 创建物体
     private void CreatItem()
     {
-        curretnItem = Instantiate(MapMakerTool.GetInstance().itemPrefabs[m_state.itemID]);
+        m_item = Instantiate(MapMakerTool.GetInstance().GetItemPrefab(m_state.itemID));
 
-        curretnItem.transform.SetParent(MapMakerTool.GetInstance().transform);
-        // curretnItem.transform.localScale = Vector3.one;
-        curretnItem.GetComponent<Item>().ID = m_state.itemID;
-        curretnItem.GetComponent<Item>().m_gridTool = this;
-        // todo: 适配一下格子大小
-        if (m_state.itemID <= 2)
+        m_item.transform.SetParent(MapMakerTool.GetInstance().transform);
+        m_item.GetComponent<Item>().ID = m_state.itemID;
+        m_item.GetComponent<Item>().m_gridTool = this;
+
+        ItemInfo itemInfo = PlayerManager.GetInstance().ItemInfoDict[m_state.itemID];
+
+        // 适配格子大小，占多个格子的以左下角为原点向右上移动
+        SpriteRenderer itemSpriteRenderer = m_item.GetComponent<SpriteRenderer>();
+        switch (itemInfo.Size)
         {
-            Vector3 pos = transform.position;
-            pos.x += MapMakerTool.GetInstance().m_gridWidth / 2;
-            pos.y += MapMakerTool.GetInstance().m_gridHeight / 2;
-            curretnItem.transform.position = pos;
+            case EnItemSize.OneMOne:
+                MapMakerTool.GetInstance().AdaptGridObjSize(itemSpriteRenderer);
+                m_item.transform.position = transform.position;
+                break;
+            case EnItemSize.OneMTow:
+                {
+                    MapMakerTool.GetInstance().AdaptGridObjSize(itemSpriteRenderer, 2, 1);
+                    Vector3 pos = transform.position;
+                    pos.x += MapMakerTool.GetInstance().m_gridWidth / 2;
+                    m_item.transform.position = pos;
+                    break;
+                }
+            case EnItemSize.TowMTow:
+                {
+                    MapMakerTool.GetInstance().AdaptGridObjSize(itemSpriteRenderer, 2, 2);
+                    Vector3 pos = transform.position;
+                    pos.x += MapMakerTool.GetInstance().m_gridWidth / 2;
+                    pos.y += MapMakerTool.GetInstance().m_gridHeight / 2;
+                    m_item.transform.position = pos;
+                    break;
+                }
         }
-        else if (m_state.itemID <= 4)
-        {
-            Vector3 pos = transform.position;
-            pos.x -= MapMakerTool.GetInstance().m_gridWidth / 2;
-            curretnItem.transform.position = pos;
-        }
-        else
-        {
-            curretnItem.transform.position = transform.position;
-        }
+
         //让物品在z轴更靠近摄像机,做碰撞检测时就可以挡住格子的碰撞器
-        curretnItem.transform.localPosition += Vector3.forward * -2;
+        m_item.transform.localPosition += Vector3.forward * -2;
 
+    }
+
+    public void SetSprite(Sprite sprite, bool enabled)
+    {
+        m_spriteRenderer.enabled = enabled;
+        m_spriteRenderer.sprite = sprite;
     }
 
     /// <summary>
@@ -122,7 +138,7 @@ public class GridTool : MonoBehaviour
     {
         if (m_state.canBuild)
         {
-            m_spriteRenderer.sprite = MapMakerTool.GetInstance().gridStartSp;
+            m_spriteRenderer.sprite = MapMakerTool.GetInstance().m_gridStartSprite;
             m_spriteRenderer.DOFade(0, 2.3f).OnComplete(() =>
             {
                 m_spriteRenderer.enabled = false;
@@ -132,143 +148,4 @@ public class GridTool : MonoBehaviour
             });
         }
     }
-
-    public void SetSprite(Sprite sprite, bool enabled)
-    {
-        m_spriteRenderer.enabled = enabled;
-        m_spriteRenderer.sprite = sprite;
-    }
-
-
-    //public void ShowGrid()
-    //{
-    //    if (state.canBuild == false)
-    //    {
-    //        ShowCannotBuild();
-    //    }
-    //    else
-    //    {
-    //        spriteRenderer.enabled = true;
-    //        spriteRenderer.sprite = MapMakerTool.GetInstance().gridSp;
-    //        if (towerGo == null)
-    //        {
-    //            GameController.GetInstance().towerList.SetActive(true);
-    //            SetTowerListToRightPos();
-    //        }
-    //        else
-    //        {
-    //            GameController.GetInstance().towerShow.SetActive(true);
-    //            towerGo.GetComponent<Tower>().attackRender.enabled = true;
-    //            SetTowerShowToRightPos();
-    //        }
-
-    //    }
-    //}
-
-    /// <summary>
-    /// 如果玩家点击的格子是边缘位置,就要调整一下
-    /// 建塔列表的显示位置
-    /// </summary>
-    //void SetTowerListToRightPos()
-    //{
-    //    int towerNums = GameController.GetInstance().towerList.transform.childCount;
-    //    Vector3 pos = transform.position;
-    //    float gridHeight = MapMakerTool.GetInstance().m_gridHeight;
-    //    float gridWidth = MapMakerTool.GetInstance().m_gridWidth;
-    //    pos.y += gridHeight;
-    //    if (this.pos.yIndex >= MapMakerTool.m_row - 2)
-    //    {
-    //        pos.y = transform.position.y - gridHeight;
-    //    }
-    //    if (towerNums < 5)
-    //    {
-    //        if (this.pos.xIndex == 0)
-    //        {
-    //            pos.x = transform.position.x + gridWidth * (towerNums - 1) * .5f;
-    //        }
-    //        else if (this.pos.xIndex == MapMakerTool.m_column - 1)
-    //        {
-    //            pos.x = transform.position.x - gridWidth * (towerNums - 1) * .5f;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        if (this.pos.xIndex <= 1)
-    //        {
-    //            pos.x = transform.position.x + gridWidth * (towerNums - 1) * .5f;
-    //        }
-    //        else if (this.pos.xIndex >= MapMakerTool.m_column - 2)
-    //        {
-    //            pos.x = transform.position.x - gridWidth * (towerNums - 1) * .5f;
-    //        }
-    //    }
-    //    GameController.GetInstance().towerList.transform.position = pos;
-
-    //}
-
-    /// <summary>
-    /// 如果玩家点击的格子是边缘位置,就要调整一下
-    /// 升级/销毁塔列表的显示位置
-    /// </summary>
-    //private void SetTowerShowToRightPos()
-    //{
-    //    GameController.GetInstance().towerShow.transform.position = transform.position;
-    //    GameController.GetInstance().towerDesTrans.localPosition = GameController.GetInstance().btnDown.localPosition;
-    //    GameController.GetInstance().towerUpTrans.localPosition = GameController.GetInstance().btnUp.localPosition;
-    //    if (pos.yIndex == 7)
-    //    {
-    //        if (pos.xIndex <= 1)
-    //        {
-    //            GameController.GetInstance().towerUpTrans.localPosition = GameController.GetInstance().btnRight.localPosition;
-    //        }
-    //        else
-    //        {
-    //            GameController.GetInstance().towerUpTrans.localPosition = GameController.GetInstance().btnLeft.localPosition;
-    //        }
-    //    }
-    //    else if (pos.yIndex == 0)
-    //    {
-    //        if (pos.xIndex <= 1)
-    //        {
-    //            GameController.GetInstance().towerDesTrans.localPosition = GameController.GetInstance().btnRight.localPosition;
-    //        }
-    //        else
-    //        {
-    //            GameController.GetInstance().towerDesTrans.localPosition = GameController.GetInstance().btnLeft.localPosition;
-    //        }
-    //    }
-    //}
-
-    /// <summary>
-    /// 提示玩家此格子无法建塔
-    /// </summary>
-    //private void ShowCannotBuild()
-    //{
-    //    spriteRenderer.enabled = true;
-    //    spriteRenderer.sprite = MapMakerTool.GetInstance().gridCannotBuildSp;
-    //    spriteRenderer.DOFade(0, 0.5f).SetLoops(2).OnComplete(() =>
-    //    {
-    //        spriteRenderer.enabled = false;
-    //        Color color = spriteRenderer.color;
-    //        color.a = 1;
-    //        spriteRenderer.color = color;
-    //    });
-    //}
-
-    //public void HideGrid()
-    //{
-    //    spriteRenderer.enabled = false;
-    //    if (towerGo == false)
-    //    {
-    //        GameController.GetInstance().towerList.SetActive(false);
-    //    }
-    //    else
-    //    {
-    //        GameController.GetInstance().towerShow.SetActive(false);
-    //        towerGo.GetComponent<Tower>().attackRender.enabled = false;
-    //    }
-
-    //}
-
-
 }

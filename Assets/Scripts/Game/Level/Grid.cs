@@ -32,9 +32,9 @@ public class Grid : MonoBehaviour
 
     SpriteRenderer m_spriteRenderer;
 
-    public GridState state = new GridState();
+    public GridState m_state = new GridState();
     public GridPosIndex pos = new GridPosIndex();
-    GameObject curretnItem;
+    GameObject m_item;
     [HideInInspector]
     public GameObject towerGo = null;//格子上建的塔
     [HideInInspector]
@@ -71,33 +71,22 @@ public class Grid : MonoBehaviour
         }
     }
 
-    public void Init()
-    {
-        if (curretnItem != null)
-        {
-            Destroy(curretnItem);
-        }
-        m_spriteRenderer.enabled = true;
-        m_spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
-        state.isMonsterPoint = false;
-        state.itemID = -1;
-        state.canBuild = true;
-    }
-
     private void OnMouseDown()
     {
         //选择的UI就不执行
         if (EventSystem.current.IsPointerOverGameObject())
+        {
             return;
+        }
         GameController.GetInstance().ClickGrid(this);
     }
 
     /// <summary>
     /// 在开始游戏时让可以建塔的格子闪烁一下,提示玩家此处可建塔
     /// </summary>
-    void ShowGridShape()
+    private void ShowGridShape()
     {
-        if (state.canBuild)
+        if (m_state.canBuild)
         {
             m_spriteRenderer.sprite = MapMaker.GetInstance().gridStartSp;
             m_spriteRenderer.DOFade(0, 2.3f).OnComplete(() =>
@@ -112,7 +101,7 @@ public class Grid : MonoBehaviour
 
     public void ShowGrid()
     {
-        if (state.canBuild == false)
+        if (m_state.canBuild == false)
         {
             ShowCannotBuild();
         }
@@ -139,7 +128,7 @@ public class Grid : MonoBehaviour
     /// 如果玩家点击的格子是边缘位置,就要调整一下
     /// 建塔列表的显示位置
     /// </summary>
-    void SetTowerListToRightPos()
+    private void SetTowerListToRightPos()
     {
         int towerNums = GameController.GetInstance().towerList.transform.childCount;
         Vector3 pos = transform.position;
@@ -170,7 +159,7 @@ public class Grid : MonoBehaviour
     /// 如果玩家点击的格子是边缘位置,就要调整一下
     /// 升级/销毁塔列表的显示位置
     /// </summary>
-    void SetTowerShowToRightPos()
+    private void SetTowerShowToRightPos()
     {
         GameController.GetInstance().towerShow.transform.position = transform.position;
         GameController.GetInstance().towerDesTrans.localPosition = GameController.GetInstance().btnDown.localPosition;
@@ -220,51 +209,51 @@ public class Grid : MonoBehaviour
 
     }
 
-    public void ClearMonsterPos()
+    private void CreatItem()
     {
-        if (state.isMonsterPoint == false)
-            return;
-        m_spriteRenderer.enabled = true;
-        m_spriteRenderer.sprite = MapMaker.GetInstance().gridSp;
-    }
+        m_item = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, $"{LevelManager.GetInstance().LevelGroupId}/Items/{PlayerManager.GetInstance().ItemInfoDict[m_state.itemID].Name}");
 
-    void CreatItem()
-    {
-        curretnItem = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, LevelManager.GetInstance().LevelGroupId + "/Items/" + state.itemID);
+        m_item.transform.SetParent(GameController.GetInstance().transform);
+        m_item.GetComponent<Item>().ID = m_state.itemID;
+        ItemInfo itemInfo = PlayerManager.GetInstance().ItemInfoDict[m_state.itemID];
+        // 适配格子大小，占多个格子的以左下角为原点向右上移动
+        SpriteRenderer itemSpriteRenderer = m_item.GetComponent<SpriteRenderer>();
+        switch (itemInfo.Size)
+        {
+            case EnItemSize.OneMOne:
+                MapMaker.GetInstance().AdaptGridObjSize(itemSpriteRenderer);
+                m_item.transform.position = transform.position;
+                break;
+            case EnItemSize.OneMTow:
+                {
+                    MapMaker.GetInstance().AdaptGridObjSize(itemSpriteRenderer, 2, 1);
+                    Vector3 pos = transform.position;
+                    pos.x += MapMaker.GetInstance().m_gridWidth / 2;
+                    m_item.transform.position = pos;
+                    break;
+                }
+            case EnItemSize.TowMTow:
+                {
+                    MapMaker.GetInstance().AdaptGridObjSize(itemSpriteRenderer, 2, 2);
+                    Vector3 pos = transform.position;
+                    pos.x += MapMaker.GetInstance().m_gridWidth / 2;
+                    pos.y += MapMaker.GetInstance().m_gridHeight / 2;
+                    m_item.transform.position = pos;
+                    break;
+                }
+        }
 
-        curretnItem.transform.SetParent(GameController.GetInstance().transform);
-        curretnItem.GetComponent<Item>().ID = state.itemID;
-        // 之后用来改大小进行适配
-        SpriteRenderer spriteRenderer = curretnItem.GetComponent<SpriteRenderer>();
-        // 这个逻辑到时候改一下
-        if (state.itemID <= 2)
-        {
-            Vector3 pos = transform.position;
-            pos.x += MapMaker.GetInstance().m_gridWidth / 2;
-            pos.y += MapMaker.GetInstance().m_gridHeight / 2;
-            curretnItem.transform.position = pos;
-        }
-        else if (state.itemID <= 4)
-        {
-            Vector3 pos = transform.position;
-            pos.x -= MapMaker.GetInstance().m_gridWidth / 2;
-            curretnItem.transform.position = pos;
-        }
-        else
-        {
-            curretnItem.transform.position = transform.position;
-        }
         //让物品在z轴更靠近摄像机,做碰撞检测时就可以挡住格子的碰撞器
-        curretnItem.transform.localPosition += Vector3.forward * -2;
+        m_item.transform.localPosition += Vector3.forward * -2;
     }
 
     // 更新格子状态
     public void UpdateState(GridState state)
     {
-        this.state = state;
-        if (curretnItem != null)
+        this.m_state = state;
+        if (m_item != null)
         {
-            Destroy(curretnItem);
+            Destroy(m_item);
         }
         m_spriteRenderer.enabled = true;
         if (state.canBuild == true)

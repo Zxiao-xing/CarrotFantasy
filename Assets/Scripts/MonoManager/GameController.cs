@@ -116,7 +116,7 @@ public class GameController : MonoSingleton<GameController>
     {
         diedMonsterCount++;
         if (isReach)
-            mapMaker.m_carrot.GetComponent<Carrot>().SubtractHP();
+            mapMaker.EndCarrot.GetComponent<Carrot>().SubtractHP();
         else//怪物是被炮塔击杀 随机奖励物品
         {
             int temp = Random.Range(1, 100);
@@ -250,7 +250,7 @@ public class GameController : MonoSingleton<GameController>
             gameModeSp = FactoryManager.GetInstance().GetSprite("NormalMordel/GameOverAndWin/gameover0-hd_10");
         if (isVictory)//只有是胜利结局才去加载萝卜奖励图标资源
         {
-            int hp = mapMaker.m_carrot.GetComponent<Carrot>().nowHP;
+            int hp = mapMaker.EndCarrot.GetComponent<Carrot>().nowHP;
             if (hp >= 8)
                 carrotSp = FactoryManager.GetInstance().GetSprite("GameOption/Normal/Level/Carrot_1");
             else if (hp >= 5)

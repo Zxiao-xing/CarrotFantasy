@@ -24,7 +24,7 @@ public class Item : MonoBehaviour
     private void Start()
     {
         hpSlider = GetComponentInChildren<Slider>();
-        prize = ID * 100;
+        prize = PlayerManager.GetInstance().ItemInfoDict[ID].Coin;
         Init();
     }
 
@@ -43,7 +43,7 @@ public class Item : MonoBehaviour
 
     void Init()
     {
-        HP = 1000 - 100 * ID;
+        HP = PlayerManager.GetInstance().ItemInfoDict[ID].Hp;
         nowHP = HP;
         hpSlider.value = 1;
         hpSlider.gameObject.SetActive(false);
@@ -57,25 +57,34 @@ public class Item : MonoBehaviour
             return;
         }
         if (EventSystem.current.IsPointerOverGameObject())
+        {
             return;
+        }
         GameController.GetInstance().SetFirePoint(transform);
     }
 
     public void TakeDamage(int damage)
     {
         if (hpSlider.gameObject.activeSelf == false)
+        {
             hpSlider.gameObject.SetActive(true);
+        }
         timer = 0;
         nowHP -= damage;
         hpSlider.value = (float)nowHP / HP;
         if (nowHP <= 0)
+        {
             Die();
+        }
     }
 
     void Die()
     {
         if (GameController.GetInstance().fireTrans == transform)
+        {
             GameController.GetInstance().HideFirePoint();
+        }
+
         GameObject priseGO = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "CoinCanvas");
         priseGO.transform.SetParent(GameController.GetInstance().transform);
         priseGO.transform.position = transform.position;

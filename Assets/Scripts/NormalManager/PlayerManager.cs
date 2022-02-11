@@ -41,9 +41,10 @@ public class MonsterInfo
     public int Damage;              // 怪物对萝卜造成的伤害
     public int Hp;                  // 怪物 hp
     public float Speed;             // 怪物默认速度
-    public int Coin;                // 击杀可获得的游戏机金币
+    public int Coin;                // 击杀可获得的游戏金币
 }
 
+// 建造的塔的信息
 public class TowerInfo
 {
     public int Id;
@@ -51,6 +52,27 @@ public class TowerInfo
     public int BuyPrice;            // 购买金额，升级后就按统一的比例上调？
     public int SellPrice;           // 出售金额，升级后就按统一的比例上调？
     public int AttackRange;         // 攻击范围，
+}
+
+
+// 格子的大小
+[SerializeField]
+public enum EnItemSize
+{
+    OneMOne = 0,        // 1 x 1
+    OneMTow = 1,        // 1 x 2
+    TowMTow = 2,        // 2 x 2
+}
+
+// 物品的信息
+public class ItemInfo
+{
+    public int Id;
+    public int BelongedLevelGroupId;            // 所属关卡组
+    public string Name;                         // Item 名
+    public EnItemSize Size;                     // Item 所占格子大小
+    public int Hp;                              // Item 血量
+    public int Coin;                            // 击杀可获得的游戏金币
 }
 
 /// <summary>
@@ -62,12 +84,16 @@ public class PlayerManager : Singleton<PlayerManager>
     public PlayerInfo PlayerInfo { get; set; }
     // 怪物数据，id 和数据的字典
     public Dictionary<int, MonsterInfo> MonsterInfoDict { get; private set; }
+    // Item 数据，id 和数据的字典
+    public Dictionary<int, ItemInfo> ItemInfoDict { get; private set; }
 
     // 判断玩家是否存有数据的标签
     private static string s_hasPlayerInfoFlag = "HasPlayerInfo";
 
     private static string s_playerInfoPath = "PlayerData";                  // 玩家数据存储的路径
     private static string s_monsterInfoPath = "MonsterData";                // 怪物数据存储的路径
+    private static string s_towerInfoPath = "TowerData";                    // 塔存储的路径
+    private static string s_itemInfoPath = "ItemData";                      // Item 数据存储的路径
 
     public PlayerManager()
     {
@@ -83,8 +109,9 @@ public class PlayerManager : Singleton<PlayerManager>
             LoadPlayerData();
         }
 
-        // 从配置表中加载怪物数据
+        // 从配置表中加载数据
         LoadMonsterData();
+        LoadItemData();
     }
 
     /// <summary>
@@ -164,6 +191,31 @@ public class PlayerManager : Singleton<PlayerManager>
         {
             MonsterInfoDict.Add(info.Id, info);
         }
+    }
+
+    // 加载 Item 数据
+    private void LoadItemData()
+    {
+        List<ItemInfo> itemInfoList = FactoryManager.GetInstance().GetJsonObject<List<ItemInfo>>(s_itemInfoPath);
+        ItemInfoDict = new Dictionary<int, ItemInfo>();
+        foreach (ItemInfo info in itemInfoList)
+        {
+            ItemInfoDict.Add(info.Id, info);
+        }
+    }
+
+    // 通过关卡组 Id 获取对应关卡组的 Item
+    public List<ItemInfo> GetItemInfoListByLevelGroup(int levelGroupId)
+    {
+        List<ItemInfo> itemInfoList = new List<ItemInfo>();
+        foreach(var itemInfo in ItemInfoDict.Values)
+        {
+            if(itemInfo.BelongedLevelGroupId == levelGroupId)
+            {
+                itemInfoList.Add(itemInfo);
+            }
+        }
+        return itemInfoList;
     }
 
     // 获取玩家关卡组数据链表
