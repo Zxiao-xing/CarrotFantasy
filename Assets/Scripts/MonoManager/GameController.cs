@@ -61,14 +61,16 @@ public class GameController : MonoSingleton<GameController>
         normalModelPanel.allWaveTxt.text = "/" + m_curLevelData.TotalWave.ToString();
     }
 
-
-
     private void Update()
     {
         if (IsInvoking("Creat") == false && isStop == false && monsterNums != nowRoundInfo.mMonsterIDList.Count)
+        {
             InvokeRepeating("Creat", 1, 1);
+        }
         if (diedMonsterCount != 0 && diedMonsterCount == monsterNums)
+        {
             NextRound();
+        }
     }
     #endregion
 
@@ -116,7 +118,9 @@ public class GameController : MonoSingleton<GameController>
     {
         diedMonsterCount++;
         if (isReach)
+        {
             mapMaker.EndCarrot.GetComponent<Carrot>().SubtractHP();
+        }
         else//怪物是被炮塔击杀 随机奖励物品
         {
             int temp = Random.Range(1, 100);
@@ -171,7 +175,9 @@ public class GameController : MonoSingleton<GameController>
         else
         {
             if (selectedGrid != null)
+            {
                 selectedGrid.HideGrid();
+            }
             selectedGrid = grid;
             selectedGrid.ShowGrid();
         }
@@ -180,7 +186,9 @@ public class GameController : MonoSingleton<GameController>
     public void SetFirePoint(Transform fireTransform)
     {
         if (firePoint.activeSelf == false)
+        {
             firePoint.SetActive(true);
+        }
         fireTrans = fireTransform;
         firePoint.transform.SetParent(fireTransform);
         firePoint.transform.position = fireTransform.position;
@@ -205,9 +213,13 @@ public class GameController : MonoSingleton<GameController>
     public int ChangePlaySpeed()
     {
         if (playSpeed == 1)
+        {
             playSpeed = 2;
+        }
         else
+        {
             playSpeed = 1;
+        }
         return playSpeed - 1;
     }
 
@@ -245,18 +257,28 @@ public class GameController : MonoSingleton<GameController>
         int allwaves = (int)m_curLevelData.TotalWave;
         Sprite carrotSp = null, gameModeSp;
         if (UIManager.GetInstance().mUIFacade.currentScene.GetType() == typeof(GameNormalState))
+        {
             gameModeSp = FactoryManager.GetInstance().GetSprite("NormalMordel/GameOverAndWin/gameover0-hd_10");
+        }
         else//没有图片资源了 所以就这样吧
+        {
             gameModeSp = FactoryManager.GetInstance().GetSprite("NormalMordel/GameOverAndWin/gameover0-hd_10");
+        }
         if (isVictory)//只有是胜利结局才去加载萝卜奖励图标资源
         {
             int hp = mapMaker.EndCarrot.GetComponent<Carrot>().nowHP;
             if (hp >= 8)
+            {
                 carrotSp = FactoryManager.GetInstance().GetSprite("GameOption/Normal/Level/Carrot_1");
+            }
             else if (hp >= 5)
+            {
                 carrotSp = FactoryManager.GetInstance().GetSprite("GameOption/Normal/Level/Carrot_2");
+            }
             else
+            {
                 carrotSp = FactoryManager.GetInstance().GetSprite("GameOption/Normal/Level/Carrot_3");
+            }
         }
         normalModelPanel.GameOverUI(isVictory, waves, allwaves, gameModeSp, carrotSp);
     }

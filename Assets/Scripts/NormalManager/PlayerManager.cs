@@ -44,16 +44,19 @@ public class MonsterInfo
     public int Coin;                // 击杀可获得的游戏金币
 }
 
-// 建造的塔的信息
+// 塔的信息，以后再看看吧，不一定改哇，现在好像直接是预制体上面就挂了
 public class TowerInfo
 {
     public int Id;
     public string Name;
-    public int BuyPrice;            // 购买金额，升级后就按统一的比例上调？
-    public int SellPrice;           // 出售金额，升级后就按统一的比例上调？
-    public int AttackRange;         // 攻击范围，
+    public int BelongedLevelGroup;          // 所属关卡组 id
+    public bool CanRotate;
+    public List<string> Path;               // 包含几个升级版本在内的路径
+    public List<int> BuyPrice;              // 包含几个升级版本在内的购买金额
+    public List<int> SellPrice;             // 包含几个升级版本在内的出售金额
+    public List<int> AttackRange;           // 包含几个升级版本在内的攻击范围
+    public List<int> AttackInterval;        // 攻击间隔
 }
-
 
 // 格子的大小
 [SerializeField]
@@ -267,6 +270,4 @@ public class PlayerManager : Singleton<PlayerManager>
         }
         return count;
     }
-
-
 }

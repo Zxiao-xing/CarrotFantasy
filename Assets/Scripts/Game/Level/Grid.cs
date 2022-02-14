@@ -57,7 +57,7 @@ public class Grid : MonoBehaviour
         if (towerGo != null)
         {
             if (towerGo.GetComponent<TowerPersonalProperty>().towerLevel < 3 &&
-               GameController.GetInstance().coins >= towerGo.GetComponent<TowerPersonalProperty>().upPrice)
+               GameController.GetInstance().coins >= towerGo.GetComponent<TowerPersonalProperty>().UpPrice)
             {
                 if (levelUPsign.activeSelf == false)
                     levelUPsign.SetActive(true);
@@ -167,16 +167,24 @@ public class Grid : MonoBehaviour
         if (pos.yIndex == 7)
         {
             if (pos.xIndex <= 1)
+            {
                 GameController.GetInstance().towerUpTrans.localPosition = GameController.GetInstance().btnRight.localPosition;
+            }
             else
+            {
                 GameController.GetInstance().towerUpTrans.localPosition = GameController.GetInstance().btnLeft.localPosition;
+            }
         }
         else if (pos.yIndex == 0)
         {
             if (pos.xIndex <= 1)
+            {
                 GameController.GetInstance().towerDesTrans.localPosition = GameController.GetInstance().btnRight.localPosition;
+            }
             else
+            {
                 GameController.GetInstance().towerDesTrans.localPosition = GameController.GetInstance().btnLeft.localPosition;
+            }
         }
     }
 
@@ -200,7 +208,9 @@ public class Grid : MonoBehaviour
     {
         m_spriteRenderer.enabled = false;
         if (towerGo == false)
+        {
             GameController.GetInstance().towerList.SetActive(false);
+        }
         else
         {
             GameController.GetInstance().towerShow.SetActive(false);

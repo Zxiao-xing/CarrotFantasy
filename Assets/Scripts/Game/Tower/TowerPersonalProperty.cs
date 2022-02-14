@@ -11,8 +11,8 @@ public class TowerPersonalProperty : MonoBehaviour
     public int towerLevel;
     [HideInInspector]
     public Transform targetTrans;
-    public int sellPrice { get; protected set; }
-    public int upPrice { get; protected set; }
+    public int SellPrice { get; protected set; }
+    public int UpPrice { get; protected set; }
     [SerializeField] int price;
     protected Tower tower;
     protected float attackTimeVal;
@@ -29,8 +29,8 @@ public class TowerPersonalProperty : MonoBehaviour
 
     protected virtual void Start()
     {
-        sellPrice = price / 2;
-        upPrice = (int)(price * 1.5f);
+        SellPrice = price / 2;
+        UpPrice = (int)(price * 1.5f);
     }
 
     private void OnEnable()
@@ -41,9 +41,13 @@ public class TowerPersonalProperty : MonoBehaviour
     protected virtual void Update()
     {
         if (GameController.GetInstance().isStop)
+        {
             return;
+        }
         if (canRotate)
+        {
             RotateTower();
+        }
         Attack();
 
     }
@@ -83,8 +87,9 @@ public class TowerPersonalProperty : MonoBehaviour
             }
         }
         else
+        {
             attackTimeVal += Time.deltaTime;
-
+        }
     }
 
     protected virtual void Init()
@@ -94,7 +99,7 @@ public class TowerPersonalProperty : MonoBehaviour
 
     public void SellTower()
     {
-        GameController.GetInstance().ChangeCoin(sellPrice);
+        GameController.GetInstance().ChangeCoin(SellPrice);
 
         GameController.GetInstance().selectedGrid.HideGrid();
         GameController.GetInstance().selectedGrid.towerGo = null;
@@ -103,9 +108,9 @@ public class TowerPersonalProperty : MonoBehaviour
         DestroyTower();
     }
 
-    public void UPTower()
+    public void UpTower()
     {
-        GameController.GetInstance().ChangeCoin(-upPrice);
+        GameController.GetInstance().ChangeCoin(-UpPrice);
 
         GameObject go = FactoryManager.GetInstance().GetObject(ObjectFactoryType.GameFactory, "Tower/ID" + tower.towerID + "/TowerSet/" + (towerLevel + 1));
         go.transform.SetParent(transform.parent);

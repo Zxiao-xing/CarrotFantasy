@@ -101,7 +101,9 @@ public class Tower : MonoBehaviour
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (!collision.tag.Equals("Monster") && !collision.tag.Equals("Item"))
+        {
             return;
+        }
         if (GameController.GetInstance().fireTrans != null && isFireTarget == false)
         {
             if (collision.transform == GameController.GetInstance().fireTrans)

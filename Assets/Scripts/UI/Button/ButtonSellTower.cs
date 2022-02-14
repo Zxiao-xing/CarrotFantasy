@@ -18,7 +18,7 @@ public class ButtonSellTower : MonoBehaviour
     {
         button.onClick.AddListener(SellTower);
         priceTxt.text = GameController.GetInstance().selectedGrid.towerGo.
-            GetComponent<TowerPersonalProperty>().sellPrice.ToString();
+            GetComponent<TowerPersonalProperty>().SellPrice.ToString();
     }
 
     private void OnDisable()

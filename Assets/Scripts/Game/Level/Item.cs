@@ -18,7 +18,9 @@ public class Item : MonoBehaviour
     private void OnEnable()
     {
         if (prize != 0)
+        {
             Init();
+        }
     }
 
     private void Start()

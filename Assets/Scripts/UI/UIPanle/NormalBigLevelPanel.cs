@@ -60,7 +60,7 @@ public class NormalBigLevelPanel : BasePanel
             // 刷新关卡状态相关 UI
             RefreshLevelStateUI(PlayerManager.GetInstance().GetPlayerLevelGroupInfo(levelGroupInfoList[i].LevelGroupId).IsLocked, PlayerManager.GetInstance().GetUnlockedLevelCountInLevelGroup(levelGroupInfoList[i].LevelGroupId), levelGroupInfoList[i].BelongLevelCount, levelGroupGo.transform);
 
-            levelGroupBtn.transform.parent = m_contentTrans;
+            levelGroupBtn.transform.SetParent(m_contentTrans);
         }
     }
 

@@ -67,6 +67,7 @@ public class MapMakerTool : MonoSingleton<MapMakerTool>
         // 若存在 GameController 说明是走正常游戏流程进来的，就不是走的工具流程，此时移除掉该物体
         if (GameController.HasInstance())
         {
+            m_camera.SetActive(false);
             Destroy(this.gameObject);
             return;
         }

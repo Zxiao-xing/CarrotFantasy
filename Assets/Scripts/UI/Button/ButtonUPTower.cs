@@ -50,24 +50,24 @@ public class ButtonUPTower : MonoBehaviour
             button.interactable = false;
         }
 
-        else if (GameController.GetInstance().coins >= tp.upPrice)
+        else if (GameController.GetInstance().coins >= tp.UpPrice)
         {
             image.sprite = canUpLevel;
-            priceTxt.text = tp.upPrice.ToString();
+            priceTxt.text = tp.UpPrice.ToString();
             button.interactable = true;
         }
 
         else
         {
             button.interactable = false;
-            priceTxt.text = tp.upPrice.ToString();
+            priceTxt.text = tp.UpPrice.ToString();
             image.sprite = cannotUpLevel;
         }
     }
 
     void TowerUP()
     {
-        GameController.GetInstance().selectedGrid.towerGo.GetComponent<TowerPersonalProperty>().UPTower();
+        GameController.GetInstance().selectedGrid.towerGo.GetComponent<TowerPersonalProperty>().UpTower();
     }
 
 }
